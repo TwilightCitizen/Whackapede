@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/LandingFragment">
+    app:startDestination="@id/LandingFragment"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/LandingFragment"

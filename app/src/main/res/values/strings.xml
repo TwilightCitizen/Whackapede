@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Whackapede</string>
 
     <string name="title_activity_game">GameActivity</string>
@@ -21,7 +21,7 @@
 
     <string name="back">Back</string>
 
-    <string name="contributors">Credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits</string>
+    <string name="contributors" tools:ignore="Typos">Credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits</string>
 
     <string name="volume">Volume</string>
 
