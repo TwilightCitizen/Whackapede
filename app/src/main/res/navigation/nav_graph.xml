@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/LandingFragment">
+
+    <fragment
+        android:id="@+id/LandingFragment"
+        android:name="edu.fullsail.whackapede.LandingFragment"
+        android:label="@string/landing_fragment_label"
+        tools:layout="@layout/fragment_landing">
+
+        <action
+            android:id="@+id/action_LandingFragment_to_CreditsFragment"
+            app:destination="@id/CreditsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CreditsFragment"
+        android:name="edu.fullsail.whackapede.CreditsFragment"
+        android:label="@string/credits_fragment_label"
+        tools:layout="@layout/fragment_credits">
+
+        <action
+            android:id="@+id/action_CreditsFragment_to_LandingFragment"
+            app:destination="@id/LandingFragment" />
+    </fragment>
+</navigation>
