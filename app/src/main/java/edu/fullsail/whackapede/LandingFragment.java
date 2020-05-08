@@ -25,6 +25,9 @@ public class LandingFragment extends Fragment {
         view.findViewById( R.id.button_leaderboard ).setOnClickListener(
             button -> navController.navigate( R.id.action_LandingFragment_to_LeaderboardFragment ) );
 
+        view.findViewById( R.id.button_settings ).setOnClickListener(
+                button -> navController.navigate( R.id.action_LandingFragment_to_SettingsFragment ) );
+
         view.findViewById( R.id.button_instructions ).setOnClickListener(
             button -> navController.navigate( R.id.action_LandingFragment_to_InstructionsFragment ) );
 

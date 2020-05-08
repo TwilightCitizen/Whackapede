@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/volume">
+        <SeekBarPreference
+            android:key="music_volume_key"
+            android:title="@string/music_volume"
+            android:summary="@string/music_volume_summary"
+            app:min="@integer/volume_min"
+            android:max="@integer/volume_max"
+            android:defaultValue="@integer/volume_default"
+            app:showSeekBarValue="true" />
+
+        <SeekBarPreference
+            android:key="effects_volume_key"
+            android:title="@string/effects_volume"
+            android:summary="@string/effects_volume_summary"
+            app:min="@integer/volume_min"
+            android:max="@integer/volume_max"
+            android:defaultValue="@integer/volume_default"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/music">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/music_tracks"
+            android:entryValues="@array/music_tracks"
+            android:key="music_track_key"
+            android:title="@string/music_track"
+            android:summary="@string/music_track_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

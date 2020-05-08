@@ -7,6 +7,7 @@
 
     <string name="landing_fragment_label">Landing Fragment</string>
     <string name="leaderboard_fragment_label">Leaderboard Fragment</string>
+    <string name="settings_fragment_label">Settings Fragment</string>
     <string name="instructions_fragment_label">Instructions Fragment</string>
     <string name="credits_fragment_label">Credits Fragment</string>
 
@@ -21,4 +22,23 @@
     <string name="back">Back</string>
 
     <string name="contributors">Credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits</string>
+
+    <string name="volume">Volume</string>
+
+    <string name="music_volume">Music Volume</string>
+    <string name="music_volume_summary">Adjust the volume of the background music.</string>
+
+    <string name="effects_volume">Effects Volume</string>
+    <string name="effects_volume_summary">Adjust the volume of in-game sound effects.</string>
+
+    <string name="music">Music</string>
+
+    <string name="music_track">Music Track</string>
+    <string name="music_track_summary">&#8220;%s&#8221; is the selected music track that will play in the background.</string>
+
+    <string-array name="music_tracks">
+        <item>This Song</item>
+        <item>That Song</item>
+        <item>The Other Song</item>
+    </string-array>
 </resources>

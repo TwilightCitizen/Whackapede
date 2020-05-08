@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <integer name="volume_min">0</integer>
+    <integer name="volume_max">100</integer>
+    <integer name="volume_default">60</integer>
+</resources>
