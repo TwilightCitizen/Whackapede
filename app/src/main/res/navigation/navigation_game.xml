@@ -17,6 +17,10 @@
             app:destination="@id/LeaderboardFragment" />
 
         <action
+            android:id="@+id/action_LandingFragment_to_InstructionsFragment"
+            app:destination="@id/InstructionsFragment" />
+
+        <action
             android:id="@+id/action_LandingFragment_to_CreditsFragment"
             app:destination="@id/CreditsFragment" />
     </fragment>
@@ -26,6 +30,12 @@
         android:name="edu.fullsail.whackapede.LeaderboardFragment"
         android:label="@string/leaderboard_fragment_label"
         tools:layout="@layout/fragment_leaderboard"/>
+
+    <fragment
+        android:id="@+id/InstructionsFragment"
+        android:name="edu.fullsail.whackapede.LeaderboardFragment"
+        android:label="@string/instructions_fragment_label"
+        tools:layout="@layout/fragment_instructions"/>
 
     <fragment
         android:id="@+id/CreditsFragment"

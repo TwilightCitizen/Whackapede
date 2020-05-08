@@ -7,6 +7,7 @@
 
     <string name="landing_fragment_label">Landing Fragment</string>
     <string name="leaderboard_fragment_label">Leaderboard Fragment</string>
+    <string name="instructions_fragment_label">Instructions Fragment</string>
     <string name="credits_fragment_label">Credits Fragment</string>
 
     <string name="whack_a_pede_logo">Whack-A-Pede Logo</string>
