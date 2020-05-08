@@ -35,6 +35,8 @@
 
     <string name="music_track">Music Track</string>
     <string name="music_track_summary">&#8220;%s&#8221; is the selected music track that will play in the background.</string>
+    <string name="guest">Guest</string>
+    <string name="play_game_fragment_label">Play Game Fragment</string>
 
     <string-array name="music_tracks">
         <item>This Song</item>

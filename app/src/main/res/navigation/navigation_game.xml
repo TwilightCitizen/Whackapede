@@ -13,6 +13,10 @@
         tools:layout="@layout/fragment_landing">
 
         <action
+            android:id="@+id/action_LandingFragment_to_PlayGameFragment"
+            app:destination="@id/PlayGameFragment" />
+
+        <action
             android:id="@+id/action_LandingFragment_to_LeaderboardFragment"
             app:destination="@id/LeaderboardFragment" />
 
@@ -30,10 +34,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/PlayGameFragment"
+        android:name="edu.fullsail.whackapede.PlayGameFragment"
+        android:label="@string/play_game_fragment_label"
+        tools:layout="@layout/fragment_play_game" />
+
+    <fragment
         android:id="@+id/LeaderboardFragment"
         android:name="edu.fullsail.whackapede.LeaderboardFragment"
         android:label="@string/leaderboard_fragment_label"
-        tools:layout="@layout/fragment_leaderboard"/>
+        tools:layout="@layout/fragment_leaderboard" />
 
     <fragment
         android:id="@+id/SettingsFragment"
@@ -44,11 +54,11 @@
         android:id="@+id/InstructionsFragment"
         android:name="edu.fullsail.whackapede.LeaderboardFragment"
         android:label="@string/instructions_fragment_label"
-        tools:layout="@layout/fragment_instructions"/>
+        tools:layout="@layout/fragment_instructions" />
 
     <fragment
         android:id="@+id/CreditsFragment"
         android:name="edu.fullsail.whackapede.CreditsFragment"
         android:label="@string/credits_fragment_label"
-        tools:layout="@layout/fragment_credits"/>
+        tools:layout="@layout/fragment_credits" />
 </navigation>

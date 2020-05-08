@@ -22,6 +22,9 @@ public class LandingFragment extends Fragment {
 
         NavController navController = NavHostFragment.findNavController( LandingFragment.this );
 
+        view.findViewById( R.id.button_play_game ).setOnClickListener(
+                button -> navController.navigate( R.id.action_LandingFragment_to_PlayGameFragment ) );
+
         view.findViewById( R.id.button_leaderboard ).setOnClickListener(
             button -> navController.navigate( R.id.action_LandingFragment_to_LeaderboardFragment ) );
 
