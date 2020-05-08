@@ -27,24 +27,28 @@
         app:layout_constraintTop_toBottomOf="@id/image_logo">
 
         <Button
+            android:id="@+id/button_play_game"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/play_game" />
 
         <Button
+            android:id="@+id/button_leaderboard"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/leaderboard" />
 
         <Button
+            android:id="@+id/button_settings"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings" />
 
         <Button
+            android:id="@+id/button_instructions"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

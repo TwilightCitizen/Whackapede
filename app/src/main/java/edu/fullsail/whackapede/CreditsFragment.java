@@ -20,7 +20,6 @@ public class CreditsFragment extends Fragment {
         super.onViewCreated( view, savedInstanceState );
 
         view.findViewById( R.id.button_back ).setOnClickListener(
-            button -> NavHostFragment.findNavController( CreditsFragment.this )
-                .navigate( R.id.action_CreditsFragment_to_LandingFragment ) );
+            button -> NavHostFragment.findNavController( CreditsFragment.this ).popBackStack() );
     }
 }

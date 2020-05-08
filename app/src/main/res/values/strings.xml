@@ -2,17 +2,22 @@
 
 <resources>
     <string name="app_name">Whackapede</string>
-    <string name="title_activity_landing">LandingActivity</string>
-    <!-- Strings used for fragments for navigation -->
+
+    <string name="title_activity_game">GameActivity</string>
+
     <string name="landing_fragment_label">Landing Fragment</string>
+    <string name="leaderboard_fragment_label">Leaderboard Fragment</string>
     <string name="credits_fragment_label">Credits Fragment</string>
 
     <string name="whack_a_pede_logo">Whack-A-Pede Logo</string>
+
     <string name="play_game">Play Game</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="settings">Settings</string>
     <string name="instructions">Instructions</string>
     <string name="credits">Credits</string>
+
     <string name="back">Back</string>
+
     <string name="contributors">Credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits</string>
 </resources>

@@ -19,6 +19,10 @@ public class LandingFragment extends Fragment {
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
+        view.findViewById( R.id.button_leaderboard ).setOnClickListener(
+            button -> NavHostFragment.findNavController( LandingFragment.this )
+                .navigate( R.id.action_LandingFragment_to_LeaderboardFragment ) );
+
         view.findViewById( R.id.button_credits ).setOnClickListener(
             button -> NavHostFragment.findNavController( LandingFragment.this )
                 .navigate( R.id.action_LandingFragment_to_CreditsFragment ) );
