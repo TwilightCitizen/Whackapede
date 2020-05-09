@@ -7,7 +7,8 @@ Development Portfolio 6
 MDV469-O, C202005-01
 -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -36,35 +37,35 @@ MDV469-O, C202005-01
 
         <Button
             android:id="@+id/button_play_game"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Whackapede.Button.Earth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/play_game" />
 
         <Button
             android:id="@+id/button_leaderboard"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Whackapede.Button.Grass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/leaderboard" />
 
         <Button
             android:id="@+id/button_settings"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Whackapede.Button.Grass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings" />
 
         <Button
             android:id="@+id/button_instructions"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Whackapede.Button.Grass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/instructions" />
 
         <Button
             android:id="@+id/button_credits"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Whackapede.Button.Grass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/credits" />

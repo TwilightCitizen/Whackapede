@@ -14,10 +14,19 @@ MDV469-O, C202005-01
 
     <color name="sunshineYellow">#FFD946</color>
     <color name="sunshineTrans">#FFD9461A</color>
+
     <color name="skyBlue">#00C4FF</color>
+
     <color name="grassGreen">#00A315</color>
+    <color name="grassGreenPressed">#007A10</color>
+    <color name="grassGreenFocused">#008F13</color>
+
     <color name="earthBrown">#524100</color>
+    <color name="earthBrownPressed">#292100</color>
+    <color name="earthBrownFocused">#3D3100</color>
+
     <color name="plainWhite">#FFFFFF</color>
+    <color name="plainGrey">#999999</color>
     <color name="notQuiteBlack">#656565</color>
     <color name="plainBlack">#000000</color>
 </resources>
