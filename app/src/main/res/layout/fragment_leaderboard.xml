@@ -13,7 +13,9 @@ MDV469-O, C202005-01
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LeaderboardFragment">
+    android:background="@color/sunBleached"
+    tools:context=".LeaderboardFragment"
+    tools:ignore="Overdraw">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_leaderboard"
