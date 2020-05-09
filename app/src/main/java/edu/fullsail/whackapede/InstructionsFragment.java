@@ -26,8 +26,9 @@ public class InstructionsFragment extends Fragment {
         return inflater.inflate( R.layout.fragment_instructions, container, false );
     }
 
-    @Override public void onAttach( @NonNull Context context ) {
-        super.onAttach( context );
+    @Override
+    public void onResume() {
+        super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).show();
         requireActivity().setTitle( R.string.instructions );

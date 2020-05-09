@@ -50,8 +50,9 @@ public class LandingFragment extends Fragment {
             button -> navController.navigate( R.id.action_LandingFragment_to_CreditsFragment ) );
     }
 
-    @Override public void onAttach( @NonNull Context context ) {
-        super.onAttach( context );
+    @Override
+    public void onResume() {
+        super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).hide();
     }

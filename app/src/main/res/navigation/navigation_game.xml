@@ -45,7 +45,18 @@ MDV469-O, C202005-01
         android:id="@+id/PlayGameFragment"
         android:name="edu.fullsail.whackapede.PlayGameFragment"
         android:label="@string/play_game_fragment_label"
-        tools:layout="@layout/fragment_play_game" />
+        tools:layout="@layout/fragment_play_game">
+
+        <action
+            android:id="@+id/action_PlayGameFragment_to_GameFragment"
+            app:destination="@id/GameFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameFragment"
+        android:name="edu.fullsail.whackapede.GameFragment"
+        android:label="@string/game_fragment_label"
+        tools:layout="@layout/fragment_game" />
 
     <fragment
         android:id="@+id/LeaderboardFragment"
