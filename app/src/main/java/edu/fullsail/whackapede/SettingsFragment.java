@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.util.Objects;
+
+@SuppressWarnings( "WeakerAccess" )
 public class SettingsFragment extends PreferenceFragmentCompat {
     @Override public void onCreatePreferences( Bundle savedInstanceState, String rootKey ) {
         addPreferencesFromResource( R.xml.game_settings );
@@ -22,7 +25,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override public void onAttach( @NonNull Context context ) {
         super.onAttach( context );
 
-        ( ( AppCompatActivity ) getActivity() ).getSupportActionBar().show();
-        getActivity().setTitle( R.string.settings );
+        Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).show();
+        requireActivity().setTitle( R.string.settings );
     }
 }

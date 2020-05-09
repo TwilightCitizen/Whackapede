@@ -19,6 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.Objects;
+
+@SuppressWarnings( "WeakerAccess" )
 public class PlayGameFragment extends Fragment {
     @Override public View onCreateView(
         LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
@@ -43,6 +46,6 @@ public class PlayGameFragment extends Fragment {
     @Override public void onAttach( @NonNull Context context ) {
         super.onAttach( context );
 
-        ( ( AppCompatActivity ) getActivity() ).getSupportActionBar().hide();
+        Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).hide();
     }
 }

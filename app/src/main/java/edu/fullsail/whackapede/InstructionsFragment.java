@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import java.util.Objects;
+
 public class InstructionsFragment extends Fragment {
     @Override public View onCreateView(
         LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
@@ -27,7 +29,7 @@ public class InstructionsFragment extends Fragment {
     @Override public void onAttach( @NonNull Context context ) {
         super.onAttach( context );
 
-        ( ( AppCompatActivity ) getActivity() ).getSupportActionBar().show();
-        getActivity().setTitle( R.string.instructions );
+        Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).show();
+        requireActivity().setTitle( R.string.instructions );
     }
 }
