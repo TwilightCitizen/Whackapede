@@ -7,12 +7,14 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -36,5 +38,11 @@ public class PlayGameFragment extends Fragment {
                 button -> navController.navigate( R.id.todo ) ); */
 
         view.findViewById( R.id.button_back ).setOnClickListener( button -> navController.popBackStack() );
+    }
+
+    @Override public void onAttach( @NonNull Context context ) {
+        super.onAttach( context );
+
+        ( ( AppCompatActivity ) getActivity() ).getSupportActionBar().hide();
     }
 }
