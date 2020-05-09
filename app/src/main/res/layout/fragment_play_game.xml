@@ -13,6 +13,7 @@ MDV469-O, C202005-01
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/sunshineYellow"
     tools:context=".PlayGameFragment">
 
     <ImageView
@@ -21,10 +22,10 @@ MDV469-O, C202005-01
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:contentDescription="@string/whack_a_pede_logo"
+        android:src="@drawable/logo_whack_a_pede"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
