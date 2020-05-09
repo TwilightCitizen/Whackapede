@@ -7,13 +7,11 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -27,8 +25,7 @@ public class LeaderboardFragment extends Fragment {
         return inflater.inflate( R.layout.fragment_leaderboard, container, false );
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).show();

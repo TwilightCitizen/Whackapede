@@ -37,8 +37,7 @@ public class GameFragment extends Fragment {
         view.findViewById( R.id.button_back ).setOnClickListener( button -> navController.popBackStack() ); */
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).show();

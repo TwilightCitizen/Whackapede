@@ -7,10 +7,8 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 

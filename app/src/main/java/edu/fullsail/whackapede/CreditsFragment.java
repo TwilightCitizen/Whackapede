@@ -7,7 +7,6 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +34,7 @@ public class CreditsFragment extends Fragment {
             button -> NavHostFragment.findNavController( CreditsFragment.this ).popBackStack() );
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).hide();

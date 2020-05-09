@@ -7,7 +7,6 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,8 +49,7 @@ public class LandingFragment extends Fragment {
             button -> navController.navigate( R.id.action_LandingFragment_to_CreditsFragment ) );
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
 
         Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).hide();
