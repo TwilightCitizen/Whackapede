@@ -5,7 +5,7 @@ Development Portfolio 6
 MDV469-O, C202005-01
 */
 
-package edu.fullsail.whackapede;
+package edu.fullsail.whackapede.activities;
 
 import android.os.Bundle;
 
@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+
+import edu.fullsail.whackapede.R;
 
 public class GameActivity extends AppCompatActivity {
     @Override protected void onCreate( Bundle savedInstanceState ) {

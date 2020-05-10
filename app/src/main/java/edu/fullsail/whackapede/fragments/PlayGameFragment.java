@@ -5,7 +5,7 @@ Development Portfolio 6
 MDV469-O, C202005-01
 */
 
-package edu.fullsail.whackapede;
+package edu.fullsail.whackapede.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
+import edu.fullsail.whackapede.R;
+import edu.fullsail.whackapede.activities.GameActivity;
 
 @SuppressWarnings( "WeakerAccess" )
 public class PlayGameFragment extends Fragment {

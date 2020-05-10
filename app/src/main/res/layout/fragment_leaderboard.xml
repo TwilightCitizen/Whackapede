@@ -14,7 +14,7 @@ MDV469-O, C202005-01
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/sunBleached"
-    tools:context=".LeaderboardFragment"
+    tools:context=".fragments.LeaderboardFragment"
     tools:ignore="Overdraw">
 
     <androidx.recyclerview.widget.RecyclerView
