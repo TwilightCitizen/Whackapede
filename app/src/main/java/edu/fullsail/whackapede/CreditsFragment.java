@@ -7,20 +7,29 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import java.util.Objects;
-
 @SuppressWarnings( "WeakerAccess" )
 public class CreditsFragment extends Fragment {
+    private GameActivity gameActivity;
+
+    @Override public void onAttach( @NonNull Context context ) {
+        super.onAttach( context );
+
+        if( ! ( context instanceof GameActivity ) )
+            throw new ClassCastException( "GameActivity must host CreditsFragment" );
+
+        gameActivity = (GameActivity) context;
+    }
+
     @Override public View onCreateView(
         LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
     ) {
@@ -31,12 +40,12 @@ public class CreditsFragment extends Fragment {
         super.onViewCreated( view, savedInstanceState );
 
         view.findViewById( R.id.button_back ).setOnClickListener(
-            button -> NavHostFragment.findNavController( CreditsFragment.this ).popBackStack() );
+            button -> NavHostFragment.findNavController( CreditsFragment.this ).navigateUp() );
     }
 
     @Override public void onResume() {
         super.onResume();
 
-        Objects.requireNonNull( ( ( AppCompatActivity ) requireActivity() ).getSupportActionBar() ).hide();
+        gameActivity.hideActionBar();
     }
 }

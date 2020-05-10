@@ -10,18 +10,10 @@ MDV469-O, C202005-01
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Whack-A-Pede</string>
 
-    <string name="title_activity_game">GameActivity</string>
-
-    <string name="landing_fragment_label">Landing Fragment</string>
-    <string name="leaderboard_fragment_label">Leaderboard Fragment</string>
-    <string name="settings_fragment_label">Settings Fragment</string>
-    <string name="instructions_fragment_label">Instructions Fragment</string>
-    <string name="credits_fragment_label">Credits Fragment</string>
-    <string name="play_game_fragment_label">Play Game Fragment</string>
-    <string name="game_fragment_label">Game Fragment</string>
-
     <string name="whack_a_pede_logo">Whack-A-Pede Logo</string>
 
+    <string name="landing">@string/app_name</string>
+    <string name="game">@string/app_name</string>
     <string name="play_game">Play Game</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="settings">Settings</string>

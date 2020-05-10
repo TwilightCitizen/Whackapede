@@ -23,7 +23,7 @@ MDV469-O, C202005-01
 
         <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game"
+            android:label="@string/app_name"
             android:theme="@style/Whackapede.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
