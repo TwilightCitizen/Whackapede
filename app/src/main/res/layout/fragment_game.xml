@@ -102,5 +102,6 @@ MDV469-O, C202005-01
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/imageAvatar"
+        app:layout_constraintDimensionRatio="7:11"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
