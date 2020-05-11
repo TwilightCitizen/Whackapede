@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.activities.GameActivity;
 
+@SuppressWarnings( "WeakerAccess" )
 public class InstructionsFragment extends Fragment {
     private GameActivity gameActivity;
 
