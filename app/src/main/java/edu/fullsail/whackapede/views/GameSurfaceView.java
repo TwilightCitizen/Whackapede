@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+import edu.fullsail.whackapede.models.Game;
 import edu.fullsail.whackapede.threads.GameThread;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {

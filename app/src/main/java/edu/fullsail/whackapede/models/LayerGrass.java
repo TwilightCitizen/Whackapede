@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.interfaces.CanvasDrawable;
 
-public class GameArenaLayerGrass implements CanvasDrawable {
+public class LayerGrass implements CanvasDrawable {
     private Canvas canvas;
     private Bitmap bitmapGrass;
     private Paint paintGrass = new Paint();
 
-    public GameArenaLayerGrass( Context context, Canvas canvas ) {
+    public LayerGrass( Context context, Canvas canvas ) {
         this.canvas = canvas;
 
         float cellSize = ( float ) canvas.getWidth() / 7;

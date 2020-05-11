@@ -17,9 +17,11 @@ import edu.fullsail.whackapede.interfaces.CanvasDrawable;
 public class GameArena implements CanvasDrawable {
     private ArrayList< CanvasDrawable > canvasDrawables = new ArrayList<>();
 
-    public GameArena( Context context, Canvas canvas ) {
-        canvasDrawables.add( new GameArenaLayerEarth( context, canvas ) );
-        canvasDrawables.add( new GameArenaLayerGrass( context, canvas ) );
+    public GameArena( Context context, Canvas canvas, Game game ) {
+        canvasDrawables.add( new LayerEarth( context, canvas ) );
+        canvasDrawables.add( new LayerBelow( context, canvas, game ) );
+        canvasDrawables.add( new LayerGrass( context, canvas ) );
+        canvasDrawables.add( new LayerAbove( context, canvas, game ) );
     }
 
     @Override public void drawToCanvas() {

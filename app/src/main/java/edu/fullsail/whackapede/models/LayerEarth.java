@@ -15,12 +15,12 @@ import androidx.core.content.ContextCompat;
 import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.interfaces.CanvasDrawable;
 
-public class GameArenaLayerEarth implements CanvasDrawable {
+public class LayerEarth implements CanvasDrawable {
     private Canvas canvas;
 
     private int colorEarth;
 
-    public GameArenaLayerEarth( Context context, Canvas canvas ) {
+    public LayerEarth( Context context, Canvas canvas ) {
         this.canvas = canvas;
 
         colorEarth = ContextCompat.getColor( context, R.color.earthBrown );
