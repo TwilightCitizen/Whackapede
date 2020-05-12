@@ -7,27 +7,29 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
+import android.graphics.Canvas;
+
 public class Segment {
     private Segment head = null;
     private Segment tail = null;
 
-    private float currentX;
-    private float currentY;
+    private float currentXPercent;
+    private float currentYPercent;
 
-    private float lastX;
-    private float lastY;
+    private float lastXPercent;
+    private float lastYPercent;
 
     private float velocityX;
     private float velocityY;
 
     private boolean isAbove = true;
 
-    private float radius;
+    private float radiusPercent;
 
-    public Segment( float currentX, float currentY, float radius ) {
-        this.currentX = currentX;
-        this.currentY = currentY;
-        this.radius = radius;
+    public Segment( float currentXPercent, float currentYPercent, float radiusPercent ) {
+        this.currentXPercent = currentXPercent;
+        this.currentYPercent = currentYPercent;
+        this.radiusPercent = radiusPercent;
     }
 
     public boolean getIsHead() {
@@ -38,16 +40,16 @@ public class Segment {
         return tail == null;
     }
 
-    public float getCurrentX() {
-        return currentX;
+    public float getCurrentXFor( Canvas canvas ) {
+        return currentXPercent * canvas.getWidth();
     }
 
-    public float getCurrentY() {
-        return currentY;
+    public float getCurrentYFor( Canvas canvas ) {
+        return currentYPercent * canvas.getWidth();
     }
 
-    public float getRadius() {
-        return radius;
+    public float getRadiusFor( Canvas canvas ) {
+        return radiusPercent * canvas.getWidth();
     }
 
     public boolean getIsAbove() {
@@ -82,7 +84,7 @@ public class Segment {
         return tail;
     }
 
-    public Segment addTail() {
+    /* public Segment addTail() {
         Segment tail = new Segment( currentX, currentY + radius * 2, radius );
 
         this.tail = tail;
@@ -90,5 +92,6 @@ public class Segment {
         tail.isAbove = this.isAbove;
 
         return tail;
-    }
+    } */
 }
+

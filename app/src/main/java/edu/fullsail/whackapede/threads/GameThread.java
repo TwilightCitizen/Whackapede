@@ -12,7 +12,6 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 import edu.fullsail.whackapede.models.Game;
-import edu.fullsail.whackapede.models.GameArena;
 
 public class GameThread extends Thread {
     private SurfaceHolder surfaceHolder;
@@ -30,9 +29,8 @@ public class GameThread extends Thread {
     public void run() {
         while( isRunning ) {
             Canvas canvas = surfaceHolder.lockCanvas();
-            GameArena gameArena = new GameArena( context, canvas, game );
 
-            gameArena.drawToCanvas();
+            game.drawToCanvas( context, canvas );
             surfaceHolder.unlockCanvasAndPost( canvas );
         }
     }
