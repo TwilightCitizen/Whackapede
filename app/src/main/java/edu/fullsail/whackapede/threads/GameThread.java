@@ -20,21 +20,16 @@ public class GameThread extends Thread {
     private boolean isRunning;
     private Game game;
 
-    public GameThread( SurfaceHolder surfaceHolder, Context context ) {
+    public GameThread( SurfaceHolder surfaceHolder, Context context, Game game ) {
         isRunning = true;
         this.surfaceHolder = surfaceHolder;
         this.context = context;
+        this.game = game;
     }
 
     public void run() {
-        Canvas canvas = surfaceHolder.lockCanvas();
-        float width = canvas.getWidth();
-        game = new Game( width );
-
-        surfaceHolder.unlockCanvasAndPost( canvas );
-
         while( isRunning ) {
-            canvas = surfaceHolder.lockCanvas();
+            Canvas canvas = surfaceHolder.lockCanvas();
             GameArena gameArena = new GameArena( context, canvas, game );
 
             gameArena.drawToCanvas();

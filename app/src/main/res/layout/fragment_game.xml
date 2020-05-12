@@ -16,7 +16,7 @@ MDV469-O, C202005-01
     tools:context=".fragments.GameFragment" >
 
     <ImageView
-        android:id="@+id/imageAvatar"
+        android:id="@+id/image_avatar"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/player_avatar"
@@ -25,14 +25,14 @@ MDV469-O, C202005-01
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="@id/textTime"
+        app:layout_constraintBottom_toBottomOf="@id/text_time"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textPlayer"
+        android:id="@+id/text_player"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
@@ -42,12 +42,12 @@ MDV469-O, C202005-01
         android:text="@string/player"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/textScore"
-        app:layout_constraintStart_toEndOf="@+id/imageAvatar"
+        app:layout_constraintEnd_toStartOf="@id/text_score"
+        app:layout_constraintStart_toEndOf="@+id/image_avatar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textScore"
+        android:id="@+id/text_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
@@ -59,11 +59,11 @@ MDV469-O, C202005-01
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textPlayer"
+        app:layout_constraintStart_toEndOf="@id/text_player"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textTime"
+        android:id="@+id/text_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
@@ -72,12 +72,12 @@ MDV469-O, C202005-01
         android:paddingBottom="8dp"
         android:text="@string/time_remaining"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@id/textClock"
-        app:layout_constraintStart_toEndOf="@+id/imageAvatar"
-        app:layout_constraintTop_toBottomOf="@id/textPlayer" />
+        app:layout_constraintEnd_toStartOf="@id/text_clock"
+        app:layout_constraintStart_toEndOf="@+id/image_avatar"
+        app:layout_constraintTop_toBottomOf="@id/text_player" />
 
     <TextView
-        android:id="@+id/textClock"
+        android:id="@+id/text_clock"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
@@ -88,11 +88,11 @@ MDV469-O, C202005-01
         android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textTime"
-        app:layout_constraintTop_toBottomOf="@id/textScore" />
+        app:layout_constraintStart_toEndOf="@id/text_time"
+        app:layout_constraintTop_toBottomOf="@id/text_score" />
 
-    <edu.fullsail.whackapede.views.GameSurfaceView
-        android:id="@+id/gameSurface"
+    <!-- <edu.fullsail.whackapede.views.GameSurfaceView
+        android:id="@+id/surface_game"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
@@ -103,5 +103,19 @@ MDV469-O, C202005-01
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageAvatar"
-        app:layout_constraintDimensionRatio="7:11"/>
+        app:layout_constraintDimensionRatio="7:11"/> -->
+
+    <FrameLayout
+        android:id="@+id/frame_game"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_avatar"
+        app:layout_constraintDimensionRatio="7:11" />
 </androidx.constraintlayout.widget.ConstraintLayout>

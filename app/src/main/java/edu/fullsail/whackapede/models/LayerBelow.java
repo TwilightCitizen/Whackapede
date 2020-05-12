@@ -27,23 +27,23 @@ public class LayerBelow implements CanvasDrawable {
 
         int colorBelow = ContextCompat.getColor( context, R.color.nightBlue );
         bitmapBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
-        Canvas canvasBelow = new Canvas( bitmapBelow );
+        Canvas canvasAbove = new Canvas( bitmapBelow );
 
         Paint paintSegment = new Paint();
 
         paintSegment.setAntiAlias( true );
         paintSegment.setColor( colorBelow );
 
-        for( Segment centipede : game.getCentipedes() ) {
-            Segment segment = centipede;
+        for( SegmentNew centipede : game.getCentipedes() ) {
+            SegmentNew segmentNew = centipede;
 
-            while( segment != null ) {
-                if( segment.getIsBelow() ) canvasBelow.drawCircle(
-                    segment.getCurrentX(), segment.getCurrentY(),
-                    segment.getRadius(), paintSegment
+            while( segmentNew != null ) {
+                if( segmentNew.getIsBelow() ) canvasAbove.drawCircle(
+                    segmentNew.getCurrentXFor( canvas ), segmentNew.getCurrentYFor( canvas ),
+                    segmentNew.getRadiusFor(  canvas ), paintSegment
                 );
 
-                segment = segment.getTail();
+                segmentNew = segmentNew.getTail();
             }
         }
     }

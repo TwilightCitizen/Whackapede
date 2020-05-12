@@ -35,16 +35,16 @@ public class LayerAbove implements CanvasDrawable {
         paintSegment.setAntiAlias( true );
         paintSegment.setColor( colorAbove );
 
-        for( Segment centipede : game.getCentipedes() ) {
-            Segment segment = centipede;
+        for( SegmentNew centipede : game.getCentipedes() ) {
+            SegmentNew segmentNew = centipede;
 
-            while( segment != null ) {
-                if( segment.getIsAbove() ) canvasAbove.drawCircle(
-                    segment.getCurrentX(), segment.getCurrentY(),
-                    segment.getRadius(), paintSegment
+            while( segmentNew != null ) {
+                if( segmentNew.getIsAbove() ) canvasAbove.drawCircle(
+                    segmentNew.getCurrentXFor( canvas ), segmentNew.getCurrentYFor( canvas ),
+                    segmentNew.getRadiusFor(  canvas ), paintSegment
                 );
 
-                segment = segment.getTail();
+                segmentNew = segmentNew.getTail();
             }
         }
     }

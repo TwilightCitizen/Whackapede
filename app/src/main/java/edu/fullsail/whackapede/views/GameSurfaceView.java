@@ -7,6 +7,7 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
@@ -15,17 +16,20 @@ import android.view.SurfaceHolder;
 import edu.fullsail.whackapede.models.Game;
 import edu.fullsail.whackapede.threads.GameThread;
 
+@SuppressLint( "ViewConstructor" )
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
+    private Game game;
 
-    public GameSurfaceView( Context context, AttributeSet attrs ) {
+    public GameSurfaceView( Context context, AttributeSet attrs, Game game ) {
         super( context, attrs );
 
         SurfaceHolder surfaceHolder = getHolder();
 
         surfaceHolder.addCallback( this );
 
-        gameThread = new GameThread( surfaceHolder, context );
+        this.game = game;
+        gameThread = new GameThread( surfaceHolder, context, game );
     }
 
     @Override public void surfaceCreated( SurfaceHolder holder ) {
@@ -38,5 +42,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override public void surfaceDestroyed( SurfaceHolder holder ) {
         gameThread.end();
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
