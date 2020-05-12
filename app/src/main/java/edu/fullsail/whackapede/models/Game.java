@@ -28,8 +28,6 @@ public class Game {
     private ArrayList< Segment > centipedes = new ArrayList<>();
     private ArrayList< Hole > holes = new ArrayList<>();
 
-    private int colorEarth;
-
     public Game() {
         setupHoles();
         setupCentipedes();
@@ -91,7 +89,7 @@ public class Game {
     }
 
     private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
-        colorEarth = ContextCompat.getColor( context, R.color.earthBrown );
+        int colorEarth = ContextCompat.getColor( context, R.color.earthBrown );
 
         canvas.drawColor( colorEarth );
     }
