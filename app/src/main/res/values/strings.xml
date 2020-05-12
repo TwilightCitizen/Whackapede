@@ -44,6 +44,9 @@ MDV469-O, C202005-01
     <string name="zero">0</string>
     <string name="player_avatar">Player Avatar</string>
 
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+
     <string-array name="music_tracks">
         <item>This Song</item>
         <item>That Song</item>

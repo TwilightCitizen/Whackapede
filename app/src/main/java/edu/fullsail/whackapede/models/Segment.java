@@ -94,15 +94,13 @@ public class Segment {
         return tail;
     }
 
-    public Segment addTails( int tails ) {
+    public void addTails( int tails ) {
         Segment tail = this;
 
         while( tails > 0 ) {
             tail = tail.addTail();
             tails--;
         }
-
-        return tail;
     }
 }
 

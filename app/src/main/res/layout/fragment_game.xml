@@ -15,12 +15,6 @@ MDV469-O, C202005-01
     android:layout_height="match_parent"
     tools:context=".fragments.GameFragment" >
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
     <ImageView
         android:id="@+id/image_avatar"
         android:layout_width="0dp"

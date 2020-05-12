@@ -156,4 +156,8 @@ public class Game {
     public void toggleState() {
         isPaused = !isPaused;
     }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
 }
