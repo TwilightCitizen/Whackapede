@@ -30,6 +30,8 @@ public class GameThread extends Thread {
         while( isRunning ) {
             Canvas canvas = surfaceHolder.lockCanvas();
 
+            if( canvas == null ) break;
+
             game.drawToCanvas( context, canvas );
             surfaceHolder.unlockCanvasAndPost( canvas );
         }

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,12 @@ public class GameFragment extends Fragment {
         GameSurfaceView gameSurfaceView = new GameSurfaceView( gameActivity, null, game );
 
         frameGame.addView( gameSurfaceView );
+
+        Button button = view.findViewById( R.id.button );
+
+        button.setOnClickListener( v -> {
+            game.toggleState();
+        } );
     }
 
     @Override public void onResume() {

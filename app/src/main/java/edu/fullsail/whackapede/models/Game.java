@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import edu.fullsail.whackapede.R;
 
 public class Game {
-    private float cellWidthPercent = cellWidthFor( 1 );
+    private boolean isPaused = true;
+
+    private float cellWidthPercent = 1f / 7f;
     private float radiusHolePercent = cellWidthPercent * 0.5f;
     private float radiusSegmentPercent = radiusHolePercent * 0.75f;
 
@@ -68,22 +70,6 @@ public class Game {
         centipedes.add( segment );
     }
 
-    public ArrayList< Hole > getHoles() {
-        return holes;
-    }
-
-    public ArrayList< Segment > getCentipedes() {
-        return centipedes;
-    }
-
-    public static float cellWidthFor( float canvasWidth ) {
-        return canvasWidth / 7;
-    }
-
-    public static float cellHeightFor( float canvasHeight ) {
-        return canvasHeight / 11;
-    }
-
     public void drawToCanvas( Context context, Canvas canvas ) {
         drawEarthLayerToCanvas( context, canvas );
         drawBelowLayerToCanvas( context, canvas );
@@ -116,7 +102,7 @@ public class Game {
     }
 
     private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
-        int colorAbove = ContextCompat.getColor( context, R.color.dayBlue );
+        int colorAbove = ContextCompat.getColor( context, isPaused ? R.color.dayBlue : R.color.nightBlue );
         Bitmap bitmapAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasAbove = new Canvas( bitmapAbove );
 
@@ -142,7 +128,7 @@ public class Game {
     }
 
     private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
-        int colorBelow = ContextCompat.getColor( context, R.color.nightBlue );
+        int colorBelow = ContextCompat.getColor( context, isPaused ? R.color.nightBlue : R.color.dayBlue );
         Bitmap bitmapBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasAbove = new Canvas( bitmapBelow );
 
@@ -165,5 +151,9 @@ public class Game {
         }
 
         canvas.drawBitmap( bitmapBelow, 0, 0, new Paint() );
+    }
+
+    public void toggleState() {
+        isPaused = !isPaused;
     }
 }
