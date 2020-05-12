@@ -23,9 +23,10 @@ import edu.fullsail.whackapede.R;
 public class Game {
     private boolean isPaused = true;
 
-    private double cellWidthPercent = 1f / 7f;
-    private double radiusHolePercent = cellWidthPercent * 0.5f;
-    private double radiusSegmentPercent = radiusHolePercent * 0.75f;
+    private double cellWidthPercent = 1 / 7d;
+    private double radiusHolePercent = cellWidthPercent * 0.5d;
+    private double radiusSegmentPercent = radiusHolePercent * 0.75d;
+    private double segmentVelocityPercent = cellWidthPercent * 10d;
 
     private ArrayList< Segment > centipedes = new ArrayList<>();
     private ArrayList< Hole > holes = new ArrayList<>();
@@ -51,7 +52,8 @@ public class Game {
         Segment segment = new Segment(
             cellWidthPercent * 2 + radiusHolePercent,
             cellWidthPercent * 2 + radiusHolePercent,
-            radiusSegmentPercent
+            radiusSegmentPercent,
+            0, segmentVelocityPercent
         );
 
         segment.addTails( 9 );
@@ -60,7 +62,8 @@ public class Game {
         segment = new Segment(
             cellWidthPercent * 3 + radiusHolePercent,
             cellWidthPercent * 3 + radiusHolePercent,
-            radiusSegmentPercent
+            radiusSegmentPercent,
+            0, segmentVelocityPercent * -1
         );
 
         segment.setIsBelow();
@@ -96,17 +99,15 @@ public class Game {
         paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
 
         for( Hole hole : holes ) canvasGrass.drawCircle(
-            (float) hole.getCurrentXFor( canvas ),
-            (float) hole.getCurrentYFor( canvas ),
-            (float) hole.getRadiusFor( canvas ),
-            paintHole
+            (float) hole.getCurrentXFor( canvas ), (float) hole.getCurrentYFor( canvas ),
+            (float) hole.getRadiusFor( canvas ), paintHole
         );
 
         canvas.drawBitmap( bitmapGrass, 0, 0, new Paint() );
     }
 
     private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
-        int colorAbove = ContextCompat.getColor( context, isPaused ? R.color.dayBlue : R.color.nightBlue );
+        int colorAbove = ContextCompat.getColor( context, R.color.dayBlue  );
         Bitmap bitmapAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasAbove = new Canvas( bitmapAbove );
 
@@ -120,10 +121,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsAbove() ) canvasAbove.drawCircle(
-                    (float) segment.getCurrentXFor( canvas ),
-                    (float) segment.getCurrentYFor( canvas ),
-                    (float) segment.getRadiusFor(  canvas ),
-                    paintSegment
+                    (float) segment.getCurrentXFor( canvas ), (float) segment.getCurrentYFor( canvas ),
+                    (float) segment.getRadiusFor(  canvas ), paintSegment
                 );
 
                 segment = segment.getTail();
@@ -134,7 +133,7 @@ public class Game {
     }
 
     private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
-        int colorBelow = ContextCompat.getColor( context, isPaused ? R.color.nightBlue : R.color.dayBlue );
+        int colorBelow = ContextCompat.getColor( context, R.color.nightBlue );
         Bitmap bitmapBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasAbove = new Canvas( bitmapBelow );
 
@@ -148,10 +147,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsBelow() ) canvasAbove.drawCircle(
-                    (float) segment.getCurrentXFor( canvas ),
-                    (float) segment.getCurrentYFor( canvas ),
-                    (float) segment.getRadiusFor(  canvas ),
-                    paintSegment
+                    (float) segment.getCurrentXFor( canvas ), (float) segment.getCurrentYFor( canvas ),
+                    (float) segment.getRadiusFor(  canvas ), paintSegment
                 );
 
                 segment = segment.getTail();
@@ -159,6 +156,22 @@ public class Game {
         }
 
         canvas.drawBitmap( bitmapBelow, 0, 0, new Paint() );
+    }
+
+    public void updatePositions( double elapsedTimeMillis ) {
+        if( isPaused ) return;
+
+        double interval = elapsedTimeMillis / 1000;
+
+        for( Segment centipede : centipedes ) {
+            Segment segment = centipede;
+
+            while( segment != null ) {
+                segment.updatePosition( interval );
+
+                segment = segment.getTail();
+            }
+        }
     }
 
     public void toggleState() {
