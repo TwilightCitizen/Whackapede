@@ -10,26 +10,26 @@ package edu.fullsail.whackapede.models;
 import android.graphics.Canvas;
 
 public class Hole {
-    private float currentXPercent;
-    private float currentYPercent;
+    private double currentXPercent;
+    private double currentYPercent;
 
-    private float radiusPercent;
+    private double radiusPercent;
 
-    public Hole( float currentXPercent, float currentYPercent, float radiusPercent ) {
+    public Hole( double currentXPercent, double currentYPercent, double radiusPercent ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
         this.radiusPercent = radiusPercent;
     }
 
-    public float getCurrentXFor( Canvas canvas ) {
+    public double getCurrentXFor( Canvas canvas ) {
         return currentXPercent * canvas.getWidth();
     }
 
-    public float getCurrentYFor( Canvas canvas ) {
+    public double getCurrentYFor( Canvas canvas ) {
         return currentYPercent * canvas.getWidth();
     }
 
-    public float getRadiusFor( Canvas canvas ) {
+    public double getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
 }

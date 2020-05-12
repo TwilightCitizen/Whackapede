@@ -13,20 +13,20 @@ public class Segment {
     private Segment head = null;
     private Segment tail = null;
 
-    private float currentXPercent;
-    private float currentYPercent;
+    private double currentXPercent;
+    private double currentYPercent;
 
-    private float lastXPercent;
-    private float lastYPercent;
+    private double lastXPercent;
+    private double lastYPercent;
 
-    private float velocityX;
-    private float velocityY;
+    private double velocityX;
+    private double velocityY;
 
     private boolean isAbove = true;
 
-    private float radiusPercent;
+    private double radiusPercent;
 
-    public Segment( float currentXPercent, float currentYPercent, float radiusPercent ) {
+    public Segment( double currentXPercent, double currentYPercent, double radiusPercent ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
         this.radiusPercent = radiusPercent;
@@ -40,15 +40,15 @@ public class Segment {
         return tail == null;
     }
 
-    public float getCurrentXFor( Canvas canvas ) {
+    public double getCurrentXFor( Canvas canvas ) {
         return currentXPercent * canvas.getWidth();
     }
 
-    public float getCurrentYFor( Canvas canvas ) {
+    public double getCurrentYFor( Canvas canvas ) {
         return currentYPercent * canvas.getWidth();
     }
 
-    public float getRadiusFor( Canvas canvas ) {
+    public double getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
 

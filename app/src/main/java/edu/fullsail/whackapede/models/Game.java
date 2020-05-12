@@ -23,9 +23,9 @@ import edu.fullsail.whackapede.R;
 public class Game {
     private boolean isPaused = true;
 
-    private float cellWidthPercent = 1f / 7f;
-    private float radiusHolePercent = cellWidthPercent * 0.5f;
-    private float radiusSegmentPercent = radiusHolePercent * 0.75f;
+    private double cellWidthPercent = 1f / 7f;
+    private double radiusHolePercent = cellWidthPercent * 0.5f;
+    private double radiusSegmentPercent = radiusHolePercent * 0.75f;
 
     private ArrayList< Segment > centipedes = new ArrayList<>();
     private ArrayList< Hole > holes = new ArrayList<>();
@@ -95,8 +95,12 @@ public class Game {
         paintHole.setAntiAlias( true );
         paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
 
-        for( Hole hole : holes )
-            canvasGrass.drawCircle( hole.getCurrentXFor( canvas ), hole.getCurrentYFor( canvas ), hole.getRadiusFor( canvas ), paintHole );
+        for( Hole hole : holes ) canvasGrass.drawCircle(
+            (float) hole.getCurrentXFor( canvas ),
+            (float) hole.getCurrentYFor( canvas ),
+            (float) hole.getRadiusFor( canvas ),
+            paintHole
+        );
 
         canvas.drawBitmap( bitmapGrass, 0, 0, new Paint() );
     }
@@ -116,8 +120,10 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsAbove() ) canvasAbove.drawCircle(
-                        segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
-                        segment.getRadiusFor(  canvas ), paintSegment
+                    (float) segment.getCurrentXFor( canvas ),
+                    (float) segment.getCurrentYFor( canvas ),
+                    (float) segment.getRadiusFor(  canvas ),
+                    paintSegment
                 );
 
                 segment = segment.getTail();
@@ -142,8 +148,10 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsBelow() ) canvasAbove.drawCircle(
-                        segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
-                        segment.getRadiusFor(  canvas ), paintSegment
+                    (float) segment.getCurrentXFor( canvas ),
+                    (float) segment.getCurrentYFor( canvas ),
+                    (float) segment.getRadiusFor(  canvas ),
+                    paintSegment
                 );
 
                 segment = segment.getTail();
