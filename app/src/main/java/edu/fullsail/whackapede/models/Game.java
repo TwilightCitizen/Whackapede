@@ -47,20 +47,23 @@ public class Game {
 
     private void setupCentipedes() {
         Segment segment = new Segment(
-                cellWidthPercent * 2 + radiusHolePercent,
-                cellWidthPercent * 2 + radiusHolePercent,
-                radiusSegmentPercent
+            cellWidthPercent * 2 + radiusHolePercent,
+            cellWidthPercent * 2 + radiusHolePercent,
+            radiusSegmentPercent
         );
 
+        segment.addTails( 9 );
         centipedes.add( segment );
 
         segment = new Segment(
-                cellWidthPercent * 3 + radiusHolePercent,
-                cellWidthPercent * 3 + radiusHolePercent,
-                radiusSegmentPercent
+            cellWidthPercent * 3 + radiusHolePercent,
+            cellWidthPercent * 3 + radiusHolePercent,
+            radiusSegmentPercent
         );
 
         segment.setIsBelow();
+        segment.addTails( 9 );
+
 
         centipedes.add( segment );
     }
@@ -83,9 +86,9 @@ public class Game {
 
     public void drawToCanvas( Context context, Canvas canvas ) {
         drawEarthLayerToCanvas( context, canvas );
+        drawBelowLayerToCanvas( context, canvas );
         drawGrassLayerToCanvas( context, canvas );
         drawAboveLayerToCanvas( context, canvas );
-        drawBelowLayerToCanvas( context, canvas );
     }
 
     private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {

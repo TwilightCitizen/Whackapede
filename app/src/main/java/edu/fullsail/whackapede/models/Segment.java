@@ -84,14 +84,25 @@ public class Segment {
         return tail;
     }
 
-    /* public Segment addTail() {
-        Segment tail = new Segment( currentX, currentY + radius * 2, radius );
+    public Segment addTail() {
+        Segment tail = new Segment( currentXPercent, currentYPercent + radiusPercent * 2, radiusPercent );
 
         this.tail = tail;
         tail.head = this;
         tail.isAbove = this.isAbove;
 
         return tail;
-    } */
+    }
+
+    public Segment addTails( int tails ) {
+        Segment tail = this;
+
+        while( tails > 0 ) {
+            tail = tail.addTail();
+            tails--;
+        }
+
+        return tail;
+    }
 }
 
