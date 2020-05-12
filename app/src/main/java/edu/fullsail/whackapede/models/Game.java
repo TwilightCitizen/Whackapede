@@ -33,7 +33,6 @@ public class Game {
     public Game() {
         setupHoles();
         setupCentipedes();
-        setupLayers();
     }
 
     private void setupHoles() {
@@ -66,29 +65,6 @@ public class Game {
         segment.setIsBelow();
 
         centipedes.add( segment );
-    }
-
-    private void setupLayers() {
-        setupEarthLayer();
-        setupGrassLayer();
-        setupAboveLayer();
-        setupBelowLayer();
-    }
-
-    private void setupEarthLayer() {
-
-    }
-
-    private void setupGrassLayer() {
-
-    }
-
-    private void setupAboveLayer() {
-
-    }
-
-    private void setupBelowLayer() {
-
     }
 
     public ArrayList< Hole > getHoles() {
