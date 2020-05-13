@@ -12,17 +12,17 @@ import android.graphics.Canvas;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Turnstile {
-    private double currentXPercent;
-    private double currentYPercent;
+class Turnstile {
+    private final double currentXPercent;
+    private final double currentYPercent;
 
-    private double radiusPercent;
+    private final double radiusPercent;
 
-    private ArrayList< Exit > exits;
+    private final ArrayList< Exit > exits;
 
-    public Turnstile(
-        double currentXPercent, double currentYPercent, double radiusPercent,
-        ArrayList< Exit > exits
+    Turnstile(
+            double currentXPercent, double currentYPercent, double radiusPercent,
+            ArrayList< Exit > exits
     ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
@@ -30,19 +30,19 @@ public class Turnstile {
         this.exits = exits;
     }
 
-    public double getCurrentXFor( Canvas canvas ) {
+    double getCurrentXFor( Canvas canvas ) {
         return currentXPercent * canvas.getWidth();
     }
 
-    public double getCurrentYFor( Canvas canvas ) {
+    double getCurrentYFor( Canvas canvas ) {
         return currentYPercent * canvas.getWidth();
     }
 
-    public double getRadiusFor( Canvas canvas ) {
+    double getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
 
-    public Exit getRandomExit() {
+    Exit getRandomExit() {
         Random rand = new Random();
 
         return exits.get( rand.nextInt( exits.size() ) );

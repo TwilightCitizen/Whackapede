@@ -23,14 +23,12 @@ import edu.fullsail.whackapede.R;
 public class Game {
     private boolean isPaused = true;
 
-    private double cellWidthPercent = 1 / 7d;
-    private double radiusHolePercent = cellWidthPercent * 0.5d;
-    private double radiusSegmentPercent = radiusHolePercent * 0.75d;
-    private double segmentSpeedPercent = cellWidthPercent * 10d;
+    private final double cellWidthPercent = 1 / 7d;
+    private final double radiusHolePercent = cellWidthPercent * 0.5d;
 
-    private ArrayList< Segment > centipedes = new ArrayList<>();
-    private ArrayList< Hole > holes = new ArrayList<>();
-    private ArrayList< Turnstile > turnstiles = new ArrayList<>();
+    private final ArrayList< Segment > centipedes = new ArrayList<>();
+    private final ArrayList< Hole > holes = new ArrayList<>();
+    private final ArrayList< Turnstile > turnstiles = new ArrayList<>();
 
     public Game() {
         setupHoles();
@@ -104,7 +102,7 @@ public class Game {
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstilesLeftAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstileLeftDown    + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitBottom()
+                radiusHolePercent, Exit.getThreeWayExitLeft()
             ) );
     }
 
@@ -116,7 +114,7 @@ public class Game {
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstilesRightAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstileRightDown    + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitBottom()
+                radiusHolePercent, Exit.getThreeWayExitRight()
             ) );
     }
 
@@ -147,9 +145,11 @@ public class Game {
     }
 
     private void setupCentipedes() {
+        double radiusSegmentPercent = radiusHolePercent * 0.75d;
+        double segmentSpeedPercent = cellWidthPercent * 10d;
         Segment segment = new Segment(
             cellWidthPercent * 2 + radiusHolePercent, cellWidthPercent * 2 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, 0, 1
+                radiusSegmentPercent, segmentSpeedPercent, 0, 1
         );
 
         segment.addTailsBelow( 9 );
@@ -157,7 +157,7 @@ public class Game {
 
         segment = new Segment(
             cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 2 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, 0, -1
+                radiusSegmentPercent, segmentSpeedPercent, 0, -1
         );
 
         segment.setIsBelow();

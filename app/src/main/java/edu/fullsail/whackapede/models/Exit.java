@@ -9,11 +9,11 @@ package edu.fullsail.whackapede.models;
 
 import java.util.ArrayList;
 
-public class Exit {
-    private double directionX;
-    private double directionY;
+class Exit {
+    private final double directionX;
+    private final double directionY;
 
-    public Exit( double directionX, double directionY ) {
+    private Exit( double directionX, double directionY ) {
         this.directionX = directionX;
         this.directionY = directionY;
     }
@@ -26,23 +26,23 @@ public class Exit {
         return directionY;
     }
 
-    public static Exit getExitTop() {
+    private static Exit getExitTop() {
         return new Exit(  0,  1 );
     }
 
-    public static Exit getExitBottom() {
+    private static Exit getExitBottom() {
         return new Exit(  0, -1 );
     }
 
-    public static Exit getExitLeft() {
+    private static Exit getExitLeft() {
         return new Exit( -1,  0 );
     }
 
-    public static Exit getExitRight() {
+    private static Exit getExitRight() {
         return new Exit(  1,  0 );
     }
 
-    public static ArrayList< Exit > getFourWayExit() {
+    static ArrayList< Exit > getFourWayExit() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );
@@ -53,7 +53,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getThreeWayExitTop() {
+    static ArrayList< Exit > getThreeWayExitTop() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitBottom() );
@@ -63,7 +63,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getThreeWayExitBottom() {
+    static ArrayList< Exit > getThreeWayExitBottom() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );
@@ -73,7 +73,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getThreeWayExitLeft() {
+    static ArrayList< Exit > getThreeWayExitLeft() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );
@@ -83,7 +83,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getThreeWayExitRight() {
+    static ArrayList< Exit > getThreeWayExitRight() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );
@@ -93,7 +93,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getTwoWayExitTopLeft() {
+    static ArrayList< Exit > getTwoWayExitTopLeft() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitBottom() );
@@ -102,7 +102,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getTwoWayExitTopRight() {
+    static ArrayList< Exit > getTwoWayExitTopRight() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitBottom() );
@@ -111,7 +111,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getTwoWayExitBottomLeft() {
+    static ArrayList< Exit > getTwoWayExitBottomLeft() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );
@@ -120,7 +120,7 @@ public class Exit {
         return  exits;
     }
 
-    public static ArrayList< Exit > getTwoWayExitBottomRight() {
+    static ArrayList< Exit > getTwoWayExitBottomRight() {
         ArrayList< Exit > exits = new ArrayList<>();
 
         exits.add( getExitTop() );

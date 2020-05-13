@@ -14,10 +14,10 @@ import android.view.SurfaceHolder;
 import edu.fullsail.whackapede.models.Game;
 
 public class GameThread extends Thread {
-    private SurfaceHolder surfaceHolder;
-    private Context context;
+    private final SurfaceHolder surfaceHolder;
+    private final Context context;
     private boolean isRunning;
-    private Game game;
+    private final Game game;
 
     public GameThread( SurfaceHolder surfaceHolder, Context context, Game game ) {
         isRunning = true;

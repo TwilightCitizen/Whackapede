@@ -18,8 +18,8 @@ import edu.fullsail.whackapede.threads.GameThread;
 
 @SuppressLint( "ViewConstructor" )
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread gameThread;
-    private Game game;
+    private final GameThread gameThread;
+    private final Game game;
 
     public GameSurfaceView( Context context, AttributeSet attrs, Game game ) {
         super( context, attrs );

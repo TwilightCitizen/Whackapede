@@ -9,7 +9,7 @@ package edu.fullsail.whackapede.models;
 
 import android.graphics.Canvas;
 
-public class Segment {
+class Segment {
     private Segment head = null;
     private Segment tail = null;
 
@@ -26,11 +26,11 @@ public class Segment {
 
     private boolean isAbove = true;
 
-    private double radiusPercent;
+    private final double radiusPercent;
 
-    public Segment(
-        double currentXPercent, double currentYPercent, double radiusPercent,
-        double speedPercent, double directionX, double directionY
+    Segment(
+            double currentXPercent, double currentYPercent, double radiusPercent,
+            double speedPercent, double directionX, double directionY
     ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
@@ -48,107 +48,107 @@ public class Segment {
         return tail == null;
     }
 
-    public double getCurrentXFor( Canvas canvas ) {
+    double getCurrentXFor( Canvas canvas ) {
         return currentXPercent * canvas.getWidth();
     }
 
-    public double getCurrentYFor( Canvas canvas ) {
+    double getCurrentYFor( Canvas canvas ) {
         return currentYPercent * canvas.getWidth();
     }
 
-    public double getRadiusFor( Canvas canvas ) {
+    double getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
 
-    public double getCurrentXPercent() {
+    double getCurrentXPercent() {
         return currentXPercent;
     }
 
-    public void setCurrentXPercent( double currentXPercent ) {
+    void setCurrentXPercent( double currentXPercent ) {
         this.currentXPercent = currentXPercent;
     }
 
-    public double getCurrentYPercent() {
+    double getCurrentYPercent() {
         return currentYPercent;
     }
 
-    public void setCurrentYPercent( double currentYPercent ) {
+    void setCurrentYPercent( double currentYPercent ) {
         this.currentYPercent = currentYPercent;
     }
 
-    public double getPreviousXPercent() {
+    double getPreviousXPercent() {
         return previousXPercent;
     }
 
-    public void setPreviousXPercent( double previousXPercent ) {
+    void setPreviousXPercent( double previousXPercent ) {
         this.previousXPercent = previousXPercent;
     }
 
-    public double getPreviousYPercent() {
+    double getPreviousYPercent() {
         return previousYPercent;
     }
 
-    public void setPreviousYPercent( double previousYPercent ) {
+    void setPreviousYPercent( double previousYPercent ) {
         this.previousYPercent = previousYPercent;
     }
 
-    public double getSpeedPercent() {
+    double getSpeedPercent() {
         return speedPercent;
     }
 
-    public void setSpeedPercent( double speedPercent ) {
+    void setSpeedPercent( double speedPercent ) {
         this.speedPercent = speedPercent;
     }
 
-    public double getDirectionX() {
+    double getDirectionX() {
         return directionX;
     }
 
-    public void setDirectionX( double directionX ) {
+    void setDirectionX( double directionX ) {
         this.directionX = directionX;
     }
 
-    public double getDirectionY() {
+    double getDirectionY() {
         return directionY;
     }
 
-    public void setDirectionY( double directionY ) {
+    void setDirectionY( double directionY ) {
         this.directionY = directionY;
     }
 
-    public boolean getIsAbove() {
+    boolean getIsAbove() {
         return isAbove;
     }
 
-    public void setIsAbove() {
+    void setIsAbove() {
         isAbove = true;
     }
 
-    public boolean getIsBelow() {
+    boolean getIsBelow() {
         return !isAbove;
     }
 
-    public void setIsBelow() {
+    void setIsBelow() {
         isAbove = false;
     }
 
-    public void setHead( Segment segment ) {
+    void setHead( Segment segment ) {
         head = segment;
     }
 
-    public Segment getHead() {
+    Segment getHead() {
         return head;
     }
 
-    public void setTail( Segment segment ) {
+    void setTail( Segment segment ) {
         tail = segment;
     }
 
-    public Segment getTail() {
+    Segment getTail() {
         return tail;
     }
 
-    public Segment addTailBelow() {
+    private Segment addTailBelow() {
         Segment tail = new Segment(
             currentXPercent, currentYPercent + radiusPercent * 2,
             radiusPercent, speedPercent, directionX, directionY
@@ -161,7 +161,7 @@ public class Segment {
         return tail;
     }
 
-    public void addTailsBelow( int tails ) {
+    void addTailsBelow( int tails ) {
         Segment tail = this;
 
         while( tails > 0 ) {
