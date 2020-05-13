@@ -10,6 +10,7 @@ package edu.fullsail.whackapede.models;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -66,7 +67,7 @@ public class Game {
                 turnstiles.add( new Turnstile(
                     cellWidthPercent * fourWayTurnstileAcross + radiusHolePercent,
                     cellWidthPercent * fourWayTurnstileDown   + radiusHolePercent,
-                    radiusHolePercent, Exit.getFourWayExit()
+                    radiusHolePercent / 2, Exit.getFourWayExit()
                 ) );
     }
 
@@ -78,7 +79,7 @@ public class Game {
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstileTopAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstilesTopDown  + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitTop()
+                radiusHolePercent / 2, Exit.getThreeWayExitTop()
             ) );
     }
 
@@ -90,31 +91,31 @@ public class Game {
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstileBottomAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstilesBottomDown  + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitBottom()
+                radiusHolePercent / 2, Exit.getThreeWayExitBottom()
             ) );
     }
 
     private void setupLeftThreeWayTurnstiles() {
         int   threeWayTurnstilesLeftAcross = 0;
-        int[] threeWayTurnstilesLeftDown   = new int[] { 1, 2, 3, 4, 5 };
+        int[] threeWayTurnstilesLeftDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         for( int threeWayTurnstileLeftDown : threeWayTurnstilesLeftDown )
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstilesLeftAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstileLeftDown    + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitLeft()
+                radiusHolePercent / 2, Exit.getThreeWayExitLeft()
             ) );
     }
 
     private void setupRightThreeWayTurnstiles() {
         int   threeWayTurnstilesRightAcross = 6;
-        int[] threeWayTurnstilesRightDown   = new int[] { 1, 2, 3, 4, 5 };
+        int[] threeWayTurnstilesRightDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         for( int threeWayTurnstileRightDown : threeWayTurnstilesRightDown )
             turnstiles.add( new Turnstile(
                 cellWidthPercent * threeWayTurnstilesRightAcross + radiusHolePercent,
                 cellWidthPercent * threeWayTurnstileRightDown    + radiusHolePercent,
-                radiusHolePercent, Exit.getThreeWayExitRight()
+                radiusHolePercent / 2, Exit.getThreeWayExitRight()
             ) );
     }
 
@@ -122,25 +123,25 @@ public class Game {
         turnstiles.add( new Turnstile(
             cellWidthPercent * 0 + radiusHolePercent,
             cellWidthPercent * 0 + radiusHolePercent,
-            radiusHolePercent, Exit.getTwoWayExitTopLeft()
+            radiusHolePercent / 2, Exit.getTwoWayExitTopLeft()
         ) );
 
         turnstiles.add( new Turnstile(
             cellWidthPercent * 6 + radiusHolePercent,
             cellWidthPercent * 0 + radiusHolePercent,
-            radiusHolePercent, Exit.getTwoWayExitTopRight()
+            radiusHolePercent / 2, Exit.getTwoWayExitTopRight()
         ) );
 
         turnstiles.add( new Turnstile(
             cellWidthPercent * 0 + radiusHolePercent,
             cellWidthPercent * 10 + radiusHolePercent,
-            radiusHolePercent, Exit.getTwoWayExitBottomLeft()
+            radiusHolePercent / 2, Exit.getTwoWayExitBottomLeft()
         ) );
 
         turnstiles.add( new Turnstile(
             cellWidthPercent * 6 + radiusHolePercent,
             cellWidthPercent * 10 + radiusHolePercent,
-            radiusHolePercent, Exit.getTwoWayExitBottomRight()
+            radiusHolePercent / 2, Exit.getTwoWayExitBottomRight()
         ) );
     }
 
@@ -149,37 +150,11 @@ public class Game {
         double segmentSpeedPercent = cellWidthPercent * 2d;
 
         Segment segment = new Segment(
-            cellWidthPercent * 2 + radiusHolePercent, cellWidthPercent * 2 + radiusHolePercent,
+            cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 0 + radiusHolePercent,
             radiusSegmentPercent, segmentSpeedPercent, 0, 1
         );
 
         segment.addTailsTop( 9 );
-        centipedes.add( segment );
-
-        segment = new Segment(
-            cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 10 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, 0, -1
-        );
-
-        segment.setIsBelow();
-        segment.addTailsBottom( 9 );
-        centipedes.add( segment );
-
-        segment = new Segment(
-            cellWidthPercent * 0 + radiusHolePercent, cellWidthPercent * 0 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, 1, 0
-        );
-
-        segment.addTailsLeft( 9 );
-        centipedes.add( segment );
-
-        segment = new Segment(
-            cellWidthPercent * 6 + radiusHolePercent, cellWidthPercent * 1 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, -1, 0
-        );
-
-        segment.setIsBelow();
-        segment.addTailsRight( 9 );
         centipedes.add( segment );
     }
 
@@ -272,19 +247,30 @@ public class Game {
     }
 
     private void drawTurnstileLayerToCanvas( Context context, Canvas canvas ) {
-        int colorTurnstile = ContextCompat.getColor( context, R.color.sunshineTrans );
+        int colorFourWay  = ContextCompat.getColor( context, R.color.fourWay );
+        int colorThreeWay = ContextCompat.getColor( context, R.color.threeWay );
+        int colorTwoWay   = ContextCompat.getColor( context, R.color.twoWay );
+
         Bitmap bitmapTurnstile = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasTurnstile = new Canvas( bitmapTurnstile );
 
         Paint paintTurnstile = new Paint();
 
         paintTurnstile.setAntiAlias( true );
-        paintTurnstile.setColor( colorTurnstile );
 
-        for( Turnstile turnstile : turnstiles ) canvasTurnstile.drawCircle(
-            (float) turnstile.getCurrentXFor( canvas ), (float) turnstile.getCurrentYFor( canvas ),
-            (float) turnstile.getRadiusFor( canvas ), paintTurnstile
-        );
+        for( Turnstile turnstile : turnstiles ) {
+            if( turnstile.getExits().size() == 4 )
+                paintTurnstile.setColor( colorFourWay );
+            else if( turnstile.getExits().size() == 3 )
+                paintTurnstile.setColor( colorThreeWay );
+            else if( turnstile.getExits().size() == 2 )
+                paintTurnstile.setColor( colorTwoWay );
+
+            canvasTurnstile.drawCircle(
+                (float) turnstile.getCurrentXFor( canvas ), (float) turnstile.getCurrentYFor( canvas ),
+                (float) turnstile.getRadiusFor( canvas ), paintTurnstile
+            );
+        }
 
         canvas.drawBitmap( bitmapTurnstile, 0, 0, new Paint() );
     }
@@ -300,22 +286,93 @@ public class Game {
             while( segment != null ) {
                 double segmentNextXPercent = segment.getCurrentXPercent() + segment.getSpeedPercent() * segment.getDirectionX() * interval;
                 double segmentNextYPercent = segment.getCurrentYPercent() + segment.getSpeedPercent() * segment.getDirectionY() * interval;
-                double segmentDiffXPercent = segment.getCurrentXPercent() - segmentNextXPercent;
-                double segmentDiffYPercent = segment.getCurrentYPercent() - segmentNextYPercent;
 
                 animateSegmentThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
-                animateSegmentThroughTurnstiles();
-
-                segment.setCurrentXPercent( segmentNextXPercent );
-                segment.setCurrentYPercent( segmentNextYPercent );
+                animateSegmentThroughTurnstiles( segment, segmentNextXPercent, segmentNextYPercent );
 
                 segment = segment.getTail();
             }
         }
     }
 
-    private void animateSegmentThroughTurnstiles() {
+    private void animateSegmentThroughTurnstiles(
+        Segment segment, double segmentNextXPercent, double segmentNextYPercent
+    ) {
+        for( Turnstile turnstile : turnstiles ) {
+            boolean segmentPerfectlyInTurnstile =
+                turnstile.getCurrentXPercent() == segmentNextXPercent &&
+                turnstile.getCurrentYPercent() == segmentNextYPercent;
 
+            boolean segmentPassedTurnstileVertically =
+                turnstile.getCurrentXPercent() == segmentNextXPercent && ( (
+                    turnstile.getCurrentYPercent() < segmentNextYPercent &&
+                    turnstile.getCurrentYPercent() > segment.getCurrentYPercent()
+                ) || (
+                    turnstile.getCurrentYPercent() > segmentNextYPercent &&
+                    turnstile.getCurrentYPercent() < segment.getCurrentYPercent()
+                ) );
+
+            boolean segmentPassedTurnstileHorizontally =
+                turnstile.getCurrentYPercent() == segmentNextYPercent && ( (
+                    turnstile.getCurrentXPercent() < segmentNextXPercent &&
+                    turnstile.getCurrentXPercent() > segment.getCurrentXPercent()
+                ) || (
+                    turnstile.getCurrentXPercent() > segmentNextXPercent &&
+                    turnstile.getCurrentXPercent() < segment.getCurrentXPercent()
+                ) );
+
+            if( segmentPerfectlyInTurnstile ||
+                segmentPassedTurnstileVertically ||
+                segmentPassedTurnstileHorizontally
+            ) {
+                if( segment.getIsHead() )
+                    segment.setExitTaken( turnstile.getRandomExit() );
+                else
+                    segment.setExitTaken( segment.getHead().getExitTaken() );
+            } else {
+                segment.setCurrentXPercent( segmentNextXPercent );
+                segment.setCurrentYPercent( segmentNextYPercent );
+
+                return;
+            }
+
+            segment.setDirectionX( segment.getExitTaken().getDirectionX() );
+            segment.setDirectionY( segment.getExitTaken().getDirectionY() );
+
+            double segmentTotalTravel;
+            double segmentTravelToTurnstile ;
+            double segmentTravelAfterTurnstile = 0;
+
+            if( segmentPerfectlyInTurnstile ) {
+                segment.setCurrentXPercent( segmentNextXPercent );
+                segment.setCurrentYPercent( segmentNextYPercent );
+
+                return;
+            } else if( segmentPassedTurnstileVertically ) {
+                segmentTotalTravel          = segment.getCurrentYPercent() - segmentNextYPercent;
+                segmentTravelToTurnstile    = segment.getCurrentYPercent() - turnstile.getCurrentYPercent();
+                segmentTravelAfterTurnstile = segmentTotalTravel - segmentTravelToTurnstile;
+            } else if( segmentPassedTurnstileHorizontally ) {
+                segmentTotalTravel          = segment.getCurrentXPercent() - segmentNextXPercent;
+                segmentTravelToTurnstile    = segment.getCurrentXPercent() - turnstile.getCurrentXPercent();
+                segmentTravelAfterTurnstile = segmentTotalTravel - segmentTravelToTurnstile;
+            }
+
+            if( segment.getExitTaken().equals( Exit.getExitTop() ) ||
+                segment.getExitTaken().equals( Exit.getExitBottom() )
+            ) {
+                segmentNextXPercent = turnstile.getCurrentXPercent();
+                segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurnstile;
+            } else if( segment.getExitTaken().equals( Exit.getExitLeft() ) ||
+                       segment.getExitTaken().equals( Exit.getExitRight() )
+            ) {
+                segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurnstile;;
+                segmentNextYPercent = turnstile.getCurrentYPercent();
+            }
+
+            segment.setCurrentXPercent( segmentNextXPercent );
+            segment.setCurrentYPercent( segmentNextYPercent );
+        }
     }
 
     private void animateSegmentThroughHoles(

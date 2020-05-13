@@ -16,9 +16,6 @@ class Segment {
     private double currentXPercent;
     private double currentYPercent;
 
-    // private double previousXPercent;
-    // private double previousYPercent;
-
     private double speedPercent;
 
     private double directionX;
@@ -27,6 +24,8 @@ class Segment {
     private boolean isAbove = true;
 
     private final double radiusPercent;
+
+    private Exit exitTaken;
 
     Segment(
             double currentXPercent, double currentYPercent, double radiusPercent,
@@ -75,22 +74,6 @@ class Segment {
     void setCurrentYPercent( double currentYPercent ) {
         this.currentYPercent = currentYPercent;
     }
-
-    /* double getPreviousXPercent() {
-        return previousXPercent;
-    }
-
-    void setPreviousXPercent( double previousXPercent ) {
-        this.previousXPercent = previousXPercent;
-    }
-
-    double getPreviousYPercent() {
-        return previousYPercent;
-    }
-
-    void setPreviousYPercent( double previousYPercent ) {
-        this.previousYPercent = previousYPercent;
-    } */
 
     double getSpeedPercent() {
         return speedPercent;
@@ -150,6 +133,14 @@ class Segment {
 
     Segment getTail() {
         return tail;
+    }
+
+    void setExitTaken( Exit exitTaken ) {
+        this.exitTaken = exitTaken;
+    }
+
+    Exit getExitTaken() {
+        return exitTaken;
     }
 
     private Segment addTailBottom() {

@@ -18,27 +18,27 @@ class Exit {
         this.directionY = directionY;
     }
 
-    public double getDirectionX() {
+    double getDirectionX() {
         return directionX;
     }
 
-    public double getDirectionY() {
+    double getDirectionY() {
         return directionY;
     }
 
-    private static Exit getExitTop() {
+    static Exit getExitTop() {
         return new Exit(  0,  1 );
     }
 
-    private static Exit getExitBottom() {
+    static Exit getExitBottom() {
         return new Exit(  0, -1 );
     }
 
-    private static Exit getExitLeft() {
+    static Exit getExitLeft() {
         return new Exit( -1,  0 );
     }
 
-    private static Exit getExitRight() {
+    static Exit getExitRight() {
         return new Exit(  1,  0 );
     }
 

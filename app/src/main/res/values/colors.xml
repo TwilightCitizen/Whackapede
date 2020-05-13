@@ -24,8 +24,10 @@ MDV469-O, C202005-01
     <color name="earthBrownPressed">#292100</color>
     <color name="earthBrownFocused">#3D3100</color>
 
-    <!-- <color name="plainWhite">#FFFFFF</color>
-    <color name="plainBlack">#000000</color> -->
     <color name="plainGrey">#999999</color>
     <color name="notQuiteBlack">#656565</color>
+
+    <color name="fourWay">#00FFEA</color>
+    <color name="threeWay">#FBEF00</color>
+    <color name="twoWay">#B800FB</color>
 </resources>

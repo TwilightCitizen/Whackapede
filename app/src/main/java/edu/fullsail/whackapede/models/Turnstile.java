@@ -21,8 +21,8 @@ class Turnstile {
     private final ArrayList< Exit > exits;
 
     Turnstile(
-            double currentXPercent, double currentYPercent, double radiusPercent,
-            ArrayList< Exit > exits
+        double currentXPercent, double currentYPercent, double radiusPercent,
+        ArrayList< Exit > exits
     ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
@@ -42,9 +42,21 @@ class Turnstile {
         return radiusPercent * canvas.getWidth();
     }
 
+    double getCurrentXPercent() {
+        return currentXPercent;
+    }
+
+    double getCurrentYPercent() {
+        return currentYPercent;
+    }
+
     Exit getRandomExit() {
         Random rand = new Random();
 
         return exits.get( rand.nextInt( exits.size() ) );
+    }
+
+    ArrayList< Exit > getExits() {
+        return exits;
     }
 }
