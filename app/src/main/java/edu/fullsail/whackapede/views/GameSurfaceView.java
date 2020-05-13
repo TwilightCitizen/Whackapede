@@ -36,9 +36,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameThread.start();
     }
 
-    @Override public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {
-
-    }
+    @Override public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {}
 
     @Override public void surfaceDestroyed( SurfaceHolder holder ) {
         gameThread.end();

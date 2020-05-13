@@ -16,11 +16,13 @@ public class Segment {
     private double currentXPercent;
     private double currentYPercent;
 
-    private double lastXPercent;
-    private double lastYPercent;
+    private double previousXPercent;
+    private double previousYPercent;
 
-    private double velocityXPercent;
-    private double velocityYPercent;
+    private double speedPercent;
+
+    private double directionX;
+    private double directionY;
 
     private boolean isAbove = true;
 
@@ -28,13 +30,14 @@ public class Segment {
 
     public Segment(
         double currentXPercent, double currentYPercent, double radiusPercent,
-        double velocityXPercent, double velocityYPercent
+        double speedPercent, double directionX, double directionY
     ) {
         this.currentXPercent = currentXPercent;
         this.currentYPercent = currentYPercent;
         this.radiusPercent = radiusPercent;
-        this.velocityXPercent = velocityXPercent;
-        this.velocityYPercent = velocityYPercent;
+        this.speedPercent = speedPercent;
+        this.directionX = directionX;
+        this.directionY = directionY;
     }
 
     public boolean getIsHead() {
@@ -57,11 +60,60 @@ public class Segment {
         return radiusPercent * canvas.getWidth();
     }
 
-    public void updatePosition( double interval ) {
-        lastXPercent = currentXPercent;
-        lastYPercent = currentYPercent;
-        currentXPercent = currentXPercent + velocityXPercent * interval;
-        currentYPercent = currentYPercent + velocityYPercent * interval;
+    public double getCurrentXPercent() {
+        return currentXPercent;
+    }
+
+    public void setCurrentXPercent( double currentXPercent ) {
+        this.currentXPercent = currentXPercent;
+    }
+
+    public double getCurrentYPercent() {
+        return currentYPercent;
+    }
+
+    public void setCurrentYPercent( double currentYPercent ) {
+        this.currentYPercent = currentYPercent;
+    }
+
+    public double getPreviousXPercent() {
+        return previousXPercent;
+    }
+
+    public void setPreviousXPercent( double previousXPercent ) {
+        this.previousXPercent = previousXPercent;
+    }
+
+    public double getPreviousYPercent() {
+        return previousYPercent;
+    }
+
+    public void setPreviousYPercent( double previousYPercent ) {
+        this.previousYPercent = previousYPercent;
+    }
+
+    public double getSpeedPercent() {
+        return speedPercent;
+    }
+
+    public void setSpeedPercent( double speedPercent ) {
+        this.speedPercent = speedPercent;
+    }
+
+    public double getDirectionX() {
+        return directionX;
+    }
+
+    public void setDirectionX( double directionX ) {
+        this.directionX = directionX;
+    }
+
+    public double getDirectionY() {
+        return directionY;
+    }
+
+    public void setDirectionY( double directionY ) {
+        this.directionY = directionY;
     }
 
     public boolean getIsAbove() {
@@ -96,10 +148,10 @@ public class Segment {
         return tail;
     }
 
-    public Segment addTail() {
+    public Segment addTailBelow() {
         Segment tail = new Segment(
             currentXPercent, currentYPercent + radiusPercent * 2,
-            radiusPercent, velocityXPercent, velocityYPercent
+            radiusPercent, speedPercent, directionX, directionY
         );
 
         this.tail = tail;
@@ -109,11 +161,11 @@ public class Segment {
         return tail;
     }
 
-    public void addTails( int tails ) {
+    public void addTailsBelow( int tails ) {
         Segment tail = this;
 
         while( tails > 0 ) {
-            tail = tail.addTail();
+            tail = tail.addTailBelow();
             tails--;
         }
     }
