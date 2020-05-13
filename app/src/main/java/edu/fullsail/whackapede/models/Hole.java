@@ -32,4 +32,12 @@ class Hole {
     double getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
+
+    double getCurrentXPercent() {
+        return currentXPercent;
+    }
+
+    double getCurrentYPercent() {
+        return currentYPercent;
+    }
 }

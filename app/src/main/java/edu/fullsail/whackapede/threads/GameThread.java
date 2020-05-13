@@ -36,7 +36,7 @@ public class GameThread extends Thread {
 
             long currentTimeMillis = System.currentTimeMillis();
             double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
-            game.updatePositions( elapsedTimeMillis );
+            game.animateOver( elapsedTimeMillis );
             game.drawToCanvas( context, canvas );
             surfaceHolder.unlockCanvasAndPost( canvas );
 

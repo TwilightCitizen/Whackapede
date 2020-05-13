@@ -146,24 +146,40 @@ public class Game {
 
     private void setupCentipedes() {
         double radiusSegmentPercent = radiusHolePercent * 0.75d;
-        double segmentSpeedPercent = cellWidthPercent * 10d;
+        double segmentSpeedPercent = cellWidthPercent * 2d;
+
         Segment segment = new Segment(
             cellWidthPercent * 2 + radiusHolePercent, cellWidthPercent * 2 + radiusHolePercent,
-                radiusSegmentPercent, segmentSpeedPercent, 0, 1
+            radiusSegmentPercent, segmentSpeedPercent, 0, 1
         );
 
-        segment.addTailsBelow( 9 );
+        segment.addTailsTop( 9 );
         centipedes.add( segment );
 
         segment = new Segment(
-            cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 2 + radiusHolePercent,
-                radiusSegmentPercent, segmentSpeedPercent, 0, -1
+            cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 10 + radiusHolePercent,
+            radiusSegmentPercent, segmentSpeedPercent, 0, -1
         );
 
         segment.setIsBelow();
-        segment.addTailsBelow( 9 );
+        segment.addTailsBottom( 9 );
+        centipedes.add( segment );
 
+        segment = new Segment(
+            cellWidthPercent * 0 + radiusHolePercent, cellWidthPercent * 0 + radiusHolePercent,
+            radiusSegmentPercent, segmentSpeedPercent, 1, 0
+        );
 
+        segment.addTailsLeft( 9 );
+        centipedes.add( segment );
+
+        segment = new Segment(
+            cellWidthPercent * 6 + radiusHolePercent, cellWidthPercent * 1 + radiusHolePercent,
+            radiusSegmentPercent, segmentSpeedPercent, -1, 0
+        );
+
+        segment.setIsBelow();
+        segment.addTailsRight( 9 );
         centipedes.add( segment );
     }
 
@@ -273,7 +289,7 @@ public class Game {
         canvas.drawBitmap( bitmapTurnstile, 0, 0, new Paint() );
     }
 
-    public void updatePositions( double elapsedTimeMillis ) {
+    public void animateOver( double elapsedTimeMillis ) {
         if( isPaused ) return;
 
         double interval = elapsedTimeMillis / 1000;
@@ -282,14 +298,56 @@ public class Game {
             Segment segment = centipede;
 
             while( segment != null ) {
-                segment.setPreviousXPercent( segment.getCurrentXPercent() );
-                segment.setPreviousYPercent( segment.getPreviousYPercent() );
+                double segmentNextXPercent = segment.getCurrentXPercent() + segment.getSpeedPercent() * segment.getDirectionX() * interval;
+                double segmentNextYPercent = segment.getCurrentYPercent() + segment.getSpeedPercent() * segment.getDirectionY() * interval;
+                double segmentDiffXPercent = segment.getCurrentXPercent() - segmentNextXPercent;
+                double segmentDiffYPercent = segment.getCurrentYPercent() - segmentNextYPercent;
 
-                segment.setCurrentXPercent( segment.getCurrentXPercent() + segment.getSpeedPercent() * segment.getDirectionX() * interval );
-                segment.setCurrentYPercent( segment.getCurrentYPercent() + segment.getSpeedPercent() * segment.getDirectionY() * interval );
+                animateSegmentThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
+                animateSegmentThroughTurnstiles();
+
+                segment.setCurrentXPercent( segmentNextXPercent );
+                segment.setCurrentYPercent( segmentNextYPercent );
 
                 segment = segment.getTail();
             }
+        }
+    }
+
+    private void animateSegmentThroughTurnstiles() {
+
+    }
+
+    private void animateSegmentThroughHoles(
+        Segment segment, double segmentNextXPercent, double segmentNextYPercent
+    ) {
+        for( Hole hole : holes ) {
+            boolean segmentPerfectlyInHole =
+                hole.getCurrentXPercent() == segmentNextXPercent &&
+                hole.getCurrentYPercent() == segmentNextYPercent;
+
+            boolean segmentPassedHoleVertically =
+                hole.getCurrentXPercent() == segmentNextXPercent && ( (
+                    hole.getCurrentYPercent() < segmentNextYPercent &&
+                    hole.getCurrentYPercent() > segment.getCurrentYPercent()
+                ) || (
+                    hole.getCurrentYPercent() > segmentNextYPercent &&
+                    hole.getCurrentYPercent() < segment.getCurrentYPercent()
+                ) );
+
+            boolean segmentPassedHoleHorizontally =
+                hole.getCurrentYPercent() == segmentNextYPercent && ( (
+                    hole.getCurrentXPercent() < segmentNextXPercent &&
+                    hole.getCurrentXPercent() > segment.getCurrentXPercent()
+                ) || (
+                    hole.getCurrentXPercent() > segmentNextXPercent &&
+                    hole.getCurrentXPercent() < segment.getCurrentXPercent()
+                ) );
+
+            if( segmentPerfectlyInHole ||
+                segmentPassedHoleVertically ||
+                segmentPassedHoleHorizontally
+            ) segment.toggleAboveBelow();
         }
     }
 

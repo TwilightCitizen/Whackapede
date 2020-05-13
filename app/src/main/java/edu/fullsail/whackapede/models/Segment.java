@@ -16,8 +16,8 @@ class Segment {
     private double currentXPercent;
     private double currentYPercent;
 
-    private double previousXPercent;
-    private double previousYPercent;
+    // private double previousXPercent;
+    // private double previousYPercent;
 
     private double speedPercent;
 
@@ -76,7 +76,7 @@ class Segment {
         this.currentYPercent = currentYPercent;
     }
 
-    double getPreviousXPercent() {
+    /* double getPreviousXPercent() {
         return previousXPercent;
     }
 
@@ -90,7 +90,7 @@ class Segment {
 
     void setPreviousYPercent( double previousYPercent ) {
         this.previousYPercent = previousYPercent;
-    }
+    } */
 
     double getSpeedPercent() {
         return speedPercent;
@@ -132,6 +132,10 @@ class Segment {
         isAbove = false;
     }
 
+    void toggleAboveBelow() {
+        isAbove = !isAbove;
+    }
+
     void setHead( Segment segment ) {
         head = segment;
     }
@@ -148,7 +152,7 @@ class Segment {
         return tail;
     }
 
-    private Segment addTailBelow() {
+    private Segment addTailBottom() {
         Segment tail = new Segment(
             currentXPercent, currentYPercent + radiusPercent * 2,
             radiusPercent, speedPercent, directionX, directionY
@@ -161,11 +165,77 @@ class Segment {
         return tail;
     }
 
-    void addTailsBelow( int tails ) {
+    void addTailsBottom( int tails ) {
         Segment tail = this;
 
         while( tails > 0 ) {
-            tail = tail.addTailBelow();
+            tail = tail.addTailBottom();
+            tails--;
+        }
+    }
+
+    private Segment addTailTop() {
+        Segment tail = new Segment(
+            currentXPercent, currentYPercent - radiusPercent * 2,
+            radiusPercent, speedPercent, directionX, directionY
+        );
+
+        this.tail = tail;
+        tail.head = this;
+        tail.isAbove = this.isAbove;
+
+        return tail;
+    }
+
+    void addTailsTop( int tails ) {
+        Segment tail = this;
+
+        while( tails > 0 ) {
+            tail = tail.addTailTop();
+            tails--;
+        }
+    }
+
+    private Segment addTailLeft() {
+        Segment tail = new Segment(
+                currentXPercent - radiusPercent * 2, currentYPercent,
+                radiusPercent, speedPercent, directionX, directionY
+        );
+
+        this.tail = tail;
+        tail.head = this;
+        tail.isAbove = this.isAbove;
+
+        return tail;
+    }
+
+    void addTailsLeft( int tails ) {
+        Segment tail = this;
+
+        while( tails > 0 ) {
+            tail = tail.addTailLeft();
+            tails--;
+        }
+    }
+
+    private Segment addTailRight() {
+        Segment tail = new Segment(
+            currentXPercent + radiusPercent * 2, currentYPercent,
+            radiusPercent, speedPercent, directionX, directionY
+        );
+
+        this.tail = tail;
+        tail.head = this;
+        tail.isAbove = this.isAbove;
+
+        return tail;
+    }
+
+    void addTailsRight( int tails ) {
+        Segment tail = this;
+
+        while( tails > 0 ) {
+            tail = tail.addTailRight();
             tails--;
         }
     }
