@@ -7,125 +7,80 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 class Exit {
-    private final double directionX;
-    private final double directionY;
+    private final float directionX;
+    private final float directionY;
 
-    private Exit( double directionX, double directionY ) {
+    static final Exit exitTop    = new Exit(  0, -1 );
+    static final Exit exitBottom = new Exit(  0,  1 );
+    static final Exit exitLeft   = new Exit( -1,  0 );
+    static final Exit exitRight  = new Exit(  1,  0 );
+
+    static final ArrayList< Exit > fourWayExit = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitBottom ); add( exitLeft); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > threeWayExitTop = new ArrayList< Exit >() { {
+        add( exitBottom ); add( exitLeft); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > threeWayExitBottom = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitLeft); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > threeWayExitLeft = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitBottom ); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > threeWayExitRight = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitBottom ); add( exitLeft);
+    } };
+
+    static final ArrayList< Exit > twoWayExitTopLeft = new ArrayList< Exit >() { {
+        add( exitBottom ); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > twoWayExitTopRight = new ArrayList< Exit >() { {
+        add( exitBottom ); add( exitLeft );
+    } };
+
+    static final ArrayList< Exit > twoWayExitBottomLeft = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitRight );
+    } };
+
+    static final ArrayList< Exit > twoWayExitBottomRight = new ArrayList< Exit >() { {
+        add( exitTop ); add( exitLeft );
+    } };
+
+    Exit( float directionX, float directionY ) {
         this.directionX = directionX;
         this.directionY = directionY;
     }
 
-    double getDirectionX() {
+    @Override public boolean equals( @Nullable Object obj ) {
+        if( obj == this ) return true;
+
+        if( !( obj instanceof Exit ) ) return false;
+
+        Exit exit = (Exit)  obj;
+
+        return Float.compare( exit.getDirectionX(), directionX ) == 0 &&
+               Float.compare( exit.getDirectionY(), directionY ) == 0;
+    }
+
+    float getDirectionX() {
         return directionX;
     }
 
-    double getDirectionY() {
+    float getDirectionY() {
         return directionY;
     }
 
-    static Exit getExitTop() {
-        return new Exit(  0,  1 );
-    }
-
-    static Exit getExitBottom() {
-        return new Exit(  0, -1 );
-    }
-
-    static Exit getExitLeft() {
-        return new Exit( -1,  0 );
-    }
-
-    static Exit getExitRight() {
-        return new Exit(  1,  0 );
-    }
-
-    static ArrayList< Exit > getFourWayExit() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitBottom() );
-        exits.add( getExitLeft() );
-        exits.add( getExitRight() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getThreeWayExitTop() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitBottom() );
-        exits.add( getExitLeft() );
-        exits.add( getExitRight() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getThreeWayExitBottom() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitLeft() );
-        exits.add( getExitRight() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getThreeWayExitLeft() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitBottom() );
-        exits.add( getExitRight() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getThreeWayExitRight() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitBottom() );
-        exits.add( getExitLeft() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getTwoWayExitTopLeft() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitBottom() );
-        exits.add( getExitRight()  );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getTwoWayExitTopRight() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitBottom() );
-        exits.add( getExitLeft() );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getTwoWayExitBottomLeft() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitRight()  );
-
-        return  exits;
-    }
-
-    static ArrayList< Exit > getTwoWayExitBottomRight() {
-        ArrayList< Exit > exits = new ArrayList<>();
-
-        exits.add( getExitTop() );
-        exits.add( getExitLeft() );
-
-        return  exits;
+    static Exit getExitReverseOf( float directionX, float directionY ) {
+        return new Exit( 0 - directionX, 0 - directionY);
     }
 }

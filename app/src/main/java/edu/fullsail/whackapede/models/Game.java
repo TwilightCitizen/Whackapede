@@ -10,30 +10,31 @@ package edu.fullsail.whackapede.models;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import edu.fullsail.whackapede.R;
 
 public class Game {
     private boolean isPaused = true;
 
-    private final double cellWidthPercent = 1 / 7d;
-    private final double radiusHolePercent = cellWidthPercent * 0.5d;
+    private final float cellWidthPercent = 1 / 7f;
+    private final float radiusHolePercent = cellWidthPercent * 0.5f;
 
     private final ArrayList< Segment > centipedes = new ArrayList<>();
     private final ArrayList< Hole > holes = new ArrayList<>();
-    private final ArrayList< Turnstile > turnstiles = new ArrayList<>();
+    private final ArrayList< Turn > turns = new ArrayList<>();
 
     public Game() {
         setupHoles();
-        setupTurnstiles();
+        setupTurns();
         setupCentipedes();
     }
 
@@ -49,112 +50,113 @@ public class Game {
             ) );
     }
 
-    private void setupTurnstiles() {
-        setupInteriorFourWayTurnstiles();
-        setupTopThreeWayTurnstiles();
-        setupBottomThreeWayTurnstiles();
-        setupLeftThreeWayTurnstiles();
-        setupRightThreeWayTurnstiles();
-        setupCornerTwoWayTurnstiles();
+    private void setupTurns() {
+        setupInteriorFourWayTurns();
+        setupTopThreeWayTurns();
+        setupBottomThreeWayTurns();
+        setupLeftThreeWayTurns();
+        setupRightThreeWayTurns();
+        setupCornerTwoWayTurns();
     }
 
-    private void setupInteriorFourWayTurnstiles() {
-        int[] fourWayTurnstilesAcross = new int[] { 1, 2, 3, 4, 5 };
-        int[] fourWayTurnstilesDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private void setupInteriorFourWayTurns() {
+        int[] fourWayTurnsAcross = new int[] { 1, 2, 3, 4, 5 };
+        int[] fourWayTurnsDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        for( int fourWayTurnstileAcross : fourWayTurnstilesAcross )
-            for( int fourWayTurnstileDown : fourWayTurnstilesDown )
-                turnstiles.add( new Turnstile(
-                    cellWidthPercent * fourWayTurnstileAcross + radiusHolePercent,
-                    cellWidthPercent * fourWayTurnstileDown   + radiusHolePercent,
-                    radiusHolePercent / 2, Exit.getFourWayExit()
+        for( int fourWayTurnAcross : fourWayTurnsAcross )
+            for( int fourWayTurnDown : fourWayTurnsDown )
+                turns.add( new Turn(
+                    cellWidthPercent * fourWayTurnAcross + radiusHolePercent,
+                    cellWidthPercent * fourWayTurnDown   + radiusHolePercent,
+                    radiusHolePercent * 0.75f, Exit.fourWayExit
                 ) );
     }
 
-    private void setupTopThreeWayTurnstiles() {
-        int[] threeWayTurnstilesTopAcross = new int[] { 1, 2, 3, 4, 5 };
-        int   threeWayTurnstilesTopDown   = 0;
+    private void setupTopThreeWayTurns() {
+        int[] threeWayTurnsTopAcross = new int[] { 1, 2, 3, 4, 5 };
+        int   threeWayTurnsTopDown   = 0;
 
-        for( int threeWayTurnstileTopAcross : threeWayTurnstilesTopAcross )
-            turnstiles.add( new Turnstile(
-                cellWidthPercent * threeWayTurnstileTopAcross + radiusHolePercent,
-                cellWidthPercent * threeWayTurnstilesTopDown  + radiusHolePercent,
-                radiusHolePercent / 2, Exit.getThreeWayExitTop()
+        for( int threeWayTurnTopAcross : threeWayTurnsTopAcross )
+            turns.add( new Turn(
+                cellWidthPercent * threeWayTurnTopAcross + radiusHolePercent,
+                cellWidthPercent * threeWayTurnsTopDown  + radiusHolePercent,
+                radiusHolePercent * 0.75f, Exit.threeWayExitTop
             ) );
     }
 
-    private void setupBottomThreeWayTurnstiles() {
-        int[] threeWayTurnstilesBottomAcross = new int[] { 1, 2, 3, 4, 5 };
-        int   threeWayTurnstilesBottomDown   = 10;
+    private void setupBottomThreeWayTurns() {
+        int[] threeWayTurnsBottomAcross = new int[] { 1, 2, 3, 4, 5 };
+        int   threeWayTurnsBottomDown   = 10;
 
-        for( int threeWayTurnstileBottomAcross : threeWayTurnstilesBottomAcross )
-            turnstiles.add( new Turnstile(
-                cellWidthPercent * threeWayTurnstileBottomAcross + radiusHolePercent,
-                cellWidthPercent * threeWayTurnstilesBottomDown  + radiusHolePercent,
-                radiusHolePercent / 2, Exit.getThreeWayExitBottom()
+        for( int threeWayTurnBottomAcross : threeWayTurnsBottomAcross )
+            turns.add( new Turn(
+                cellWidthPercent * threeWayTurnBottomAcross + radiusHolePercent,
+                cellWidthPercent * threeWayTurnsBottomDown  + radiusHolePercent,
+                radiusHolePercent * 0.75f, Exit.threeWayExitBottom
             ) );
     }
 
-    private void setupLeftThreeWayTurnstiles() {
-        int   threeWayTurnstilesLeftAcross = 0;
-        int[] threeWayTurnstilesLeftDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private void setupLeftThreeWayTurns() {
+        int   threeWayTurnsLeftAcross = 0;
+        int[] threeWayTurnsLeftDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        for( int threeWayTurnstileLeftDown : threeWayTurnstilesLeftDown )
-            turnstiles.add( new Turnstile(
-                cellWidthPercent * threeWayTurnstilesLeftAcross + radiusHolePercent,
-                cellWidthPercent * threeWayTurnstileLeftDown    + radiusHolePercent,
-                radiusHolePercent / 2, Exit.getThreeWayExitLeft()
+        for( int threeWayTurnLeftDown : threeWayTurnsLeftDown )
+            turns.add( new Turn(
+                cellWidthPercent * threeWayTurnsLeftAcross + radiusHolePercent,
+                cellWidthPercent * threeWayTurnLeftDown    + radiusHolePercent,
+                radiusHolePercent * 0.75f, Exit.threeWayExitLeft
             ) );
     }
 
-    private void setupRightThreeWayTurnstiles() {
-        int   threeWayTurnstilesRightAcross = 6;
-        int[] threeWayTurnstilesRightDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private void setupRightThreeWayTurns() {
+        int   threeWayTurnsRightAcross = 6;
+        int[] threeWayTurnsRightDown   = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        for( int threeWayTurnstileRightDown : threeWayTurnstilesRightDown )
-            turnstiles.add( new Turnstile(
-                cellWidthPercent * threeWayTurnstilesRightAcross + radiusHolePercent,
-                cellWidthPercent * threeWayTurnstileRightDown    + radiusHolePercent,
-                radiusHolePercent / 2, Exit.getThreeWayExitRight()
+        for( int threeWayTurnRightDown : threeWayTurnsRightDown )
+            turns.add( new Turn(
+                cellWidthPercent * threeWayTurnsRightAcross + radiusHolePercent,
+                cellWidthPercent * threeWayTurnRightDown    + radiusHolePercent,
+                radiusHolePercent * 0.75f, Exit.threeWayExitRight
             ) );
     }
 
-    private void setupCornerTwoWayTurnstiles() {
-        turnstiles.add( new Turnstile(
+    private void setupCornerTwoWayTurns() {
+        turns.add( new Turn(
             cellWidthPercent * 0 + radiusHolePercent,
             cellWidthPercent * 0 + radiusHolePercent,
-            radiusHolePercent / 2, Exit.getTwoWayExitTopLeft()
+            radiusHolePercent * 0.75f, Exit.twoWayExitTopLeft
         ) );
 
-        turnstiles.add( new Turnstile(
+        turns.add( new Turn(
             cellWidthPercent * 6 + radiusHolePercent,
             cellWidthPercent * 0 + radiusHolePercent,
-            radiusHolePercent / 2, Exit.getTwoWayExitTopRight()
+            radiusHolePercent * 0.75f, Exit.twoWayExitTopRight
         ) );
 
-        turnstiles.add( new Turnstile(
+        turns.add( new Turn(
             cellWidthPercent * 0 + radiusHolePercent,
             cellWidthPercent * 10 + radiusHolePercent,
-            radiusHolePercent / 2, Exit.getTwoWayExitBottomLeft()
+            radiusHolePercent * 0.75f, Exit.twoWayExitBottomLeft
         ) );
 
-        turnstiles.add( new Turnstile(
+        turns.add( new Turn(
             cellWidthPercent * 6 + radiusHolePercent,
             cellWidthPercent * 10 + radiusHolePercent,
-            radiusHolePercent / 2, Exit.getTwoWayExitBottomRight()
+            radiusHolePercent * 0.75f, Exit.twoWayExitBottomRight
         ) );
     }
 
     private void setupCentipedes() {
-        double radiusSegmentPercent = radiusHolePercent * 0.75d;
-        double segmentSpeedPercent = cellWidthPercent * 2d;
+        float radiusSegmentPercent = radiusHolePercent * 0.75f;
+        float segmentSpeedPercent = cellWidthPercent * 1f;
 
         Segment segment = new Segment(
-            cellWidthPercent * 3 + radiusHolePercent, cellWidthPercent * 0 + radiusHolePercent,
-            radiusSegmentPercent, segmentSpeedPercent, 0, 1
+            cellWidthPercent * -1  + radiusHolePercent,
+            cellWidthPercent * 3  + radiusHolePercent,
+            radiusSegmentPercent, segmentSpeedPercent, 1, 0
         );
 
-        segment.addTailsTop( 9 );
+        segment.addTailsLeft( 9 );
         centipedes.add( segment );
     }
 
@@ -164,8 +166,8 @@ public class Game {
         drawGrassLayerToCanvas( context, canvas );
         drawAboveLayerToCanvas( context, canvas );
 
-        // Temporarily draw turnstiles for visualization during development.
-        drawTurnstileLayerToCanvas( context, canvas );
+        // Temporarily draw turns for visualization during development.
+        // drawTurnLayerToCanvas( context, canvas );
     }
 
     private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
@@ -176,10 +178,14 @@ public class Game {
 
     private void drawGrassLayerToCanvas( Context context, Canvas canvas ) {
         int colorGrass = ContextCompat.getColor( context, R.color.grassGreen );
-        Bitmap bitmapGrass = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
+
+        Bitmap bitmapGrass = Bitmap.createBitmap(
+            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
+        );
+
         Canvas canvasGrass = new Canvas( bitmapGrass );
 
-        canvasGrass.drawColor( colorGrass );
+        canvasGrass.drawColor( ContextCompat.getColor( context, R.color.grassTrans ) ); // colorGrass );
 
         Paint paintHole = new Paint();
 
@@ -187,8 +193,8 @@ public class Game {
         paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
 
         for( Hole hole : holes ) canvasGrass.drawCircle(
-            (float) hole.getCurrentXFor( canvas ), (float) hole.getCurrentYFor( canvas ),
-            (float) hole.getRadiusFor( canvas ), paintHole
+            hole.getCurrentXFor( canvas ), hole.getCurrentYFor( canvas ),
+            hole.getRadiusFor( canvas ), paintHole
         );
 
         canvas.drawBitmap( bitmapGrass, 0, 0, new Paint() );
@@ -196,9 +202,12 @@ public class Game {
 
     private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
         int colorAbove = ContextCompat.getColor( context, R.color.dayBlue  );
-        Bitmap bitmapAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
-        Canvas canvasAbove = new Canvas( bitmapAbove );
 
+        Bitmap bitmapAbove = Bitmap.createBitmap(
+            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvasAbove = new Canvas( bitmapAbove );
         Paint paintSegment = new Paint();
 
         paintSegment.setAntiAlias( true );
@@ -209,8 +218,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsAbove() ) canvasAbove.drawCircle(
-                    (float) segment.getCurrentXFor( canvas ), (float) segment.getCurrentYFor( canvas ),
-                    (float) segment.getRadiusFor(  canvas ), paintSegment
+                    segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
+                    segment.getRadiusFor(  canvas ), paintSegment
                 );
 
                 segment = segment.getTail();
@@ -222,9 +231,12 @@ public class Game {
 
     private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
         int colorBelow = ContextCompat.getColor( context, R.color.nightBlue );
-        Bitmap bitmapBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
-        Canvas canvasAbove = new Canvas( bitmapBelow );
 
+        Bitmap bitmapBelow = Bitmap.createBitmap(
+            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvasAbove = new Canvas( bitmapBelow );
         Paint paintSegment = new Paint();
 
         paintSegment.setAntiAlias( true );
@@ -235,8 +247,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsBelow() ) canvasAbove.drawCircle(
-                    (float) segment.getCurrentXFor( canvas ), (float) segment.getCurrentYFor( canvas ),
-                    (float) segment.getRadiusFor(  canvas ), paintSegment
+                    segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
+                    segment.getRadiusFor(  canvas ), paintSegment
                 );
 
                 segment = segment.getTail();
@@ -246,165 +258,255 @@ public class Game {
         canvas.drawBitmap( bitmapBelow, 0, 0, new Paint() );
     }
 
-    private void drawTurnstileLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawTurnLayerToCanvas( Context context, Canvas canvas ) {
         int colorFourWay  = ContextCompat.getColor( context, R.color.fourWay );
         int colorThreeWay = ContextCompat.getColor( context, R.color.threeWay );
         int colorTwoWay   = ContextCompat.getColor( context, R.color.twoWay );
 
-        Bitmap bitmapTurnstile = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
-        Canvas canvasTurnstile = new Canvas( bitmapTurnstile );
+        Bitmap bitmapTurn = Bitmap.createBitmap(
+            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
+        );
 
-        Paint paintTurnstile = new Paint();
+        Canvas canvasTurn = new Canvas( bitmapTurn );
+        Paint paintTurn = new Paint();
 
-        paintTurnstile.setAntiAlias( true );
+        paintTurn.setAntiAlias( true );
 
-        for( Turnstile turnstile : turnstiles ) {
-            if( turnstile.getExits().size() == 4 )
-                paintTurnstile.setColor( colorFourWay );
-            else if( turnstile.getExits().size() == 3 )
-                paintTurnstile.setColor( colorThreeWay );
-            else if( turnstile.getExits().size() == 2 )
-                paintTurnstile.setColor( colorTwoWay );
+        for( Turn turn : turns ) {
+            if( turn.getExits().size() == 4 )
+                paintTurn.setColor( colorFourWay );
+            else if( turn.getExits().size() == 3 )
+                paintTurn.setColor( colorThreeWay );
+            else if( turn.getExits().size() == 2 )
+                paintTurn.setColor( colorTwoWay );
 
-            canvasTurnstile.drawCircle(
-                (float) turnstile.getCurrentXFor( canvas ), (float) turnstile.getCurrentYFor( canvas ),
-                (float) turnstile.getRadiusFor( canvas ), paintTurnstile
+            canvasTurn.drawCircle(
+                turn.getCurrentXFor( canvas ), turn.getCurrentYFor( canvas ),
+                turn.getRadiusFor( canvas ), paintTurn
             );
         }
 
-        canvas.drawBitmap( bitmapTurnstile, 0, 0, new Paint() );
+        canvas.drawBitmap( bitmapTurn, 0, 0, new Paint() );
     }
 
-    public void animateOver( double elapsedTimeMillis ) {
+    public void animateOver( float elapsedTimeMillis ) {
         if( isPaused ) return;
 
-        double interval = elapsedTimeMillis / 1000;
+        float interval = elapsedTimeMillis / 1000f;
 
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
-
+            
             while( segment != null ) {
-                double segmentNextXPercent = segment.getCurrentXPercent() + segment.getSpeedPercent() * segment.getDirectionX() * interval;
-                double segmentNextYPercent = segment.getCurrentYPercent() + segment.getSpeedPercent() * segment.getDirectionY() * interval;
+                float segmentNextXPercent =
+                    segment.getPositionXPercent() + centipede.getSpeedPercent() *
+                    segment.getDirectionX() * interval;
 
-                animateSegmentThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
-                animateSegmentThroughTurnstiles( segment, segmentNextXPercent, segmentNextYPercent );
+                float segmentNextYPercent =
+                    segment.getPositionYPercent() + segment.getSpeedPercent() *
+                    segment.getDirectionY() * interval;
 
+                animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
+                animateThroughTurns( segment, segmentNextXPercent, segmentNextYPercent );
+                
                 segment = segment.getTail();
             }
         }
     }
 
-    private void animateSegmentThroughTurnstiles(
-        Segment segment, double segmentNextXPercent, double segmentNextYPercent
+    private void animateThroughTurns(
+        Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
-        for( Turnstile turnstile : turnstiles ) {
-            boolean segmentPerfectlyInTurnstile =
-                turnstile.getCurrentXPercent() == segmentNextXPercent &&
-                turnstile.getCurrentYPercent() == segmentNextYPercent;
+        for( Turn turn : turns ) {
+            boolean turnXMatchesSegmentX =
+                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) == 0;
+            boolean turnYMatchesSegmentY =
+                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) == 0;
 
-            boolean segmentPassedTurnstileVertically =
-                turnstile.getCurrentXPercent() == segmentNextXPercent && ( (
-                    turnstile.getCurrentYPercent() < segmentNextYPercent &&
-                    turnstile.getCurrentYPercent() > segment.getCurrentYPercent()
-                ) || (
-                    turnstile.getCurrentYPercent() > segmentNextYPercent &&
-                    turnstile.getCurrentYPercent() < segment.getCurrentYPercent()
-                ) );
+            boolean segmentPerfectlyInTurn = turnXMatchesSegmentX && turnYMatchesSegmentY;
 
-            boolean segmentPassedTurnstileHorizontally =
-                turnstile.getCurrentYPercent() == segmentNextYPercent && ( (
-                    turnstile.getCurrentXPercent() < segmentNextXPercent &&
-                    turnstile.getCurrentXPercent() > segment.getCurrentXPercent()
-                ) || (
-                    turnstile.getCurrentXPercent() > segmentNextXPercent &&
-                    turnstile.getCurrentXPercent() < segment.getCurrentXPercent()
-                ) );
+            boolean turnYBelowSegmentY =
+                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) < 0;
+            boolean turnYAboveNextY =
+                Float.compare( turn.getPositionYPercent(), segment.getPositionYPercent() ) > 0;
 
-            if( segmentPerfectlyInTurnstile ||
-                segmentPassedTurnstileVertically ||
-                segmentPassedTurnstileHorizontally
-            ) {
-                if( segment.getIsHead() )
-                    segment.setExitTaken( turnstile.getRandomExit() );
-                else
-                    segment.setExitTaken( segment.getHead().getExitTaken() );
-            } else {
-                segment.setCurrentXPercent( segmentNextXPercent );
-                segment.setCurrentYPercent( segmentNextYPercent );
+            boolean segmentPassedTurnTopToBottom =
+                    turnXMatchesSegmentX && turnYBelowSegmentY && turnYAboveNextY;
 
-                return;
-            }
+            boolean turnYAboveSegmentY =
+                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) > 0;
+            boolean turnYBelowNextY =
+                Float.compare( turn.getPositionYPercent(), segment.getPositionYPercent() ) < 0;
+
+            boolean segmentPassedTurnBottomToTop =
+                turnXMatchesSegmentX && turnYAboveSegmentY && turnYBelowNextY;
+
+            boolean turnXBelowSegmentX =
+                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) < 0;
+            boolean turnXAboveNextX =
+                Float.compare( turn.getPositionXPercent(), segment.getPositionXPercent() ) > 0;
+
+            boolean segmentPassedLeftToRight =
+                turnYMatchesSegmentY && turnXBelowSegmentX && turnXAboveNextX;
+
+            boolean turnXAboveSegmentX =
+                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) > 0;
+            boolean turnXBelowNextX  =
+                Float.compare( turn.getPositionXPercent(), segment.getPositionXPercent() ) < 0;
+
+            boolean segmentPassedRightToLeft =
+                turnYMatchesSegmentY && turnXAboveSegmentX && turnXBelowNextX;
+
+            boolean segmentPassedTurnVertically =
+                segmentPassedTurnBottomToTop || segmentPassedTurnTopToBottom;
+
+            boolean segmentPassedTurnHorizontally =
+                segmentPassedLeftToRight || segmentPassedRightToLeft;
+
+            boolean segmentReachedTurn =
+                segmentPerfectlyInTurn ||
+                segmentPassedTurnVertically ||
+                segmentPassedTurnHorizontally;
+
+            if( !segmentReachedTurn ) continue;
+
+            Log.wtf( "GAME", "SEGMENT REACHED TURN" );
+            Log.wtf( "GAME", String.format( Locale.getDefault(), "TURN HAS %d EXITS", turn.getExits().size() ) );
+
+            if( segment.getIsHead() )
+                segment.setExitTaken( turn.getRandomExit( segment ) );
+            else
+                segment.setExitTaken( segment.getHead().getExitTaken() );
 
             segment.setDirectionX( segment.getExitTaken().getDirectionX() );
             segment.setDirectionY( segment.getExitTaken().getDirectionY() );
 
-            double segmentTotalTravel;
-            double segmentTravelToTurnstile ;
-            double segmentTravelAfterTurnstile = 0;
+            float segmentTotalTravel;
+            float segmentTravelToTurn ;
+            float segmentTravelAfterTurn = 0;
 
-            if( segmentPerfectlyInTurnstile ) {
-                segment.setCurrentXPercent( segmentNextXPercent );
-                segment.setCurrentYPercent( segmentNextYPercent );
+            if( segmentPerfectlyInTurn ) {
+                segment.setPositionXPercent( segmentNextXPercent );
+                segment.setPositionYPercent( segmentNextYPercent );
+
+                Log.wtf( "GAME", "SEGMENT PERFECTLY IN TURN" );
 
                 return;
-            } else if( segmentPassedTurnstileVertically ) {
-                segmentTotalTravel          = segment.getCurrentYPercent() - segmentNextYPercent;
-                segmentTravelToTurnstile    = segment.getCurrentYPercent() - turnstile.getCurrentYPercent();
-                segmentTravelAfterTurnstile = segmentTotalTravel - segmentTravelToTurnstile;
-            } else if( segmentPassedTurnstileHorizontally ) {
-                segmentTotalTravel          = segment.getCurrentXPercent() - segmentNextXPercent;
-                segmentTravelToTurnstile    = segment.getCurrentXPercent() - turnstile.getCurrentXPercent();
-                segmentTravelAfterTurnstile = segmentTotalTravel - segmentTravelToTurnstile;
             }
 
-            if( segment.getExitTaken().equals( Exit.getExitTop() ) ||
-                segment.getExitTaken().equals( Exit.getExitBottom() )
-            ) {
-                segmentNextXPercent = turnstile.getCurrentXPercent();
-                segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurnstile;
-            } else if( segment.getExitTaken().equals( Exit.getExitLeft() ) ||
-                       segment.getExitTaken().equals( Exit.getExitRight() )
-            ) {
-                segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurnstile;;
-                segmentNextYPercent = turnstile.getCurrentYPercent();
+            if( segmentPassedTurnTopToBottom ) {
+                segmentTotalTravel     = segment.getPositionYPercent() - segmentNextYPercent;
+                segmentTravelToTurn    = segment.getPositionYPercent() - turn.getPositionYPercent();
+                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+
+                Log.wtf( "GAME", "SEGMENT PASSED TURN TOP TO BOTTOM" );
+            } else if( segmentPassedTurnBottomToTop ) {
+                segmentTotalTravel     = segment.getPositionYPercent() - segmentNextYPercent;
+                segmentTravelToTurn    = turn.getPositionYPercent() - segment.getPositionYPercent() ;
+                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+
+                Log.wtf( "GAME", "SEGMENT PASSED TURN BOTTOM TO TOP" );
+            } else if( segmentPassedLeftToRight ) {
+                segmentTotalTravel     = segment.getPositionXPercent() - segmentNextXPercent;
+                segmentTravelToTurn    = segment.getPositionXPercent() - turn.getPositionXPercent();
+                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+
+                Log.wtf( "GAME", "SEGMENT PASSED TURN LEFT TO RIGHT" );
+            } else if( segmentPassedRightToLeft ) {
+                segmentTotalTravel     = segment.getPositionXPercent() - segmentNextXPercent;
+                segmentTravelToTurn    = turn.getPositionXPercent() - segment.getPositionXPercent();
+                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+
+                Log.wtf( "GAME", "SEGMENT PASSED TURN RIGHT TO LEFT" );
             }
 
-            segment.setCurrentXPercent( segmentNextXPercent );
-            segment.setCurrentYPercent( segmentNextYPercent );
+            if( segment.getExitTaken().equals( Exit.exitTop ) ) {
+                segmentNextXPercent = turn.getPositionXPercent();
+                segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurn;
+
+                Log.wtf( "GAME", "SEGMENT EXITED TOP" );
+            } else if( segment.getExitTaken().equals( Exit.exitBottom ) ) {
+                segmentNextXPercent = turn.getPositionXPercent();
+                segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurn;
+
+                Log.wtf( "GAME", "SEGMENT EXITED BOTTOM" );
+            } else if( segment.getExitTaken().equals( Exit.exitLeft ) ) {
+                segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurn;
+                segmentNextYPercent = turn.getPositionYPercent();
+
+                Log.wtf( "GAME", "SEGMENT EXITED LEFT" );
+            } else if(  segment.getExitTaken().equals( Exit.exitRight ) ) {
+                segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurn;
+                segmentNextYPercent = turn.getPositionYPercent();
+
+                Log.wtf( "GAME", "SEGMENT EXITED RIGHT" );
+            }
+
+            segment.setPositionXPercent( segmentNextXPercent );
+            segment.setPositionYPercent( segmentNextYPercent );
+
+            return;
         }
+
+        segment.setPositionXPercent( segmentNextXPercent );
+        segment.setPositionYPercent( segmentNextYPercent );
     }
 
-    private void animateSegmentThroughHoles(
-        Segment segment, double segmentNextXPercent, double segmentNextYPercent
+    private void animateThroughHoles(
+        Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
         for( Hole hole : holes ) {
-            boolean segmentPerfectlyInHole =
-                hole.getCurrentXPercent() == segmentNextXPercent &&
-                hole.getCurrentYPercent() == segmentNextYPercent;
+            boolean holeXMatchesSegmentX =
+                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) == 0;
+            boolean holeYMatchesSegmentY =
+                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) == 0;
+
+            boolean segmentPerfectlyInHole = holeXMatchesSegmentX && holeYMatchesSegmentY;
+
+            boolean holeYBelowSegmentY =
+                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) < 0;
+            boolean holeYAboveNextY =
+                Float.compare( hole.getPositionYPercent(), segment.getPositionYPercent() ) > 0;
+
+            boolean segmentPassedHoleTopToBottom =
+                holeXMatchesSegmentX && holeYBelowSegmentY && holeYAboveNextY;
+
+            boolean holeYAboveSegmentY =
+                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) > 0;
+            boolean holeYBelowNextY =
+                Float.compare( hole.getPositionYPercent(), segment.getPositionYPercent() ) < 0;
+
+            boolean segmentPassedHoleBottomToTop =
+                holeXMatchesSegmentX && holeYAboveSegmentY && holeYBelowNextY;
+
+            boolean holeXBelowSegmentX =
+                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) < 0;
+            boolean holeXAboveNextX =
+                Float.compare( hole.getPositionXPercent(), segment.getPositionXPercent() ) > 0;
+
+            boolean segmentPassedLeftToRight =
+                holeYMatchesSegmentY && holeXBelowSegmentX && holeXAboveNextX;
+
+            boolean holeXAboveSegmentX =
+                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) > 0;
+            boolean holeXBelowNextX  =
+                Float.compare( hole.getPositionXPercent(), segment.getPositionXPercent() ) < 0;
+
+            boolean segmentPassedRightToLeft =
+                holeYMatchesSegmentY && holeXAboveSegmentX && holeXBelowNextX;
 
             boolean segmentPassedHoleVertically =
-                hole.getCurrentXPercent() == segmentNextXPercent && ( (
-                    hole.getCurrentYPercent() < segmentNextYPercent &&
-                    hole.getCurrentYPercent() > segment.getCurrentYPercent()
-                ) || (
-                    hole.getCurrentYPercent() > segmentNextYPercent &&
-                    hole.getCurrentYPercent() < segment.getCurrentYPercent()
-                ) );
+                segmentPassedHoleBottomToTop || segmentPassedHoleTopToBottom;
 
             boolean segmentPassedHoleHorizontally =
-                hole.getCurrentYPercent() == segmentNextYPercent && ( (
-                    hole.getCurrentXPercent() < segmentNextXPercent &&
-                    hole.getCurrentXPercent() > segment.getCurrentXPercent()
-                ) || (
-                    hole.getCurrentXPercent() > segmentNextXPercent &&
-                    hole.getCurrentXPercent() < segment.getCurrentXPercent()
-                ) );
+                segmentPassedLeftToRight || segmentPassedRightToLeft;
 
-            if( segmentPerfectlyInHole ||
+            boolean segmentReachedHole =
+                segmentPerfectlyInHole ||
                 segmentPassedHoleVertically ||
-                segmentPassedHoleHorizontally
-            ) segment.toggleAboveBelow();
+                segmentPassedHoleHorizontally;
+
+            if( segmentReachedHole ) segment.toggleAboveBelow();
         }
     }
 

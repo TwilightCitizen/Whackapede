@@ -27,20 +27,27 @@ public class GameThread extends Thread {
     }
 
     public void run() {
+        Canvas canvas = null;
         long previousTimeMillis = System.currentTimeMillis();
 
         while( isRunning ) {
-            Canvas canvas = surfaceHolder.lockCanvas();
+            try {
+                synchronized( surfaceHolder ) {
+                    canvas = surfaceHolder.lockCanvas();
 
-            if( canvas == null ) break;
+                    if( canvas == null ) break;
 
-            long currentTimeMillis = System.currentTimeMillis();
-            double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
-            game.animateOver( elapsedTimeMillis );
-            game.drawToCanvas( context, canvas );
-            surfaceHolder.unlockCanvasAndPost( canvas );
+                    long currentTimeMillis = System.currentTimeMillis();
+                    float elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
 
-            previousTimeMillis = currentTimeMillis;
+                    game.animateOver( elapsedTimeMillis );
+                    game.drawToCanvas( context, canvas );
+
+                    previousTimeMillis = currentTimeMillis;
+                }
+            } finally {
+                if( canvas != null ) surfaceHolder.unlockCanvasAndPost( canvas );
+            }
         }
     }
 

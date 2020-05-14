@@ -9,16 +9,25 @@ package edu.fullsail.whackapede.models;
 
 import android.graphics.Canvas;
 
-class Hole {
+import java.util.ArrayList;
+import java.util.Random;
+
+class Turn {
     private final float positionXPercent;
     private final float positionYPercent;
 
     private final float radiusPercent;
 
-    Hole( float positionXPercent, float positionYPercent, float radiusPercent ) {
+    private final ArrayList< Exit > exits;
+
+    Turn(
+        float positionXPercent, float currentYPercent, float radiusPercent,
+        ArrayList< Exit > exits
+    ) {
         this.positionXPercent = positionXPercent;
-        this.positionYPercent = positionYPercent;
+        this.positionYPercent = currentYPercent;
         this.radiusPercent = radiusPercent;
+        this.exits = exits;
     }
 
     float getCurrentXFor( Canvas canvas ) {
@@ -39,5 +48,19 @@ class Hole {
 
     float getPositionYPercent() {
         return positionYPercent;
+    }
+
+    Exit getRandomExit( Segment segment ) {
+        Random rand = new Random();
+        Exit excludedExit = Exit.getExitReverseOf( segment.getDirectionX(), segment.getDirectionY() );
+        ArrayList< Exit > includedExits = new ArrayList<>( exits );
+
+        includedExits.remove( excludedExit );
+
+        return includedExits.get( rand.nextInt( includedExits.size() ) );
+    }
+
+    ArrayList< Exit > getExits() {
+        return exits;
     }
 }

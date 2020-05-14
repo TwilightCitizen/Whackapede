@@ -13,26 +13,26 @@ class Segment {
     private Segment head = null;
     private Segment tail = null;
 
-    private double currentXPercent;
-    private double currentYPercent;
+    private float positionXPercent;
+    private float positionYPercent;
 
-    private double speedPercent;
+    private float speedPercent;
 
-    private double directionX;
-    private double directionY;
+    private float directionX;
+    private float directionY;
 
     private boolean isAbove = true;
 
-    private final double radiusPercent;
+    private final float radiusPercent;
 
     private Exit exitTaken;
 
     Segment(
-            double currentXPercent, double currentYPercent, double radiusPercent,
-            double speedPercent, double directionX, double directionY
+        float positionXPercent, float positionYPercent, float radiusPercent,
+        float speedPercent, float directionX, float directionY
     ) {
-        this.currentXPercent = currentXPercent;
-        this.currentYPercent = currentYPercent;
+        this.positionXPercent = positionXPercent;
+        this.positionYPercent = positionYPercent;
         this.radiusPercent = radiusPercent;
         this.speedPercent = speedPercent;
         this.directionX = directionX;
@@ -47,55 +47,55 @@ class Segment {
         return tail == null;
     }
 
-    double getCurrentXFor( Canvas canvas ) {
-        return currentXPercent * canvas.getWidth();
+    float getCurrentXFor( Canvas canvas ) {
+        return positionXPercent * canvas.getWidth();
     }
 
-    double getCurrentYFor( Canvas canvas ) {
-        return currentYPercent * canvas.getWidth();
+    float getCurrentYFor( Canvas canvas ) {
+        return positionYPercent * canvas.getWidth();
     }
 
-    double getRadiusFor( Canvas canvas ) {
+    float getRadiusFor( Canvas canvas ) {
         return radiusPercent * canvas.getWidth();
     }
 
-    double getCurrentXPercent() {
-        return currentXPercent;
+    float getPositionXPercent() {
+        return positionXPercent;
     }
 
-    void setCurrentXPercent( double currentXPercent ) {
-        this.currentXPercent = currentXPercent;
+    void setPositionXPercent( float positionXPercent ) {
+        this.positionXPercent = positionXPercent;
     }
 
-    double getCurrentYPercent() {
-        return currentYPercent;
+    float getPositionYPercent() {
+        return positionYPercent;
     }
 
-    void setCurrentYPercent( double currentYPercent ) {
-        this.currentYPercent = currentYPercent;
+    void setPositionYPercent( float positionYPercent ) {
+        this.positionYPercent = positionYPercent;
     }
 
-    double getSpeedPercent() {
+    float getSpeedPercent() {
         return speedPercent;
     }
 
-    void setSpeedPercent( double speedPercent ) {
+    void setSpeedPercent( float speedPercent ) {
         this.speedPercent = speedPercent;
     }
 
-    double getDirectionX() {
+    float getDirectionX() {
         return directionX;
     }
 
-    void setDirectionX( double directionX ) {
+    void setDirectionX( float directionX ) {
         this.directionX = directionX;
     }
 
-    double getDirectionY() {
+    float getDirectionY() {
         return directionY;
     }
 
-    void setDirectionY( double directionY ) {
+    void setDirectionY( float directionY ) {
         this.directionY = directionY;
     }
 
@@ -145,7 +145,7 @@ class Segment {
 
     private Segment addTailBottom() {
         Segment tail = new Segment(
-            currentXPercent, currentYPercent + radiusPercent * 2,
+            positionXPercent, positionYPercent + radiusPercent * 2,
             radiusPercent, speedPercent, directionX, directionY
         );
 
@@ -167,7 +167,7 @@ class Segment {
 
     private Segment addTailTop() {
         Segment tail = new Segment(
-            currentXPercent, currentYPercent - radiusPercent * 2,
+            positionXPercent, positionYPercent - radiusPercent * 2,
             radiusPercent, speedPercent, directionX, directionY
         );
 
@@ -189,8 +189,8 @@ class Segment {
 
     private Segment addTailLeft() {
         Segment tail = new Segment(
-                currentXPercent - radiusPercent * 2, currentYPercent,
-                radiusPercent, speedPercent, directionX, directionY
+            positionXPercent - radiusPercent * 2, positionYPercent,
+            radiusPercent, speedPercent, directionX, directionY
         );
 
         this.tail = tail;
@@ -211,7 +211,7 @@ class Segment {
 
     private Segment addTailRight() {
         Segment tail = new Segment(
-            currentXPercent + radiusPercent * 2, currentYPercent,
+            positionXPercent + radiusPercent * 2, positionYPercent,
             radiusPercent, speedPercent, directionX, directionY
         );
 

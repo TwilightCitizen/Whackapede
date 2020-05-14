@@ -17,6 +17,7 @@ MDV469-O, C202005-01
     <color name="nightBlue">#006280</color>
 
     <color name="grassGreen">#00A315</color>
+    <color name="grassTrans">#A000A315</color>
     <color name="grassGreenPressed">#007A10</color>
     <color name="grassGreenFocused">#008F13</color>
 
