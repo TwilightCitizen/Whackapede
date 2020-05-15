@@ -27,8 +27,11 @@ public class GameThread extends Thread {
     }
 
     public void run() {
-        Canvas canvas = null;
+        Canvas canvas = surfaceHolder.lockCanvas();
         long previousTimeMillis = System.currentTimeMillis();
+
+        game.initializeBoard( canvas.getWidth() );
+        surfaceHolder.unlockCanvasAndPost( canvas );
 
         while( isRunning ) {
             try {
@@ -38,7 +41,7 @@ public class GameThread extends Thread {
                     if( canvas == null ) break;
 
                     long currentTimeMillis = System.currentTimeMillis();
-                    float elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
+                    double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
 
                     game.animateOver( elapsedTimeMillis );
                     game.drawToCanvas( context, canvas );

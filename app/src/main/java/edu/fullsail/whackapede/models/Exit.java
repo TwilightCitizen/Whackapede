@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 class Exit {
-    private final float directionX;
-    private final float directionY;
+    private final int directionX;
+    private final int directionY;
 
     static final Exit exitTop    = new Exit(  0, -1 );
     static final Exit exitBottom = new Exit(  0,  1 );
@@ -56,7 +56,7 @@ class Exit {
         add( exitTop ); add( exitLeft );
     } };
 
-    private Exit( float directionX, float directionY ) {
+    private Exit( int directionX, int directionY ) {
         this.directionX = directionX;
         this.directionY = directionY;
     }
@@ -71,15 +71,11 @@ class Exit {
         return exit.getDirectionX() == directionX && exit.getDirectionY() == directionY;
     }
 
-    float getDirectionX() {
-        return directionX;
-    }
+    int getDirectionX() { return directionX; }
 
-    float getDirectionY() {
-        return directionY;
-    }
+    int getDirectionY() { return directionY; }
 
-    static Exit getExitReverseOf( float directionX, float directionY ) {
+    static Exit getExitReverseOf( int directionX, int directionY ) {
         return new Exit( 0 - directionX, 0 - directionY);
     }
 }

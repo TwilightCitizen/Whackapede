@@ -13,150 +13,79 @@ class Segment {
     private Segment head = null;
     private Segment tail = null;
 
-    private float positionXPercent;
-    private float positionYPercent;
+    private int positionX;
+    private int positionY;
 
-    private float speedPercent;
+    private int speed;
 
-    private float directionX;
-    private float directionY;
+    private int directionX;
+    private int directionY;
 
     private boolean isAbove = true;
-
-    private final float radiusPercent;
 
     private Turn turnReached;
     private Exit exitTaken;
 
-    Segment(
-        float positionXPercent, float positionYPercent, float radiusPercent,
-        float speedPercent, float directionX, float directionY
-    ) {
-        this.positionXPercent = positionXPercent;
-        this.positionYPercent = positionYPercent;
-        this.radiusPercent = radiusPercent;
-        this.speedPercent = speedPercent;
+    Segment( int positionX, int positionY, int speed, int directionX, int directionY ) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
     }
 
-    boolean getIsHead() {
-        return head == null;
-    }
+    boolean getIsHead() { return head == null; }
 
-    boolean getIsTail() {
-        return tail == null;
-    }
+    boolean getIsTail() { return tail == null; }
 
-    float getCurrentXFor( Canvas canvas ) {
-        return positionXPercent * canvas.getWidth();
-    }
+    int getPositionX() { return positionX; }
 
-    float getCurrentYFor( Canvas canvas ) {
-        return positionYPercent * canvas.getWidth();
-    }
+    void setPositionX( int positionX ) { this.positionX = positionX; }
 
-    float getRadiusFor( Canvas canvas ) {
-        return radiusPercent * canvas.getWidth();
-    }
+    int getPositionY() { return positionY; }
 
-    float getPositionXPercent() {
-        return positionXPercent;
-    }
+    void setPositionY( int positionY ) { this.positionY = positionY; }
 
-    void setPositionXPercent( float positionXPercent ) {
-        this.positionXPercent = positionXPercent;
-    }
+    int getSpeed() { return speed; }
 
-    float getPositionYPercent() {
-        return positionYPercent;
-    }
+    void setSpeed( int speed ) { this.speed = speed; }
 
-    void setPositionYPercent( float positionYPercent ) {
-        this.positionYPercent = positionYPercent;
-    }
+    int getDirectionX() { return directionX; }
 
-    float getSpeedPercent() {
-        return speedPercent;
-    }
+    void setDirectionX( int directionX ) { this.directionX = directionX; }
 
-    void setSpeedPercent( float speedPercent ) {
-        this.speedPercent = speedPercent;
-    }
+    int getDirectionY() { return directionY; }
 
-    float getDirectionX() {
-        return directionX;
-    }
+    void setDirectionY( int directionY ) { this.directionY = directionY; }
 
-    void setDirectionX( float directionX ) {
-        this.directionX = directionX;
-    }
+    boolean getIsAbove() { return isAbove; }
 
-    float getDirectionY() {
-        return directionY;
-    }
+    void setIsAbove() { isAbove = true; }
 
-    void setDirectionY( float directionY ) {
-        this.directionY = directionY;
-    }
+    boolean getIsBelow() { return !isAbove; }
 
-    boolean getIsAbove() {
-        return isAbove;
-    }
+    void setIsBelow() { isAbove = false; }
 
-    void setIsAbove() {
-        isAbove = true;
-    }
+    void toggleAboveBelow() { isAbove = !isAbove; }
 
-    boolean getIsBelow() {
-        return !isAbove;
-    }
+    void setHead( Segment segment ) { head = segment; }
 
-    void setIsBelow() {
-        isAbove = false;
-    }
+    Segment getHead() { return head; }
 
-    void toggleAboveBelow() {
-        isAbove = !isAbove;
-    }
+    void setTail( Segment segment ) { tail = segment; }
 
-    void setHead( Segment segment ) {
-        head = segment;
-    }
+    Segment getTail() { return tail; }
 
-    Segment getHead() {
-        return head;
-    }
+    void setTurnReached( Turn turnReached ) { this.turnReached = turnReached; }
 
-    void setTail( Segment segment ) {
-        tail = segment;
-    }
+    Turn getTurnReached() { return turnReached; }
 
-    Segment getTail() {
-        return tail;
-    }
+    void setExitTaken( Exit exitTaken ) { this.exitTaken = exitTaken; }
 
-    void setTurnReached( Turn turnReached ) {
-        this.turnReached = turnReached;
-    }
+    Exit getExitTaken() { return exitTaken; }
 
-    public Turn getTurnReached() {
-        return turnReached;
-    }
-
-    void setExitTaken( Exit exitTaken ) {
-        this.exitTaken = exitTaken;
-    }
-
-    Exit getExitTaken() {
-        return exitTaken;
-    }
-
-    private Segment addTailBottom() {
-        Segment tail = new Segment(
-            positionXPercent, positionYPercent + radiusPercent * 2,
-            radiusPercent, speedPercent, directionX, directionY
-        );
+    private Segment addTailLeft( int cellSize ) {
+        Segment tail = new Segment( positionX - cellSize, positionY, speed, directionX, directionY );
 
         this.tail = tail;
         tail.head = this;
@@ -165,77 +94,11 @@ class Segment {
         return tail;
     }
 
-    void addTailsBottom( int tails ) {
+    void addTailsLeft( int tails, int cellSize ) {
         Segment tail = this;
 
         while( tails > 0 ) {
-            tail = tail.addTailBottom();
-            tails--;
-        }
-    }
-
-    private Segment addTailTop() {
-        Segment tail = new Segment(
-            positionXPercent, positionYPercent - radiusPercent * 2,
-            radiusPercent, speedPercent, directionX, directionY
-        );
-
-        this.tail = tail;
-        tail.head = this;
-        tail.isAbove = this.isAbove;
-
-        return tail;
-    }
-
-    void addTailsTop( int tails ) {
-        Segment tail = this;
-
-        while( tails > 0 ) {
-            tail = tail.addTailTop();
-            tails--;
-        }
-    }
-
-    private Segment addTailLeft() {
-        Segment tail = new Segment(
-            positionXPercent - radiusPercent * 2, positionYPercent,
-            radiusPercent, speedPercent, directionX, directionY
-        );
-
-        this.tail = tail;
-        tail.head = this;
-        tail.isAbove = this.isAbove;
-
-        return tail;
-    }
-
-    void addTailsLeft( int tails ) {
-        Segment tail = this;
-
-        while( tails > 0 ) {
-            tail = tail.addTailLeft();
-            tails--;
-        }
-    }
-
-    private Segment addTailRight() {
-        Segment tail = new Segment(
-            positionXPercent + radiusPercent * 2, positionYPercent,
-            radiusPercent, speedPercent, directionX, directionY
-        );
-
-        this.tail = tail;
-        tail.head = this;
-        tail.isAbove = this.isAbove;
-
-        return tail;
-    }
-
-    void addTailsRight( int tails ) {
-        Segment tail = this;
-
-        while( tails > 0 ) {
-            tail = tail.addTailRight();
+            tail = tail.addTailLeft( cellSize );
             tails--;
         }
     }

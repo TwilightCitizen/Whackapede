@@ -13,42 +13,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class Turn {
-    private final float positionXPercent;
-    private final float positionYPercent;
-
-    private final float radiusPercent;
+    private final int positionX;
+    private final int positionY;
 
     private final ArrayList< Exit > exits;
 
-    Turn(
-        float positionXPercent, float currentYPercent, float radiusPercent,
-        ArrayList< Exit > exits
-    ) {
-        this.positionXPercent = positionXPercent;
-        this.positionYPercent = currentYPercent;
-        this.radiusPercent = radiusPercent;
+    Turn( int positionXPercent, int currentYPercent, ArrayList< Exit > exits ) {
+        this.positionX = positionXPercent;
+        this.positionY = currentYPercent;
         this.exits = exits;
     }
 
-    float getCurrentXFor( Canvas canvas ) {
-        return positionXPercent * canvas.getWidth();
-    }
+    int getPositionX() { return positionX; }
 
-    float getCurrentYFor( Canvas canvas ) {
-        return positionYPercent * canvas.getWidth();
-    }
-
-    float getRadiusFor( Canvas canvas ) {
-        return radiusPercent * canvas.getWidth();
-    }
-
-    float getPositionXPercent() {
-        return positionXPercent;
-    }
-
-    float getPositionYPercent() {
-        return positionYPercent;
-    }
+    int getPositionY() { return positionY; }
 
     Exit getRandomExit( Segment segment ) {
         Random rand = new Random();

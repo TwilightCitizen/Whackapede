@@ -83,8 +83,8 @@ public class GameFragment extends Fragment {
 
             MenuItem itemPlayPause = menu.getItem( 0 );
 
-            itemPlayPause.setIcon( game.isPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
-            itemPlayPause.setTitle( game.isPaused() ? R.string.play : R.string.pause );
+            itemPlayPause.setIcon( game.isGameIsPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
+            itemPlayPause.setTitle( game.isGameIsPaused() ? R.string.play : R.string.pause );
 
             return true;
         }
