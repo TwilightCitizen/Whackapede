@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import edu.fullsail.whackapede.R;
+import static edu.fullsail.whackapede.R.color.*;
 
 public class Game {
     private boolean isPaused = true;
@@ -171,13 +171,13 @@ public class Game {
     }
 
     private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
-        int colorEarth = ContextCompat.getColor( context, R.color.earthBrown );
+        int colorEarth = ContextCompat.getColor( context, earthBrown );
 
         canvas.drawColor( colorEarth );
     }
 
     private void drawGrassLayerToCanvas( Context context, Canvas canvas ) {
-        int colorGrass = ContextCompat.getColor( context, R.color.grassGreen );
+        int colorGrass = ContextCompat.getColor( context, grassGreen );
 
         Bitmap bitmapGrass = Bitmap.createBitmap(
             canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
@@ -185,7 +185,7 @@ public class Game {
 
         Canvas canvasGrass = new Canvas( bitmapGrass );
 
-        canvasGrass.drawColor( ContextCompat.getColor( context, R.color.grassTrans ) ); // colorGrass );
+        canvasGrass.drawColor( ContextCompat.getColor( context, grassTrans ) ); // colorGrass );
 
         Paint paintHole = new Paint();
 
@@ -201,7 +201,7 @@ public class Game {
     }
 
     private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
-        int colorAbove = ContextCompat.getColor( context, R.color.dayBlue  );
+        int colorAbove = ContextCompat.getColor( context, dayBlue  );
 
         Bitmap bitmapAbove = Bitmap.createBitmap(
             canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
@@ -230,7 +230,7 @@ public class Game {
     }
 
     private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
-        int colorBelow = ContextCompat.getColor( context, R.color.nightBlue );
+        int colorBelow = ContextCompat.getColor( context, nightBlue );
 
         Bitmap bitmapBelow = Bitmap.createBitmap(
             canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
@@ -259,9 +259,9 @@ public class Game {
     }
 
     private void drawTurnLayerToCanvas( Context context, Canvas canvas ) {
-        int colorFourWay  = ContextCompat.getColor( context, R.color.fourWay );
-        int colorThreeWay = ContextCompat.getColor( context, R.color.threeWay );
-        int colorTwoWay   = ContextCompat.getColor( context, R.color.twoWay );
+        int colorFourWay  = ContextCompat.getColor( context, fourWay );
+        int colorThreeWay = ContextCompat.getColor( context, threeWay );
+        int colorTwoWay   = ContextCompat.getColor( context, twoWay );
 
         Bitmap bitmapTurn = Bitmap.createBitmap(
             canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888

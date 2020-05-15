@@ -56,7 +56,7 @@ class Exit {
         add( exitTop ); add( exitLeft );
     } };
 
-    Exit( float directionX, float directionY ) {
+    private Exit( float directionX, float directionY ) {
         this.directionX = directionX;
         this.directionY = directionY;
     }

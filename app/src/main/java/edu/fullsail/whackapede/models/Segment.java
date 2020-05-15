@@ -39,11 +39,11 @@ class Segment {
         this.directionY = directionY;
     }
 
-    public boolean getIsHead() {
+    boolean getIsHead() {
         return head == null;
     }
 
-    public boolean getIsTail() {
+    boolean getIsTail() {
         return tail == null;
     }
 
