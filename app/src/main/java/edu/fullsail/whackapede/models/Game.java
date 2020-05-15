@@ -177,19 +177,27 @@ public class Game {
             radiusSegmentPercent, segmentSpeedPercent, 1, 0
         );
 
-        segment.addTailsLeft( 9 );
+        // segment.addTailsLeft( 9 );
+        centipedes.add( segment );
+
+        segment = new Segment(
+            cellWidthPercent * -2  + radiusHolePercent,
+            cellWidthPercent *  3  + radiusHolePercent,
+            radiusSegmentPercent, segmentSpeedPercent, 1, 0
+        );
+
         centipedes.add( segment );
     }
 
     public void drawToCanvas( Context context, Canvas canvas ) {
         initializeDrawingEnvironment( context, canvas );
-        drawEarthLayerToCanvas( context, canvas );
-        drawBelowLayerToCanvas( context, canvas );
-        drawGrassLayerToCanvas( context, canvas );
-        drawAboveLayerToCanvas( context, canvas );
+        drawEarthLayerToCanvas( canvas );
+        drawBelowLayerToCanvas( canvas );
+        drawGrassLayerToCanvas( canvas );
+        drawAboveLayerToCanvas( canvas );
 
         // Temporarily draw turns for visualization during development.
-        // drawTurnLayerToCanvas( context, canvas );
+        // drawTurnLayerToCanvas( canvas );
     }
 
     private void initializeDrawingEnvironment( Context context, Canvas canvas ) {
@@ -230,7 +238,7 @@ public class Game {
         colorTwoWay   = ContextCompat.getColor( context, twoWay );
     }
 
-    private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawEarthLayerToCanvas( Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
         canvasLayer.drawColor( colorGrass );
 
@@ -242,7 +250,7 @@ public class Game {
         canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
-    private void drawGrassLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawGrassLayerToCanvas( Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
         canvasLayer.drawColor( colorTrans );
 
@@ -254,7 +262,7 @@ public class Game {
         canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
-    private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawAboveLayerToCanvas( Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
         paintSegment.setColor( colorAbove );
 
@@ -274,7 +282,7 @@ public class Game {
         canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
-    private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawBelowLayerToCanvas( Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
         paintSegment.setColor( colorBelow );
 
@@ -294,7 +302,7 @@ public class Game {
         canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
-    private void drawTurnLayerToCanvas( Context context, Canvas canvas ) {
+    private void drawTurnLayerToCanvas( Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
 
         for( Turn turn : turns ) {
@@ -334,9 +342,6 @@ public class Game {
                 animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
                 animateThroughTurns( segment, segmentNextXPercent, segmentNextYPercent );
 
-                //segment.setPositionXPercent( segmentNextXPercent );
-                //segment.setPositionYPercent( segmentNextYPercent );
-
                 segment = segment.getTail();
             }
         }
@@ -374,9 +379,6 @@ public class Game {
 
             segment.setTurnReached( turn );
 
-            Log.wtf( "GAME", "SEGMENT REACHED TURN" );
-            Log.wtf( "GAME", String.format( Locale.getDefault(), "TURN HAS %d EXITS", turn.getExits().size() ) );
-
             if( segment.getIsHead() )
                 segment.setExitTaken( turn.getRandomExit( segment ) );
             else
@@ -389,51 +391,33 @@ public class Game {
                 segment.setPositionXPercent( segmentNextXPercent );
                 segment.setPositionYPercent( segmentNextYPercent );
 
-                Log.wtf( "GAME", "SEGMENT PERFECTLY IN TURN" );
-
                 return;
             }
 
             float segmentTravelAfterTurn = 0;
 
             if( segmentPassedTurnTopToBottom ) {
-                segmentTravelAfterTurn = segmentNextYPercent - turn.getPositionYPercent(); // positive
-
-                Log.wtf( "GAME", "SEGMENT PASSED TURN TOP TO BOTTOM" );
+                segmentTravelAfterTurn = segmentNextYPercent - turn.getPositionYPercent();
             } else if( segmentPassedTurnBottomToTop ) {
-                segmentTravelAfterTurn = turn.getPositionYPercent() - segmentNextYPercent; // positive
-
-                Log.wtf( "GAME", "SEGMENT PASSED TURN BOTTOM TO TOP" );
+                segmentTravelAfterTurn = turn.getPositionYPercent() - segmentNextYPercent;
             } else if( segmentPassedLeftToRight ) {
-                segmentTravelAfterTurn = segmentNextXPercent - turn.getPositionXPercent(); // positive
-
-                Log.wtf( "GAME", "SEGMENT PASSED TURN LEFT TO RIGHT" );
+                segmentTravelAfterTurn = segmentNextXPercent - turn.getPositionXPercent();
             } else if( segmentPassedRightToLeft ) {
-                segmentTravelAfterTurn = turn.getPositionXPercent() - segmentNextXPercent; // positive
-
-                Log.wtf( "GAME", "SEGMENT PASSED TURN RIGHT TO LEFT" );
+                segmentTravelAfterTurn = turn.getPositionXPercent() - segmentNextXPercent;
             }
 
             if( segment.getExitTaken().equals( Exit.exitTop ) ) {
                 segmentNextXPercent = turn.getPositionXPercent();
                 segmentNextYPercent = segmentNextYPercent - segmentTravelAfterTurn;
-
-                Log.wtf( "GAME", "SEGMENT EXITED TOP" );
             } else if( segment.getExitTaken().equals( Exit.exitBottom ) ) {
                 segmentNextXPercent = turn.getPositionXPercent();
                 segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurn;
-
-                Log.wtf( "GAME", "SEGMENT EXITED BOTTOM" );
             } else if( segment.getExitTaken().equals( Exit.exitLeft ) ) {
                 segmentNextXPercent = segmentNextXPercent - segmentTravelAfterTurn;
                 segmentNextYPercent = turn.getPositionYPercent();
-
-                Log.wtf( "GAME", "SEGMENT EXITED LEFT" );
             } else if(  segment.getExitTaken().equals( Exit.exitRight ) ) {
                 segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurn;
                 segmentNextYPercent = turn.getPositionYPercent();
-
-                Log.wtf( "GAME", "SEGMENT EXITED RIGHT" );
             }
 
             segment.setPositionXPercent( segmentNextXPercent );
