@@ -10,6 +10,7 @@ package edu.fullsail.whackapede.models;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -24,6 +25,24 @@ import static edu.fullsail.whackapede.R.color.*;
 
 public class Game {
     private boolean isPaused = true;
+
+    private boolean drawingEnvironmentIsInitialized = false;
+
+    private int colorEarth;
+    private int colorGrass;
+    private int colorAbove;
+    private int colorBelow;
+    private int colorFourWay;
+    private int colorThreeWay;
+    private int colorTwoWay;
+
+    private Paint paintHole;
+    private Paint paintLayer;
+    private Paint paintSegment;
+    private Paint paintTurn;
+
+    private Bitmap bitmapLayer;
+    private Canvas canvasLayer;
 
     private final float cellWidthPercent = 1 / 7f;
     private final float radiusHolePercent = cellWidthPercent * 0.5f;
@@ -161,6 +180,7 @@ public class Game {
     }
 
     public void drawToCanvas( Context context, Canvas canvas ) {
+        initializeDrawingEnvironment( context, canvas );
         drawEarthLayerToCanvas( context, canvas );
         drawBelowLayerToCanvas( context, canvas );
         drawGrassLayerToCanvas( context, canvas );
@@ -170,54 +190,66 @@ public class Game {
         // drawTurnLayerToCanvas( context, canvas );
     }
 
-    private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
-        int colorEarth = ContextCompat.getColor( context, earthBrown );
+    private void initializeDrawingEnvironment( Context context, Canvas canvas ) {
+        if( drawingEnvironmentIsInitialized ) return;
 
+        initializeColors( context );
+        initializePaints();
+
+        bitmapLayer = Bitmap.createBitmap(
+            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
+        );
+
+        canvasLayer = new Canvas( bitmapLayer );
+    }
+
+    private void initializePaints() {
+        paintLayer = new Paint();
+        paintHole = new Paint();
+        paintSegment = new Paint();
+        paintTurn = new Paint();
+
+        paintHole.setAntiAlias( true );
+        paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
+        paintSegment.setAntiAlias( true );
+        paintTurn.setAntiAlias( true );
+    }
+
+    private void initializeColors( Context context ) {
+        colorEarth = ContextCompat.getColor( context, earthBrown );
+        colorGrass = ContextCompat.getColor( context, grassGreen );
+        colorAbove = ContextCompat.getColor( context, dayBlue  );
+        colorBelow = ContextCompat.getColor( context, nightBlue );
+        colorFourWay  = ContextCompat.getColor( context, fourWay );
+        colorThreeWay = ContextCompat.getColor( context, threeWay );
+        colorTwoWay   = ContextCompat.getColor( context, twoWay );
+    }
+
+    private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
         canvas.drawColor( colorEarth );
     }
 
     private void drawGrassLayerToCanvas( Context context, Canvas canvas ) {
-        int colorGrass = ContextCompat.getColor( context, grassGreen );
+        bitmapLayer.eraseColor( Color.TRANSPARENT );
+        canvasLayer.drawColor( colorGrass );
 
-        Bitmap bitmapGrass = Bitmap.createBitmap(
-            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
-        );
-
-        Canvas canvasGrass = new Canvas( bitmapGrass );
-
-        canvasGrass.drawColor( ContextCompat.getColor( context, grassTrans ) ); // colorGrass );
-
-        Paint paintHole = new Paint();
-
-        paintHole.setAntiAlias( true );
-        paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
-
-        for( Hole hole : holes ) canvasGrass.drawCircle(
+        for( Hole hole : holes ) canvasLayer.drawCircle(
             hole.getCurrentXFor( canvas ), hole.getCurrentYFor( canvas ),
             hole.getRadiusFor( canvas ), paintHole
         );
 
-        canvas.drawBitmap( bitmapGrass, 0, 0, new Paint() );
+        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     private void drawAboveLayerToCanvas( Context context, Canvas canvas ) {
-        int colorAbove = ContextCompat.getColor( context, dayBlue  );
-
-        Bitmap bitmapAbove = Bitmap.createBitmap(
-            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
-        );
-
-        Canvas canvasAbove = new Canvas( bitmapAbove );
-        Paint paintSegment = new Paint();
-
-        paintSegment.setAntiAlias( true );
+        bitmapLayer.eraseColor( Color.TRANSPARENT );
         paintSegment.setColor( colorAbove );
 
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
 
             while( segment != null ) {
-                if( segment.getIsAbove() ) canvasAbove.drawCircle(
+                if( segment.getIsAbove() ) canvasLayer.drawCircle(
                     segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
                     segment.getRadiusFor(  canvas ), paintSegment
                 );
@@ -226,27 +258,18 @@ public class Game {
             }
         }
 
-        canvas.drawBitmap( bitmapAbove, 0, 0, new Paint() );
+        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     private void drawBelowLayerToCanvas( Context context, Canvas canvas ) {
-        int colorBelow = ContextCompat.getColor( context, nightBlue );
-
-        Bitmap bitmapBelow = Bitmap.createBitmap(
-            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
-        );
-
-        Canvas canvasAbove = new Canvas( bitmapBelow );
-        Paint paintSegment = new Paint();
-
-        paintSegment.setAntiAlias( true );
+        bitmapLayer.eraseColor( Color.TRANSPARENT );
         paintSegment.setColor( colorBelow );
 
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
 
             while( segment != null ) {
-                if( segment.getIsBelow() ) canvasAbove.drawCircle(
+                if( segment.getIsBelow() ) canvasLayer.drawCircle(
                     segment.getCurrentXFor( canvas ), segment.getCurrentYFor( canvas ),
                     segment.getRadiusFor(  canvas ), paintSegment
                 );
@@ -255,22 +278,11 @@ public class Game {
             }
         }
 
-        canvas.drawBitmap( bitmapBelow, 0, 0, new Paint() );
+        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     private void drawTurnLayerToCanvas( Context context, Canvas canvas ) {
-        int colorFourWay  = ContextCompat.getColor( context, fourWay );
-        int colorThreeWay = ContextCompat.getColor( context, threeWay );
-        int colorTwoWay   = ContextCompat.getColor( context, twoWay );
-
-        Bitmap bitmapTurn = Bitmap.createBitmap(
-            canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888
-        );
-
-        Canvas canvasTurn = new Canvas( bitmapTurn );
-        Paint paintTurn = new Paint();
-
-        paintTurn.setAntiAlias( true );
+        bitmapLayer.eraseColor( Color.TRANSPARENT );
 
         for( Turn turn : turns ) {
             if( turn.getExits().size() == 4 )
@@ -280,13 +292,13 @@ public class Game {
             else if( turn.getExits().size() == 2 )
                 paintTurn.setColor( colorTwoWay );
 
-            canvasTurn.drawCircle(
+            canvasLayer.drawCircle(
                 turn.getCurrentXFor( canvas ), turn.getCurrentYFor( canvas ),
                 turn.getRadiusFor( canvas ), paintTurn
             );
         }
 
-        canvas.drawBitmap( bitmapTurn, 0, 0, new Paint() );
+        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     public void animateOver( float elapsedTimeMillis ) {
@@ -306,9 +318,12 @@ public class Game {
                     segment.getPositionYPercent() + segment.getSpeedPercent() *
                     segment.getDirectionY() * interval;
 
-                animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
+                // animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
                 animateThroughTurns( segment, segmentNextXPercent, segmentNextYPercent );
-                
+
+                // segment.setPositionXPercent( segmentNextXPercent );
+                // segment.setPositionYPercent( segmentNextYPercent );
+
                 segment = segment.getTail();
             }
         }
@@ -318,55 +333,36 @@ public class Game {
         Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
         for( Turn turn : turns ) {
-            boolean turnXMatchesSegmentX =
-                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) == 0;
-            boolean turnYMatchesSegmentY =
-                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) == 0;
+            boolean turnXMatchesSegmentX = turn.getPositionXPercent() == segmentNextXPercent;
+            boolean turnYMatchesSegmentY = turn.getPositionYPercent() == segmentNextYPercent;
 
             boolean segmentPerfectlyInTurn = turnXMatchesSegmentX && turnYMatchesSegmentY;
 
-            boolean turnYBelowSegmentY =
-                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) < 0;
-            boolean turnYAboveNextY =
-                Float.compare( turn.getPositionYPercent(), segment.getPositionYPercent() ) > 0;
+            boolean turnYBelowSegmentY = turn.getPositionYPercent() < segmentNextYPercent;
+            boolean turnYAboveNextY = turn.getPositionYPercent() > segment.getPositionYPercent();
 
-            boolean segmentPassedTurnTopToBottom =
-                    turnXMatchesSegmentX && turnYBelowSegmentY && turnYAboveNextY;
+            boolean segmentPassedTurnTopToBottom = turnXMatchesSegmentX && turnYBelowSegmentY && turnYAboveNextY;
 
-            boolean turnYAboveSegmentY =
-                Float.compare( turn.getPositionYPercent(), segmentNextYPercent ) > 0;
-            boolean turnYBelowNextY =
-                Float.compare( turn.getPositionYPercent(), segment.getPositionYPercent() ) < 0;
+            boolean turnYAboveSegmentY = turn.getPositionYPercent() > segmentNextYPercent;
+            boolean turnYBelowNextY = turn.getPositionYPercent() < segment.getPositionYPercent();
 
-            boolean segmentPassedTurnBottomToTop =
-                turnXMatchesSegmentX && turnYAboveSegmentY && turnYBelowNextY;
+            boolean segmentPassedTurnBottomToTop = turnXMatchesSegmentX && turnYAboveSegmentY && turnYBelowNextY;
 
-            boolean turnXBelowSegmentX =
-                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) < 0;
-            boolean turnXAboveNextX =
-                Float.compare( turn.getPositionXPercent(), segment.getPositionXPercent() ) > 0;
+            boolean turnXBelowSegmentX = turn.getPositionXPercent() < segmentNextXPercent;
+            boolean turnXAboveNextX = turn.getPositionXPercent() > segment.getPositionXPercent();
 
-            boolean segmentPassedLeftToRight =
-                turnYMatchesSegmentY && turnXBelowSegmentX && turnXAboveNextX;
+            boolean segmentPassedLeftToRight = turnYMatchesSegmentY && turnXBelowSegmentX && turnXAboveNextX;
 
-            boolean turnXAboveSegmentX =
-                Float.compare( turn.getPositionXPercent(), segmentNextXPercent ) > 0;
-            boolean turnXBelowNextX  =
-                Float.compare( turn.getPositionXPercent(), segment.getPositionXPercent() ) < 0;
+            boolean turnXAboveSegmentX = turn.getPositionXPercent() > segmentNextXPercent;
+            boolean turnXBelowNextX  = turn.getPositionXPercent() < segment.getPositionXPercent();
 
-            boolean segmentPassedRightToLeft =
-                turnYMatchesSegmentY && turnXAboveSegmentX && turnXBelowNextX;
+            boolean segmentPassedRightToLeft = turnYMatchesSegmentY && turnXAboveSegmentX && turnXBelowNextX;
 
-            boolean segmentPassedTurnVertically =
-                segmentPassedTurnBottomToTop || segmentPassedTurnTopToBottom;
+            boolean segmentPassedTurnVertically = segmentPassedTurnBottomToTop || segmentPassedTurnTopToBottom;
 
-            boolean segmentPassedTurnHorizontally =
-                segmentPassedLeftToRight || segmentPassedRightToLeft;
+            boolean segmentPassedTurnHorizontally = segmentPassedLeftToRight || segmentPassedRightToLeft;
 
-            boolean segmentReachedTurn =
-                segmentPerfectlyInTurn ||
-                segmentPassedTurnVertically ||
-                segmentPassedTurnHorizontally;
+            boolean segmentReachedTurn = segmentPerfectlyInTurn || segmentPassedTurnVertically || segmentPassedTurnHorizontally;
 
             if( !segmentReachedTurn ) continue;
 
@@ -456,55 +452,36 @@ public class Game {
         Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
         for( Hole hole : holes ) {
-            boolean holeXMatchesSegmentX =
-                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) == 0;
-            boolean holeYMatchesSegmentY =
-                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) == 0;
+            boolean holeXMatchesSegmentX = hole.getPositionXPercent() == segmentNextXPercent;
+            boolean holeYMatchesSegmentY = hole.getPositionYPercent() == segmentNextYPercent;
 
             boolean segmentPerfectlyInHole = holeXMatchesSegmentX && holeYMatchesSegmentY;
 
-            boolean holeYBelowSegmentY =
-                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) < 0;
-            boolean holeYAboveNextY =
-                Float.compare( hole.getPositionYPercent(), segment.getPositionYPercent() ) > 0;
+            boolean holeYBelowSegmentY = hole.getPositionYPercent() < segmentNextYPercent;
+            boolean holeYAboveNextY = hole.getPositionYPercent() > segment.getPositionYPercent();
 
-            boolean segmentPassedHoleTopToBottom =
-                holeXMatchesSegmentX && holeYBelowSegmentY && holeYAboveNextY;
+            boolean segmentPassedHoleTopToBottom = holeXMatchesSegmentX && holeYBelowSegmentY && holeYAboveNextY;
 
-            boolean holeYAboveSegmentY =
-                Float.compare( hole.getPositionYPercent(), segmentNextYPercent ) > 0;
-            boolean holeYBelowNextY =
-                Float.compare( hole.getPositionYPercent(), segment.getPositionYPercent() ) < 0;
+            boolean holeYAboveSegmentY = hole.getPositionYPercent() > segmentNextYPercent;
+            boolean holeYBelowNextY = hole.getPositionYPercent() < segment.getPositionYPercent();
 
-            boolean segmentPassedHoleBottomToTop =
-                holeXMatchesSegmentX && holeYAboveSegmentY && holeYBelowNextY;
+            boolean segmentPassedHoleBottomToTop = holeXMatchesSegmentX && holeYAboveSegmentY && holeYBelowNextY;
 
-            boolean holeXBelowSegmentX =
-                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) < 0;
-            boolean holeXAboveNextX =
-                Float.compare( hole.getPositionXPercent(), segment.getPositionXPercent() ) > 0;
+            boolean holeXBelowSegmentX = hole.getPositionXPercent() < segmentNextXPercent;
+            boolean holeXAboveNextX = hole.getPositionXPercent() > segment.getPositionXPercent();
 
-            boolean segmentPassedLeftToRight =
-                holeYMatchesSegmentY && holeXBelowSegmentX && holeXAboveNextX;
+            boolean segmentPassedLeftToRight = holeYMatchesSegmentY && holeXBelowSegmentX && holeXAboveNextX;
 
-            boolean holeXAboveSegmentX =
-                Float.compare( hole.getPositionXPercent(), segmentNextXPercent ) > 0;
-            boolean holeXBelowNextX  =
-                Float.compare( hole.getPositionXPercent(), segment.getPositionXPercent() ) < 0;
+            boolean holeXAboveSegmentX = hole.getPositionXPercent() > segmentNextXPercent;
+            boolean holeXBelowNextX  = hole.getPositionXPercent() < segment.getPositionXPercent();
 
-            boolean segmentPassedRightToLeft =
-                holeYMatchesSegmentY && holeXAboveSegmentX && holeXBelowNextX;
+            boolean segmentPassedRightToLeft = holeYMatchesSegmentY && holeXAboveSegmentX && holeXBelowNextX;
 
-            boolean segmentPassedHoleVertically =
-                segmentPassedHoleBottomToTop || segmentPassedHoleTopToBottom;
+            boolean segmentPassedHoleVertically = segmentPassedHoleBottomToTop || segmentPassedHoleTopToBottom;
 
-            boolean segmentPassedHoleHorizontally =
-                segmentPassedLeftToRight || segmentPassedRightToLeft;
+            boolean segmentPassedHoleHorizontally = segmentPassedLeftToRight || segmentPassedRightToLeft;
 
-            boolean segmentReachedHole =
-                segmentPerfectlyInHole ||
-                segmentPassedHoleVertically ||
-                segmentPassedHoleHorizontally;
+            boolean segmentReachedHole = segmentPerfectlyInHole || segmentPassedHoleVertically || segmentPassedHoleHorizontally;
 
             if( segmentReachedHole ) segment.toggleAboveBelow();
         }

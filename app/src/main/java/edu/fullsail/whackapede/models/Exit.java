@@ -68,8 +68,7 @@ class Exit {
 
         Exit exit = (Exit)  obj;
 
-        return Float.compare( exit.getDirectionX(), directionX ) == 0 &&
-               Float.compare( exit.getDirectionY(), directionY ) == 0;
+        return exit.getDirectionX() == directionX && exit.getDirectionY() == directionY;
     }
 
     float getDirectionX() {
