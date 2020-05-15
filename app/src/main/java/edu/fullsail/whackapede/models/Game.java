@@ -30,12 +30,14 @@ public class Game {
 
     private int colorEarth;
     private int colorGrass;
+    private int colorTrans;
     private int colorAbove;
     private int colorBelow;
     private int colorFourWay;
     private int colorThreeWay;
     private int colorTwoWay;
 
+    private Paint paintEarth;
     private Paint paintHole;
     private Paint paintLayer;
     private Paint paintSegment;
@@ -167,11 +169,11 @@ public class Game {
 
     private void setupCentipedes() {
         float radiusSegmentPercent = radiusHolePercent * 0.75f;
-        float segmentSpeedPercent = cellWidthPercent * 1f;
+        float segmentSpeedPercent = cellWidthPercent * 5f;
 
         Segment segment = new Segment(
             cellWidthPercent * -1  + radiusHolePercent,
-            cellWidthPercent * 3  + radiusHolePercent,
+            cellWidthPercent *  3  + radiusHolePercent,
             radiusSegmentPercent, segmentSpeedPercent, 1, 0
         );
 
@@ -205,10 +207,12 @@ public class Game {
 
     private void initializePaints() {
         paintLayer = new Paint();
+        paintEarth = new Paint();
         paintHole = new Paint();
         paintSegment = new Paint();
         paintTurn = new Paint();
 
+        paintEarth.setColor( colorEarth );
         paintHole.setAntiAlias( true );
         paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
         paintSegment.setAntiAlias( true );
@@ -218,6 +222,7 @@ public class Game {
     private void initializeColors( Context context ) {
         colorEarth = ContextCompat.getColor( context, earthBrown );
         colorGrass = ContextCompat.getColor( context, grassGreen );
+        colorTrans = ContextCompat.getColor( context, grassTrans );
         colorAbove = ContextCompat.getColor( context, dayBlue  );
         colorBelow = ContextCompat.getColor( context, nightBlue );
         colorFourWay  = ContextCompat.getColor( context, fourWay );
@@ -226,12 +231,20 @@ public class Game {
     }
 
     private void drawEarthLayerToCanvas( Context context, Canvas canvas ) {
-        canvas.drawColor( colorEarth );
+        bitmapLayer.eraseColor( Color.TRANSPARENT );
+        canvasLayer.drawColor( colorGrass );
+
+        for( Hole hole : holes ) canvasLayer.drawCircle(
+            hole.getCurrentXFor( canvas ), hole.getCurrentYFor( canvas ),
+            hole.getRadiusFor( canvas ), paintEarth
+        );
+
+        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     private void drawGrassLayerToCanvas( Context context, Canvas canvas ) {
         bitmapLayer.eraseColor( Color.TRANSPARENT );
-        canvasLayer.drawColor( colorGrass );
+        canvasLayer.drawColor( colorTrans );
 
         for( Hole hole : holes ) canvasLayer.drawCircle(
             hole.getCurrentXFor( canvas ), hole.getCurrentYFor( canvas ),
@@ -318,11 +331,11 @@ public class Game {
                     segment.getPositionYPercent() + segment.getSpeedPercent() *
                     segment.getDirectionY() * interval;
 
-                // animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
+                animateThroughHoles( segment, segmentNextXPercent, segmentNextYPercent );
                 animateThroughTurns( segment, segmentNextXPercent, segmentNextYPercent );
 
-                // segment.setPositionXPercent( segmentNextXPercent );
-                // segment.setPositionYPercent( segmentNextYPercent );
+                //segment.setPositionXPercent( segmentNextXPercent );
+                //segment.setPositionYPercent( segmentNextYPercent );
 
                 segment = segment.getTail();
             }
@@ -333,38 +346,33 @@ public class Game {
         Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
         for( Turn turn : turns ) {
-            boolean turnXMatchesSegmentX = turn.getPositionXPercent() == segmentNextXPercent;
-            boolean turnYMatchesSegmentY = turn.getPositionYPercent() == segmentNextYPercent;
+            boolean segmentPerfectlyInTurn =
+                turn.getPositionXPercent() == segmentNextXPercent && turn.getPositionYPercent() == segmentNextYPercent ;
 
-            boolean segmentPerfectlyInTurn = turnXMatchesSegmentX && turnYMatchesSegmentY;
+            boolean segmentPassedTurnTopToBottom =
+                segment.getPositionXPercent() == turn.getPositionXPercent() && turn.getPositionXPercent() == segmentNextXPercent &&
+                segment.getPositionYPercent() <  turn.getPositionYPercent() && turn.getPositionYPercent() <  segmentNextYPercent;
 
-            boolean turnYBelowSegmentY = turn.getPositionYPercent() < segmentNextYPercent;
-            boolean turnYAboveNextY = turn.getPositionYPercent() > segment.getPositionYPercent();
+            boolean segmentPassedTurnBottomToTop =
+                segment.getPositionXPercent() == turn.getPositionXPercent() && turn.getPositionXPercent() == segmentNextXPercent &&
+                segment.getPositionYPercent() >  turn.getPositionYPercent() && turn.getPositionYPercent() >  segmentNextYPercent;
 
-            boolean segmentPassedTurnTopToBottom = turnXMatchesSegmentX && turnYBelowSegmentY && turnYAboveNextY;
+            boolean segmentPassedLeftToRight =
+                segment.getPositionYPercent() == turn.getPositionYPercent() && turn.getPositionYPercent() == segmentNextYPercent &&
+                segment.getPositionXPercent() <  turn.getPositionXPercent() && turn.getPositionXPercent() <  segmentNextXPercent;
 
-            boolean turnYAboveSegmentY = turn.getPositionYPercent() > segmentNextYPercent;
-            boolean turnYBelowNextY = turn.getPositionYPercent() < segment.getPositionYPercent();
+            boolean segmentPassedRightToLeft =
+                segment.getPositionYPercent() == turn.getPositionYPercent() && turn.getPositionYPercent() == segmentNextYPercent &&
+                segment.getPositionXPercent() >  turn.getPositionXPercent() && turn.getPositionXPercent() >  segmentNextXPercent;
 
-            boolean segmentPassedTurnBottomToTop = turnXMatchesSegmentX && turnYAboveSegmentY && turnYBelowNextY;
-
-            boolean turnXBelowSegmentX = turn.getPositionXPercent() < segmentNextXPercent;
-            boolean turnXAboveNextX = turn.getPositionXPercent() > segment.getPositionXPercent();
-
-            boolean segmentPassedLeftToRight = turnYMatchesSegmentY && turnXBelowSegmentX && turnXAboveNextX;
-
-            boolean turnXAboveSegmentX = turn.getPositionXPercent() > segmentNextXPercent;
-            boolean turnXBelowNextX  = turn.getPositionXPercent() < segment.getPositionXPercent();
-
-            boolean segmentPassedRightToLeft = turnYMatchesSegmentY && turnXAboveSegmentX && turnXBelowNextX;
-
-            boolean segmentPassedTurnVertically = segmentPassedTurnBottomToTop || segmentPassedTurnTopToBottom;
-
-            boolean segmentPassedTurnHorizontally = segmentPassedLeftToRight || segmentPassedRightToLeft;
-
-            boolean segmentReachedTurn = segmentPerfectlyInTurn || segmentPassedTurnVertically || segmentPassedTurnHorizontally;
+            boolean segmentReachedTurn =
+                segmentPerfectlyInTurn || segmentPassedTurnTopToBottom || segmentPassedTurnBottomToTop || segmentPassedLeftToRight || segmentPassedRightToLeft;
 
             if( !segmentReachedTurn ) continue;
+
+            if( segment.getTurnReached() == turn ) continue;
+
+            segment.setTurnReached( turn );
 
             Log.wtf( "GAME", "SEGMENT REACHED TURN" );
             Log.wtf( "GAME", String.format( Locale.getDefault(), "TURN HAS %d EXITS", turn.getExits().size() ) );
@@ -377,10 +385,6 @@ public class Game {
             segment.setDirectionX( segment.getExitTaken().getDirectionX() );
             segment.setDirectionY( segment.getExitTaken().getDirectionY() );
 
-            float segmentTotalTravel;
-            float segmentTravelToTurn ;
-            float segmentTravelAfterTurn = 0;
-
             if( segmentPerfectlyInTurn ) {
                 segment.setPositionXPercent( segmentNextXPercent );
                 segment.setPositionYPercent( segmentNextYPercent );
@@ -390,35 +394,29 @@ public class Game {
                 return;
             }
 
+            float segmentTravelAfterTurn = 0;
+
             if( segmentPassedTurnTopToBottom ) {
-                segmentTotalTravel     = segment.getPositionYPercent() - segmentNextYPercent;
-                segmentTravelToTurn    = segment.getPositionYPercent() - turn.getPositionYPercent();
-                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+                segmentTravelAfterTurn = segmentNextYPercent - turn.getPositionYPercent(); // positive
 
                 Log.wtf( "GAME", "SEGMENT PASSED TURN TOP TO BOTTOM" );
             } else if( segmentPassedTurnBottomToTop ) {
-                segmentTotalTravel     = segment.getPositionYPercent() - segmentNextYPercent;
-                segmentTravelToTurn    = turn.getPositionYPercent() - segment.getPositionYPercent() ;
-                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+                segmentTravelAfterTurn = turn.getPositionYPercent() - segmentNextYPercent; // positive
 
                 Log.wtf( "GAME", "SEGMENT PASSED TURN BOTTOM TO TOP" );
             } else if( segmentPassedLeftToRight ) {
-                segmentTotalTravel     = segment.getPositionXPercent() - segmentNextXPercent;
-                segmentTravelToTurn    = segment.getPositionXPercent() - turn.getPositionXPercent();
-                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+                segmentTravelAfterTurn = segmentNextXPercent - turn.getPositionXPercent(); // positive
 
                 Log.wtf( "GAME", "SEGMENT PASSED TURN LEFT TO RIGHT" );
             } else if( segmentPassedRightToLeft ) {
-                segmentTotalTravel     = segment.getPositionXPercent() - segmentNextXPercent;
-                segmentTravelToTurn    = turn.getPositionXPercent() - segment.getPositionXPercent();
-                segmentTravelAfterTurn = segmentTotalTravel - segmentTravelToTurn;
+                segmentTravelAfterTurn = turn.getPositionXPercent() - segmentNextXPercent; // positive
 
                 Log.wtf( "GAME", "SEGMENT PASSED TURN RIGHT TO LEFT" );
             }
 
             if( segment.getExitTaken().equals( Exit.exitTop ) ) {
                 segmentNextXPercent = turn.getPositionXPercent();
-                segmentNextYPercent = segmentNextYPercent + segmentTravelAfterTurn;
+                segmentNextYPercent = segmentNextYPercent - segmentTravelAfterTurn;
 
                 Log.wtf( "GAME", "SEGMENT EXITED TOP" );
             } else if( segment.getExitTaken().equals( Exit.exitBottom ) ) {
@@ -427,7 +425,7 @@ public class Game {
 
                 Log.wtf( "GAME", "SEGMENT EXITED BOTTOM" );
             } else if( segment.getExitTaken().equals( Exit.exitLeft ) ) {
-                segmentNextXPercent = segmentNextXPercent + segmentTravelAfterTurn;
+                segmentNextXPercent = segmentNextXPercent - segmentTravelAfterTurn;
                 segmentNextYPercent = turn.getPositionYPercent();
 
                 Log.wtf( "GAME", "SEGMENT EXITED LEFT" );
@@ -452,36 +450,27 @@ public class Game {
         Segment segment, float segmentNextXPercent, float segmentNextYPercent
     ) {
         for( Hole hole : holes ) {
-            boolean holeXMatchesSegmentX = hole.getPositionXPercent() == segmentNextXPercent;
-            boolean holeYMatchesSegmentY = hole.getPositionYPercent() == segmentNextYPercent;
+            boolean segmentPerfectlyInHole =
+                hole.getPositionXPercent() == segmentNextXPercent && hole.getPositionYPercent() == segmentNextYPercent ;
 
-            boolean segmentPerfectlyInHole = holeXMatchesSegmentX && holeYMatchesSegmentY;
+            boolean segmentPassedHoleTopToBottom =
+                segment.getPositionXPercent() == hole.getPositionXPercent() && hole.getPositionXPercent() == segmentNextXPercent &&
+                segment.getPositionYPercent() <  hole.getPositionYPercent() && hole.getPositionYPercent() <  segmentNextYPercent;
 
-            boolean holeYBelowSegmentY = hole.getPositionYPercent() < segmentNextYPercent;
-            boolean holeYAboveNextY = hole.getPositionYPercent() > segment.getPositionYPercent();
+            boolean segmentPassedHoleBottomToTop =
+                segment.getPositionXPercent() == hole.getPositionXPercent() && hole.getPositionXPercent() == segmentNextXPercent &&
+                segment.getPositionYPercent() >  hole.getPositionYPercent() && hole.getPositionYPercent() >  segmentNextYPercent;
 
-            boolean segmentPassedHoleTopToBottom = holeXMatchesSegmentX && holeYBelowSegmentY && holeYAboveNextY;
+            boolean segmentPassedLeftToRight =
+                segment.getPositionYPercent() == hole.getPositionYPercent() && hole.getPositionYPercent() == segmentNextYPercent &&
+                segment.getPositionXPercent() <  hole.getPositionXPercent() && hole.getPositionXPercent() <  segmentNextXPercent;
 
-            boolean holeYAboveSegmentY = hole.getPositionYPercent() > segmentNextYPercent;
-            boolean holeYBelowNextY = hole.getPositionYPercent() < segment.getPositionYPercent();
+            boolean segmentPassedRightToLeft =
+                segment.getPositionYPercent() == hole.getPositionYPercent() && hole.getPositionYPercent() == segmentNextYPercent &&
+                segment.getPositionXPercent() >  hole.getPositionXPercent() && hole.getPositionXPercent() >  segmentNextXPercent;
 
-            boolean segmentPassedHoleBottomToTop = holeXMatchesSegmentX && holeYAboveSegmentY && holeYBelowNextY;
-
-            boolean holeXBelowSegmentX = hole.getPositionXPercent() < segmentNextXPercent;
-            boolean holeXAboveNextX = hole.getPositionXPercent() > segment.getPositionXPercent();
-
-            boolean segmentPassedLeftToRight = holeYMatchesSegmentY && holeXBelowSegmentX && holeXAboveNextX;
-
-            boolean holeXAboveSegmentX = hole.getPositionXPercent() > segmentNextXPercent;
-            boolean holeXBelowNextX  = hole.getPositionXPercent() < segment.getPositionXPercent();
-
-            boolean segmentPassedRightToLeft = holeYMatchesSegmentY && holeXAboveSegmentX && holeXBelowNextX;
-
-            boolean segmentPassedHoleVertically = segmentPassedHoleBottomToTop || segmentPassedHoleTopToBottom;
-
-            boolean segmentPassedHoleHorizontally = segmentPassedLeftToRight || segmentPassedRightToLeft;
-
-            boolean segmentReachedHole = segmentPerfectlyInHole || segmentPassedHoleVertically || segmentPassedHoleHorizontally;
+            boolean segmentReachedHole =
+                    segmentPerfectlyInHole || segmentPassedHoleTopToBottom || segmentPassedHoleBottomToTop || segmentPassedLeftToRight || segmentPassedRightToLeft;
 
             if( segmentReachedHole ) segment.toggleAboveBelow();
         }

@@ -25,6 +25,7 @@ class Segment {
 
     private final float radiusPercent;
 
+    private Turn turnReached;
     private Exit exitTaken;
 
     Segment(
@@ -133,6 +134,14 @@ class Segment {
 
     Segment getTail() {
         return tail;
+    }
+
+    void setTurnReached( Turn turnReached ) {
+        this.turnReached = turnReached;
+    }
+
+    public Turn getTurnReached() {
+        return turnReached;
     }
 
     void setExitTaken( Exit exitTaken ) {
