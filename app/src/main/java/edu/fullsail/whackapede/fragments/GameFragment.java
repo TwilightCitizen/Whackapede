@@ -38,7 +38,6 @@ public class GameFragment extends Fragment {
     private Menu menu;
     private TextView textScore;
     private TextView textClock;
-    private boolean backPressed = false;
 
     @Override public void onCreate( @Nullable Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -101,9 +100,10 @@ public class GameFragment extends Fragment {
     }
 
     public boolean onNavigateBackOrUp() {
-        if( backPressed ) return true;
+        if( game.isGameIsPaused() ) return true;
 
-        backPressed = true;
+        game.pause();
+        toggleItemPlayPause();
 
         return false;
     }
