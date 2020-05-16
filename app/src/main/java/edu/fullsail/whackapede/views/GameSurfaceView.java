@@ -8,12 +8,14 @@ MDV469-O, C202005-01
 package edu.fullsail.whackapede.views;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+
+import edu.fullsail.whackapede.activities.GameActivity;
+import edu.fullsail.whackapede.fragments.GameFragment;
 import edu.fullsail.whackapede.models.Game;
 import edu.fullsail.whackapede.threads.GameThread;
 
@@ -21,16 +23,18 @@ import edu.fullsail.whackapede.threads.GameThread;
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private final GameThread gameThread;
     private final Game game;
+    private GameFragment gameFragment;
 
-    public GameSurfaceView( Context context, AttributeSet attrs, Game game ) {
-        super( context, attrs );
+    public GameSurfaceView( GameActivity gameActivity, GameFragment gameFragment, AttributeSet attrs, Game game ) {
+        super( gameActivity, attrs );
 
         SurfaceHolder surfaceHolder = getHolder();
 
         surfaceHolder.addCallback( this );
 
         this.game = game;
-        gameThread = new GameThread( surfaceHolder, context, game );
+        this.gameFragment = gameFragment;
+        gameThread = new GameThread( surfaceHolder, gameActivity, gameFragment, game );
     }
 
     @Override public void surfaceCreated( SurfaceHolder holder ) {
@@ -56,9 +60,5 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         game.addTouchEvent( translatedEvent );
 
         return  true;
-    }
-
-    public Game getGame() {
-        return game;
     }
 }

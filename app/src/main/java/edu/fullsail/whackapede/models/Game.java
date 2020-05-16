@@ -58,10 +58,21 @@ public class Game {
     private final ArrayList< Turn > turns = new ArrayList<>();
     private final ArrayList< MotionEvent > touchEvents = new ArrayList<>();
 
+    private int score;
+    private double remainingTimeMillis;
+
     public Game() {
         gameIsPaused = true;
         boardIsInitialized = false;
         drawingToolsAreInitialized = false;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public double getRemainingTimeMillis() {
+        return remainingTimeMillis;
     }
 
     public void initializeBoard( int canvasWidth ) {
@@ -73,6 +84,8 @@ public class Game {
         this.radiusSegment = radiusHole;
         this.radiusTurn = radiusHole / 2;
         this.segmentSpeed = cellSize;
+        this.score = 0;
+        this.remainingTimeMillis = 0;
 
         setupHoles();
         setupTurns();
@@ -303,6 +316,8 @@ public class Game {
     }
 
     private void attackCentipedes() {
+        if( gameIsPaused ) return;
+
         ArrayList< Segment > segmentsKilled = new ArrayList<>();
         ArrayList< Segment > headsToRemove = new ArrayList<>();
         ArrayList< Segment > headsToAdd = new ArrayList<>();
@@ -315,10 +330,13 @@ public class Game {
                     boolean touchOnSegmentX =
                         touchEvent.getX() <= segment.getPositionX() + cellSize &&
                         touchEvent.getX() >= segment.getPositionX();
+
                     boolean touchOnSegmentY =
                         touchEvent.getY() <= segment.getPositionY() + cellSize &&
                         touchEvent.getY() >= segment.getPositionY();
-                    boolean touchOnSegment = touchOnSegmentX && touchOnSegmentY;
+
+                    boolean touchOnSegment =
+                        touchOnSegmentX && touchOnSegmentY  && segment.getIsAbove();
 
                     if( touchOnSegment ) segmentsKilled.add( segment );
 
@@ -362,6 +380,8 @@ public class Game {
 
         centipedes.removeAll( headsToRemove );
         centipedes.addAll( headsToAdd );
+
+        score += segmentsKilled.size();
     }
 
     private void animateCentipedes( double elapsedTimeMillis ) {

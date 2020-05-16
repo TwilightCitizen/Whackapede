@@ -7,23 +7,28 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.threads;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+import edu.fullsail.whackapede.activities.GameActivity;
+import edu.fullsail.whackapede.fragments.GameFragment;
 import edu.fullsail.whackapede.models.Game;
 
-public class GameThread extends Thread {
+public class GameThread extends Thread  {
     private final SurfaceHolder surfaceHolder;
-    private final Context context;
+    private final GameActivity gameActivity;
     private boolean isRunning;
     private final Game game;
+    private final GameFragment gameFragment;
 
-    public GameThread( SurfaceHolder surfaceHolder, Context context, Game game ) {
+    public GameThread(
+        SurfaceHolder surfaceHolder, GameActivity gameActivity, GameFragment gameFragment, Game game
+    ) {
         isRunning = true;
         this.surfaceHolder = surfaceHolder;
-        this.context = context;
+        this.gameActivity = gameActivity;
         this.game = game;
+        this.gameFragment = gameFragment;
     }
 
     public void run() {
@@ -43,7 +48,9 @@ public class GameThread extends Thread {
                     long currentTimeMillis = System.currentTimeMillis();
                     double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
 
-                    game.loop( context, canvas, elapsedTimeMillis );
+                    game.loop( gameActivity, canvas, elapsedTimeMillis );
+                    gameActivity.runOnUiThread( gameFragment::onGameStatsChanged );
+
 
                     previousTimeMillis = currentTimeMillis;
                 }
