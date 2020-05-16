@@ -72,7 +72,6 @@ class Exit {
     }
 
     int getDirectionX() { return directionX; }
-
     int getDirectionY() { return directionY; }
 
     static Exit getExitReverseOf( int directionX, int directionY ) {

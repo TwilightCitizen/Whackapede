@@ -23,7 +23,6 @@ class Turn {
     }
 
     int getPositionX() { return positionX; }
-
     int getPositionY() { return positionY; }
 
     Exit getRandomExit( Segment segment ) {
@@ -36,7 +35,5 @@ class Turn {
         return includedExits.get( rand.nextInt( includedExits.size() ) );
     }
 
-    ArrayList< Exit > getExits() {
-        return exits;
-    }
+    ArrayList< Exit > getExits() { return exits; }
 }

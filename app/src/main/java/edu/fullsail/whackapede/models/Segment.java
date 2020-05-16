@@ -33,49 +33,37 @@ class Segment {
     }
 
     boolean getIsHead() { return head == null; }
-
     boolean getIsTail() { return tail == null; }
 
     int getPositionX() { return positionX; }
-
     void setPositionX( int positionX ) { this.positionX = positionX; }
 
     int getPositionY() { return positionY; }
-
     void setPositionY( int positionY ) { this.positionY = positionY; }
 
     int getSpeed() { return speed; }
-
     void setSpeed( int speed ) { this.speed = speed; }
 
     int getDirectionX() { return directionX; }
-
     void setDirectionX( int directionX ) { this.directionX = directionX; }
 
     int getDirectionY() { return directionY; }
-
     void setDirectionY( int directionY ) { this.directionY = directionY; }
 
     boolean getIsAbove() { return isAbove; }
-
     boolean getIsBelow() { return !isAbove; }
-
     void toggleAboveBelow() { isAbove = !isAbove; }
 
     void removeHead() { head = null; }
-
     Segment getHead() { return head; }
 
     void removeTail() { tail = null; }
-
     Segment getTail() { return tail; }
 
     void setTurnReached( Turn turnReached ) { this.turnReached = turnReached; }
-
     Turn getTurnReached() { return turnReached; }
 
     void setExitTaken( Exit exitTaken ) { this.exitTaken = exitTaken; }
-
     Exit getExitTaken() { return exitTaken; }
 
     private Segment addTailLeft( int cellSize ) {

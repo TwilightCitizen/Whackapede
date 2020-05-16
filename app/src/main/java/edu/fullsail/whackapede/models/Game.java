@@ -24,9 +24,7 @@ import static edu.fullsail.whackapede.R.color.*;
 
 public class Game {
     private boolean gameIsPaused;
-
     private boolean boardIsInitialized;
-
     private boolean drawingToolsAreInitialized;
 
     private int colorEarth;
@@ -212,14 +210,14 @@ public class Game {
     }
 
     private void initializeColors( Context context ) {
-        colorEarth = ContextCompat.getColor( context, earthBrown );
-        colorGrass = ContextCompat.getColor( context, grassGreen );
-        colorTrans = ContextCompat.getColor( context, grassTrans );
-        colorAbove = ContextCompat.getColor( context, dayBlue  );
-        colorBelow = ContextCompat.getColor( context, nightBlue );
-        colorFourWay  = ContextCompat.getColor( context, fourWay );
-        colorThreeWay = ContextCompat.getColor( context, threeWay );
-        colorTwoWay   = ContextCompat.getColor( context, twoWay );
+        colorEarth = ContextCompat.getColor( context, earth_brown );
+        colorGrass = ContextCompat.getColor( context, grass_green );
+        colorTrans = ContextCompat.getColor( context, grass_trans );
+        colorAbove = ContextCompat.getColor( context, day_blue );
+        colorBelow = ContextCompat.getColor( context, night_blue );
+        colorFourWay  = ContextCompat.getColor( context, four_way );
+        colorThreeWay = ContextCompat.getColor( context, three_way );
+        colorTwoWay   = ContextCompat.getColor( context, two_way );
     }
 
     private void drawEarthLayerToCanvas( Canvas canvas ) {

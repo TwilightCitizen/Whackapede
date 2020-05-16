@@ -9,10 +9,10 @@ MDV469-O, C202005-01
 
 <resources>
     <style name="Whackapede" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/sunshineYellow</item>
-        <item name="colorPrimaryDark">@color/sunsetYellow</item>
-        <item name="colorAccent">@color/dayBlue</item>
-        <item name="android:colorBackground">@color/sunshineYellow</item>
+        <item name="colorPrimary">@color/sunshine_yellow</item>
+        <item name="colorPrimaryDark">@color/sunset_yellow</item>
+        <item name="colorAccent">@color/day_blue</item>
+        <item name="android:colorBackground">@color/sunshine_yellow</item>
     </style>
 
     <style name="Whackapede.NoActionBar">

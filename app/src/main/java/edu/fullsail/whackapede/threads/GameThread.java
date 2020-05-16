@@ -60,7 +60,5 @@ public class GameThread extends Thread  {
         }
     }
 
-    public void end() {
-        isRunning = false;
-    }
+    public void end() { isRunning = false; }
 }

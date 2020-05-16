@@ -17,6 +17,5 @@ class Hole {
     }
 
     int getPositionX() { return positionX; }
-
     int getPositionY() { return positionY; }
 }
