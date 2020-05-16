@@ -31,8 +31,10 @@ import edu.fullsail.whackapede.views.GameSurfaceView;
 
 @SuppressWarnings( "WeakerAccess" )
 public class GameFragment extends Fragment {
+    private FrameLayout frameGame;
     private GameActivity gameActivity;
     private Game game;
+    private GameSurfaceView gameSurfaceView;
     private Menu menu;
     private TextView textScore;
     private TextView textClock;
@@ -71,15 +73,22 @@ public class GameFragment extends Fragment {
 
         textScore = view.findViewById( R.id.text_score );
         textClock = view.findViewById( R.id.text_clock );
-        FrameLayout frameGame = view.findViewById( R.id.frame_game );
+        frameGame = view.findViewById( R.id.frame_game );
         game = new Game();
-        GameSurfaceView gameSurfaceView = new GameSurfaceView( gameActivity, this, null, game );
+        gameSurfaceView = new GameSurfaceView( gameActivity, this, null, game );
 
         frameGame.addView( gameSurfaceView );
     }
 
     @Override public void onResume() {
         super.onResume();
+
+        if( game != null ) {
+            frameGame.removeAllViews();
+            gameSurfaceView = new GameSurfaceView( gameActivity, this, null, game );
+
+            frameGame.addView( gameSurfaceView );
+        }
 
         gameActivity.showActionBar();
     }
