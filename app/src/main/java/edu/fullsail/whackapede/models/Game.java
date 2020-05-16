@@ -75,6 +75,10 @@ public class Game {
         return remainingTimeMillis;
     }
 
+    public void pause() {
+        gameIsPaused = true;
+    }
+
     public void initializeBoard( int canvasWidth ) {
         if( boardIsInitialized ) return;
 

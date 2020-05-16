@@ -23,7 +23,6 @@ import edu.fullsail.whackapede.threads.GameThread;
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private final GameThread gameThread;
     private final Game game;
-    private GameFragment gameFragment;
 
     public GameSurfaceView( GameActivity gameActivity, GameFragment gameFragment, AttributeSet attrs, Game game ) {
         super( gameActivity, attrs );
@@ -33,7 +32,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         surfaceHolder.addCallback( this );
 
         this.game = game;
-        this.gameFragment = gameFragment;
         gameThread = new GameThread( surfaceHolder, gameActivity, gameFragment, game );
     }
 

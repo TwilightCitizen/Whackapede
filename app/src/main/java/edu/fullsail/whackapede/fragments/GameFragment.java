@@ -38,6 +38,7 @@ public class GameFragment extends Fragment {
     private Menu menu;
     private TextView textScore;
     private TextView textClock;
+    private boolean backPressed = false;
 
     @Override public void onCreate( @Nullable Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -93,19 +94,36 @@ public class GameFragment extends Fragment {
         gameActivity.showActionBar();
     }
 
+    @Override public void onStop() {
+        super.onStop();
+        game.pause();
+        toggleItemPlayPause();
+    }
+
+    public boolean onNavigateBackOrUp() {
+        if( backPressed ) return true;
+
+        backPressed = true;
+
+        return false;
+    }
+
     @Override public boolean onOptionsItemSelected( @NonNull MenuItem item ) {
         if( item.getItemId() == R.id.action_play_pause ) {
             game.toggleState();
-
-            MenuItem itemPlayPause = menu.getItem( 0 );
-
-            itemPlayPause.setIcon( game.isGameIsPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
-            itemPlayPause.setTitle( game.isGameIsPaused() ? R.string.play : R.string.pause );
+            toggleItemPlayPause();
 
             return true;
         }
 
         return super.onOptionsItemSelected( item );
+    }
+
+    private void toggleItemPlayPause() {
+        MenuItem itemPlayPause = menu.getItem( 0 );
+
+        itemPlayPause.setIcon( game.isGameIsPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
+        itemPlayPause.setTitle( game.isGameIsPaused() ? R.string.play : R.string.pause );
     }
 
     public void onGameStatsChanged() {
