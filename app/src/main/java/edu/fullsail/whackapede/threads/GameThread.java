@@ -43,8 +43,7 @@ public class GameThread extends Thread {
                     long currentTimeMillis = System.currentTimeMillis();
                     double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
 
-                    game.animateOver( elapsedTimeMillis );
-                    game.drawToCanvas( context, canvas );
+                    game.loop( context, canvas, elapsedTimeMillis );
 
                     previousTimeMillis = currentTimeMillis;
                 }

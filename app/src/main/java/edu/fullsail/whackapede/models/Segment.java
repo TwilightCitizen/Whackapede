@@ -7,8 +7,6 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
-import android.graphics.Canvas;
-
 class Segment {
     private Segment head = null;
     private Segment tail = null;
@@ -60,19 +58,15 @@ class Segment {
 
     boolean getIsAbove() { return isAbove; }
 
-    void setIsAbove() { isAbove = true; }
-
     boolean getIsBelow() { return !isAbove; }
-
-    void setIsBelow() { isAbove = false; }
 
     void toggleAboveBelow() { isAbove = !isAbove; }
 
-    void setHead( Segment segment ) { head = segment; }
+    void removeHead() { head = null; }
 
     Segment getHead() { return head; }
 
-    void setTail( Segment segment ) { tail = segment; }
+    void removeTail() { tail = null; }
 
     Segment getTail() { return tail; }
 

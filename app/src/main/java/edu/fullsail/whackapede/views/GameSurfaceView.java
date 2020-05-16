@@ -10,6 +10,7 @@ package edu.fullsail.whackapede.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
@@ -41,6 +42,20 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override public void surfaceDestroyed( SurfaceHolder holder ) {
         gameThread.end();
         gameThread.interrupt();
+    }
+
+    @SuppressLint( "ClickableViewAccessibility" )
+    @Override public boolean onTouchEvent( MotionEvent event ) {
+        if( event.getAction() != MotionEvent.ACTION_DOWN ) return false;
+
+        MotionEvent translatedEvent = MotionEvent.obtain(
+            event.getDownTime(), event.getEventTime(), event.getAction(),
+            event.getX(), event.getY(), event.getMetaState()
+        );
+
+        game.addTouchEvent( translatedEvent );
+
+        return  true;
     }
 
     public Game getGame() {

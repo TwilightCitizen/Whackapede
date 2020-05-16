@@ -7,8 +7,6 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
-import android.graphics.Canvas;
-
 class Hole {
     private final int positionX;
     private final int positionY;

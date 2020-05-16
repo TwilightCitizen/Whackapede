@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.view.MotionEvent;
 
 import androidx.core.content.ContextCompat;
 
@@ -26,9 +27,7 @@ public class Game {
 
     private boolean boardIsInitialized;
 
-    private boolean drawingToolsAreInitialize;
-
-    private int canvasWidth;
+    private boolean drawingToolsAreInitialized;
 
     private int colorEarth;
     private int colorGrass;
@@ -48,31 +47,32 @@ public class Game {
     private Bitmap bitmapLayer;
     private Canvas canvasLayer;
 
-    private final double cellWidthPercent = 1 / 15d;
-
-    private int cellSize = (int) ( canvasWidth * cellWidthPercent );
-    private int radiusHole = (int) ( canvasWidth * cellWidthPercent / 2 );
-    private int radiusSegment = radiusHole;
-    private int radiusTurn = radiusHole / 2;
+    private int cellSize;
+    private int radiusHole;
+    private int radiusSegment ;
+    private int radiusTurn ;
+    private int segmentSpeed;
 
     private final ArrayList< Segment > centipedes = new ArrayList<>();
     private final ArrayList< Hole > holes = new ArrayList<>();
     private final ArrayList< Turn > turns = new ArrayList<>();
+    private final ArrayList< MotionEvent > touchEvents = new ArrayList<>();
 
     public Game() {
         gameIsPaused = true;
         boardIsInitialized = false;
-        drawingToolsAreInitialize = false;
+        drawingToolsAreInitialized = false;
     }
 
     public void initializeBoard( int canvasWidth ) {
         if( boardIsInitialized ) return;
 
-        this.canvasWidth = canvasWidth;
+        double cellWidthPercent = 1 / 15d;
         this.cellSize = (int) ( canvasWidth * cellWidthPercent );
         this.radiusHole = (int) ( canvasWidth * cellWidthPercent / 2 );
         this.radiusSegment = radiusHole;
-        this.radiusTurn = (int) ( radiusHole / 2 );
+        this.radiusTurn = radiusHole / 2;
+        this.segmentSpeed = cellSize;
 
         setupHoles();
         setupTurns();
@@ -145,22 +145,20 @@ public class Game {
     }
 
     private void setupCornerTwoWayTurns() {
-        turns.add( new Turn( cellSize *  1, cellSize *  1, Exit.twoWayExitTopLeft ) );
-        turns.add( new Turn( cellSize * 13, cellSize *  1, Exit.twoWayExitTopRight ) );
-        turns.add( new Turn( cellSize *  1, cellSize * 21, Exit.twoWayExitBottomLeft ) );
+        turns.add( new Turn( cellSize, cellSize, Exit.twoWayExitTopLeft ) );
+        turns.add( new Turn( cellSize * 13, cellSize, Exit.twoWayExitTopRight ) );
+        turns.add( new Turn( cellSize, cellSize * 21, Exit.twoWayExitBottomLeft ) );
         turns.add( new Turn( cellSize * 13, cellSize * 21, Exit.twoWayExitBottomRight ) );
     }
 
     private void setupCentipedes() {
-        int segmentSpeed = cellSize * 5;
-
-        Segment segment = new Segment( cellSize * -1, cellSize *  3, segmentSpeed, 1, 0 );
+        Segment segment = new Segment( cellSize * -1 , cellSize *  3, segmentSpeed, 1, 0 );
 
         segment.addTailsLeft( 9, cellSize );
         centipedes.add( segment );
     }
 
-    public void drawToCanvas( Context context, Canvas canvas ) {
+    private void drawToCanvas( Context context, Canvas canvas ) {
         initializeDrawingTools( context, canvas );
         drawEarthLayerToCanvas( canvas );
         drawBelowLayerToCanvas( canvas );
@@ -172,13 +170,14 @@ public class Game {
     }
 
     private void initializeDrawingTools( Context context, Canvas canvas ) {
-        if( drawingToolsAreInitialize ) return;
+        if( drawingToolsAreInitialized ) return;
 
         initializeColors( context );
         initializePaints();
 
         bitmapLayer = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         canvasLayer = new Canvas( bitmapLayer );
+        drawingToolsAreInitialized = true;
     }
 
     private void initializePaints() {
@@ -293,7 +292,79 @@ public class Game {
         canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
-    public void animateOver( double elapsedTimeMillis ) {
+    public void loop( Context context, Canvas canvas, double elapsedTimeMillis  ) {
+        attackCentipedes();
+        animateCentipedes( elapsedTimeMillis );
+        drawToCanvas( context, canvas );
+    }
+
+    public void addTouchEvent( MotionEvent touchEvent ) {
+        touchEvents.add( touchEvent );
+    }
+
+    private void attackCentipedes() {
+        ArrayList< Segment > segmentsKilled = new ArrayList<>();
+        ArrayList< Segment > headsToRemove = new ArrayList<>();
+        ArrayList< Segment > headsToAdd = new ArrayList<>();
+
+        for( MotionEvent touchEvent : touchEvents ) {
+            for( Segment centipede : centipedes ) {
+                Segment segment = centipede;
+
+                while( segment != null ) {
+                    boolean touchOnSegmentX =
+                        touchEvent.getX() <= segment.getPositionX() + cellSize &&
+                        touchEvent.getX() >= segment.getPositionX();
+                    boolean touchOnSegmentY =
+                        touchEvent.getY() <= segment.getPositionY() + cellSize &&
+                        touchEvent.getY() >= segment.getPositionY();
+                    boolean touchOnSegment = touchOnSegmentX && touchOnSegmentY;
+
+                    if( touchOnSegment ) segmentsKilled.add( segment );
+
+                    segment = segment.getTail();
+                }
+            }
+        }
+
+        touchEvents.clear();
+
+        for( Segment centipede : centipedes ) {
+            Segment segment = centipede;
+
+            while( segment != null ) {
+                segment.setSpeed( segment.getSpeed() + segmentSpeed * segmentsKilled.size() );
+
+                segment = segment.getTail();
+            }
+        }
+
+        for( Segment segment : segmentsKilled ) {
+            if( segment.getIsHead() ) {
+                if( segment.getTail() != null ) {
+                    headsToAdd.add( segment.getTail() );
+                    segment.getTail().removeHead();
+                    segment.removeTail();
+                }
+
+                headsToRemove.add( segment );
+            } else if ( segment.getIsTail() ) {
+                segment.getHead().removeTail();
+                segment.removeHead();
+            } else {
+                headsToAdd.add( segment.getTail() );
+                segment.getHead().removeTail();
+                segment.removeHead();
+                segment.getTail().removeHead();
+                segment.removeTail();
+            }
+        }
+
+        centipedes.removeAll( headsToRemove );
+        centipedes.addAll( headsToAdd );
+    }
+
+    private void animateCentipedes( double elapsedTimeMillis ) {
         if( gameIsPaused ) return;
 
         double interval = elapsedTimeMillis / 1000d;

@@ -7,8 +7,6 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
-import android.graphics.Canvas;
-
 import java.util.ArrayList;
 import java.util.Random;
 
