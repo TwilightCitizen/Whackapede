@@ -20,9 +20,13 @@ Whack-A-Pede is a quasi mash-up of the Atari arcade classic, Centipede, and Whac
 
 - Android Phones and Tablets running Android 5.0 (API 21) or Later.
 
-- Note that a hardware device is recommended for testing the game screen itself, as the emulators introduce subtle delays that can affect the correct animation of on-screen elements.
+- Hardware device is recommended for testing the game screen itself, as the emulators can introduce subtle delays that can affect the correct animation of on-screen elements at higher speeds.  Any compatible emulator is fine to test the overall navigation and other app features.
 
-- An emulator is fine to test the overall navigation and other app features.
+### Hardware and Emulators Tested On
+
+- Nexus 5 Emulator, APIs 21, 23, 28, and 29.
+
+- Pixel 3 Harware, API 29.
 
 ## Log in Requirements & Credentials for Testing
 
