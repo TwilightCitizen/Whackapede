@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static edu.fullsail.whackapede.R.color.*;
 
@@ -72,6 +73,7 @@ public class Game {
 
     // Player score and time remaining.
     private int score;
+    private double roundTimeMillis;
     private double remainingTimeMillis;
 
     // New games start paused without game board or drawing tools initialized.
@@ -107,12 +109,13 @@ public class Game {
 
         // Zero score and time remaining.
         this.score = 0;
-        this.remainingTimeMillis = 0;
+        this.roundTimeMillis = 1000 * 60;
+        this.remainingTimeMillis = roundTimeMillis;
 
         // Position game elements on the board.
         setupHoles();
         setupTurns();
-        setupCentipedes();
+        setupCentipede();
 
         // Flag initialization complete.
         boardIsInitialized = true;
@@ -204,11 +207,61 @@ public class Game {
     }
 
     // Set a 10-segment centipede off screen, oriented to crawl on screen.
-    private void setupCentipedes() {
-        Segment segment = new Segment( cellSize * -1 , cellSize *  3, segmentSpeed, 1, 0 );
+    private void setupCentipede() {
+        // Starting centipedes from which one will be chosen.
+        ArrayList< Segment > startingCentipedes = new ArrayList<>();
 
-        segment.addTailsLeft( 9, cellSize );
-        centipedes.add( segment );
+        // Centipedes can start just beyond any of the game arena's edges.
+        int leftStart = -1, topStart = -1, rightStart = 16, bottomStart = 24;
+
+        // Centipedes can start above or below ground.
+        boolean[] flags = new boolean[] { true, false };
+
+        // Keep centipedes in line with turns so they don't just walk off screen.
+        int[] rows = new int[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21 };
+        int[] cols = new int[] { 1, 3, 5, 7, 9, 11, 13 };
+
+        // Whip up from fresh centipedes.
+        for( boolean setBelow : flags ) {
+            for( int row : rows ) {
+                Segment segment = new Segment( cellSize * leftStart, cellSize * row, segmentSpeed, 1, 0 );
+
+                if( setBelow ) segment.toggleAboveBelow();
+                segment.addTails( 9, cellSize, -1, 0 );
+                startingCentipedes.add( segment );
+            }
+
+            for( int row : rows ) {
+                Segment segment = new Segment( cellSize * rightStart, cellSize * row, segmentSpeed, -1, 0 );
+
+                if( setBelow ) segment.toggleAboveBelow();
+                segment.addTails( 9, cellSize, 1, 0 );
+                startingCentipedes.add( segment );
+            }
+
+            for( int col : cols ) {
+                Segment segment = new Segment( cellSize * col, cellSize * topStart, segmentSpeed, 0, 1 );
+
+                if( setBelow ) segment.toggleAboveBelow();
+                segment.addTails( 9, cellSize, 0, -1 );
+                startingCentipedes.add( segment );
+            }
+
+            for( int col : cols ) {
+                Segment segment = new Segment( cellSize * col, cellSize * bottomStart, segmentSpeed, 0, -1 );
+
+                if( setBelow ) segment.toggleAboveBelow();
+                segment.addTails( 9, cellSize, 0, 1 );
+                startingCentipedes.add( segment );
+            }
+        }
+
+        // Get a random centipede from the batch.
+        Random rand = new Random();
+        Segment startingSegment = startingCentipedes.get( rand.nextInt( startingCentipedes.size() ) );
+
+        // And add it to the mix.
+        centipedes.add( startingSegment );
     }
 
     // Initialize drawing tools and draw all game layers to canvas, overlaying them on screen.
@@ -379,9 +432,49 @@ public class Game {
     animate them over the interval, and then draw everything to canvas.
     */
     public void loop( Context context, Canvas canvas, double elapsedTimeMillis  ) {
+        checkForGameOver( elapsedTimeMillis );
+        checkForNextRound();
         attackCentipedes();
         animateCentipedes( elapsedTimeMillis );
         drawToCanvas( context, canvas );
+    }
+
+    /*
+    Check for remaining centipedes.  If there are none, create new, faster one, add it to the
+    board and reset the clock.
+    */
+    private void checkForNextRound() {
+        // Guard against starting next round when paused.
+        if( gameIsPaused ) return;
+
+        // Guard against starting new round when centipedes exist.
+        if( !centipedes.isEmpty() ) return;
+
+        remainingTimeMillis = roundTimeMillis;
+        segmentSpeed *= 1.25;
+
+        setupCentipede();
+    }
+
+    /*
+    Check for time remaining.  If there is none, pause the game, zero the clock, and more will
+    happen in the next sprint.
+    */
+    private void checkForGameOver( double elapsedTimeMillis ) {
+        // Guard against ticking clock and ending game when paused.
+        if( gameIsPaused ) return;
+
+        // Tick down the clock.
+        remainingTimeMillis -= elapsedTimeMillis;
+
+        // Game is over if timer reaches zero.
+        if( remainingTimeMillis <= 0 ) {
+            // Prevent negative clock.
+            remainingTimeMillis = 0;
+
+            // TODO: Implement end game when user/guest play is determined.
+            pause();
+        }
     }
 
     /*

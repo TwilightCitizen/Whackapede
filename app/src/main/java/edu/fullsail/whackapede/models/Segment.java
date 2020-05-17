@@ -83,9 +83,13 @@ class Segment {
     void setExitTaken( Exit exitTaken ) { this.exitTaken = exitTaken; }
     Exit getExitTaken() { return exitTaken; }
 
-    // Add a tail Segment, placed left of the Segment.
-    private Segment addTailLeft( int cellSize ) {
-        Segment tail = new Segment( positionX - cellSize, positionY, speed, directionX, directionY );
+    // Add a tail Segment, placed adjacent to the Segment.
+    private Segment addTailLeft( int cellSize, int sideX, int sideY ) {
+        Segment tail = new Segment(
+            positionX + cellSize * sideX,
+            positionY + cellSize * sideY,
+            speed, directionX, directionY
+        );
 
         this.tail = tail;
         tail.head = this;
@@ -94,12 +98,12 @@ class Segment {
         return tail;
     }
 
-    // Add X number of tail Segments left of the Segment, each successive one the tail of the last.
-    void addTailsLeft( int tails, int cellSize ) {
+    // Add X number of tail Segments adjacent to the Segment, each one the next tail of the last.
+    void addTails( int tails, int cellSize, int sideX, int sideY ) {
         Segment tail = this;
 
         while( tails > 0 ) {
-            tail = tail.addTailLeft( cellSize );
+            tail = tail.addTailLeft( cellSize, sideX, sideY );
             tails--;
         }
     }
