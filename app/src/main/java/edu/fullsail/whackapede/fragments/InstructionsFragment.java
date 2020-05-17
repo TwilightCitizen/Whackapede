@@ -19,28 +19,38 @@ import androidx.fragment.app.Fragment;
 import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.activities.GameActivity;
 
-@SuppressWarnings( "WeakerAccess" )
-public class InstructionsFragment extends Fragment {
+/*
+Instructions Fragment simply displays instructions on how to play Whack-A-Pede, using the action
+bar for back/up navigation.
+*/
+@SuppressWarnings( "WeakerAccess" ) public class InstructionsFragment extends Fragment {
+    // Game Activity must host Instructions Fragment.
     private GameActivity gameActivity;
 
+    // Check the host context on attachment.
     @Override public void onAttach( @NonNull Context context ) {
         super.onAttach( context );
+        checkGameActivityHost( context );
+    }
 
+    // Ensure that the host context is a Game Activity.
+    private void checkGameActivityHost( Context context ) {
         if( ! ( context instanceof GameActivity ) )
             throw new ClassCastException( "GameActivity must host InstructionsFragment" );
 
         gameActivity = (GameActivity) context;
     }
 
+    // Just inflate the view on view creation.
     @Override public View onCreateView(
         LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
     ) {
         return inflater.inflate( R.layout.fragment_instructions, container, false );
     }
 
+    // Show the action bar on resume.
     @Override public void onResume() {
         super.onResume();
-
         gameActivity.showActionBar();
     }
 }

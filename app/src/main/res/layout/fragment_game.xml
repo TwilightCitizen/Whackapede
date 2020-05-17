@@ -92,20 +92,6 @@ MDV469-O, C202005-01
         app:layout_constraintStart_toEndOf="@id/text_time"
         app:layout_constraintTop_toBottomOf="@id/text_score" />
 
-    <!-- <edu.fullsail.whackapede.views.GameSurfaceView
-        android:id="@+id/surface_game"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageAvatar"
-        app:layout_constraintDimensionRatio="7:11"/> -->
-
     <FrameLayout
         android:id="@+id/frame_game"
         android:layout_width="0dp"
