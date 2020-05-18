@@ -21,6 +21,9 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import edu.fullsail.whackapede.gameElements.Direction;
+import edu.fullsail.whackapede.gameElements.Position;
+
 import static edu.fullsail.whackapede.R.color.*;
 
 /*
@@ -128,7 +131,7 @@ public class Game {
         int[] holesDown   = new int[] { 3, 7, 11, 15, 19 };
 
         for( int holeAcross : holesAcross ) for( int holeDown : holesDown )
-            holes.add( new Hole( cellSize * holeAcross, cellSize * holeDown ) );
+            holes.add( new Hole( new Position( cellSize * holeAcross, cellSize * holeDown ) ) );
     }
 
     // Set turns at fixed intervals throughout the game board.
@@ -150,7 +153,8 @@ public class Game {
 
         for( int fourWayTurnAcross : fourWayTurnsAcross )
             for( int fourWayTurnDown : fourWayTurnsDown ) turns.add( new Turn(
-                cellSize * fourWayTurnAcross, cellSize * fourWayTurnDown, Exit.fourWayExit
+                new Position( cellSize * fourWayTurnAcross, cellSize * fourWayTurnDown ),
+                Exit.fourWayExit
             ) );
     }
 
@@ -161,7 +165,8 @@ public class Game {
         int   threeWayTurnsTopDown   = 1;
 
         for( int threeWayTurnTopAcross : threeWayTurnsTopAcross ) turns.add( new Turn(
-            cellSize * threeWayTurnTopAcross, cellSize * threeWayTurnsTopDown, Exit.threeWayExitTop
+            new Position( cellSize * threeWayTurnTopAcross, cellSize * threeWayTurnsTopDown ),
+            Exit.threeWayExitTop
         ) );
     }
 
@@ -172,7 +177,8 @@ public class Game {
         int   threeWayTurnsBottomDown   = 21;
 
         for( int threeWayTurnBottomAcross : threeWayTurnsBottomAcross ) turns.add( new Turn(
-            cellSize * threeWayTurnBottomAcross, cellSize * threeWayTurnsBottomDown, Exit.threeWayExitBottom
+            new Position( cellSize * threeWayTurnBottomAcross, cellSize * threeWayTurnsBottomDown ),
+            Exit.threeWayExitBottom
         ) );
     }
 
@@ -183,7 +189,8 @@ public class Game {
         int[] threeWayTurnsLeftDown   = new int[] { 3, 5, 7, 9, 11, 13, 15, 17, 19 };
 
         for( int threeWayTurnLeftDown : threeWayTurnsLeftDown ) turns.add( new Turn(
-            cellSize * threeWayTurnsLeftAcross, cellSize * threeWayTurnLeftDown, Exit.threeWayExitLeft
+            new Position( cellSize * threeWayTurnsLeftAcross, cellSize * threeWayTurnLeftDown ),
+            Exit.threeWayExitLeft
         ) );
     }
 
@@ -194,16 +201,17 @@ public class Game {
         int[] threeWayTurnsRightDown   = new int[] { 3, 5, 7, 9, 11, 13, 15, 17, 19 };
 
         for( int threeWayTurnRightDown : threeWayTurnsRightDown ) turns.add( new Turn(
-            cellSize * threeWayTurnsRightAcross, cellSize * threeWayTurnRightDown, Exit.threeWayExitRight
+            new Position( cellSize * threeWayTurnsRightAcross, cellSize * threeWayTurnRightDown ),
+            Exit.threeWayExitRight
         ) );
     }
 
     // Set two way turns at each corner, all of which are 1 across by 1 down.
     private void setupCornerTwoWayTurns() {
-        turns.add( new Turn( cellSize, cellSize, Exit.twoWayExitTopLeft ) );
-        turns.add( new Turn( cellSize * 13, cellSize, Exit.twoWayExitTopRight ) );
-        turns.add( new Turn( cellSize, cellSize * 21, Exit.twoWayExitBottomLeft ) );
-        turns.add( new Turn( cellSize * 13, cellSize * 21, Exit.twoWayExitBottomRight ) );
+        turns.add( new Turn( new Position( cellSize, cellSize ), Exit.twoWayExitTopLeft ) );
+        turns.add( new Turn( new Position( cellSize * 13, cellSize ), Exit.twoWayExitTopRight ) );
+        turns.add( new Turn( new Position( cellSize, cellSize * 21 ), Exit.twoWayExitBottomLeft ) );
+        turns.add( new Turn( new Position( cellSize * 13, cellSize * 21 ), Exit.twoWayExitBottomRight ) );
     }
 
     // Set a 10-segment centipede off screen, oriented to crawl on screen.
@@ -224,7 +232,10 @@ public class Game {
         // Whip up from fresh centipedes.
         for( boolean setBelow : flags ) {
             for( int row : rows ) {
-                Segment segment = new Segment( cellSize * leftStart, cellSize * row, segmentSpeed, 1, 0 );
+                Segment segment = new Segment(
+                    new Position( cellSize * leftStart, cellSize * row ),
+                    segmentSpeed, Direction.right
+                );
 
                 if( setBelow ) segment.toggleAboveBelow();
                 segment.addTails( 9, cellSize, -1, 0 );
@@ -232,7 +243,10 @@ public class Game {
             }
 
             for( int row : rows ) {
-                Segment segment = new Segment( cellSize * rightStart, cellSize * row, segmentSpeed, -1, 0 );
+                Segment segment = new Segment(
+                    new Position( cellSize * rightStart, cellSize * row ),
+                    segmentSpeed, Direction.left
+                );
 
                 if( setBelow ) segment.toggleAboveBelow();
                 segment.addTails( 9, cellSize, 1, 0 );
@@ -240,7 +254,10 @@ public class Game {
             }
 
             for( int col : cols ) {
-                Segment segment = new Segment( cellSize * col, cellSize * topStart, segmentSpeed, 0, 1 );
+                Segment segment = new Segment(
+                    new Position( cellSize * col, cellSize * topStart ),
+                    segmentSpeed, Direction.down
+                );
 
                 if( setBelow ) segment.toggleAboveBelow();
                 segment.addTails( 9, cellSize, 0, -1 );
@@ -248,7 +265,10 @@ public class Game {
             }
 
             for( int col : cols ) {
-                Segment segment = new Segment( cellSize * col, cellSize * bottomStart, segmentSpeed, 0, -1 );
+                Segment segment = new Segment(
+                    new Position( cellSize * col, cellSize * bottomStart ),
+                    segmentSpeed, Direction.up
+                );
 
                 if( setBelow ) segment.toggleAboveBelow();
                 segment.addTails( 9, cellSize, 0, 1 );
@@ -329,7 +349,8 @@ public class Game {
         canvasLayer.drawColor( colorGrass );
         
         for( Hole hole : holes ) canvasLayer.drawCircle(
-            (float) hole.getPositionX() + radiusHole, (float) hole.getPositionY() + radiusHole,
+            (float) hole.getPosition().getX() + radiusHole,
+            (float) hole.getPosition().getY() + radiusHole,
             (float) radiusHole, paintEarth
         );
 
@@ -347,7 +368,8 @@ public class Game {
         canvasLayer.drawColor( colorTrans );
 
         for( Hole hole : holes ) canvasLayer.drawCircle(
-            (float) hole.getPositionX() + radiusHole, (float) hole.getPositionY() + radiusHole,
+            (float) hole.getPosition().getX() + radiusHole,
+            (float) hole.getPosition().getY() + radiusHole,
             (float) radiusHole, paintHole
         );
 
@@ -366,8 +388,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsAbove() ) canvasLayer.drawCircle(
-                    (float) segment.getPositionX() + radiusSegment,
-                    (float) segment.getPositionY() + radiusSegment,
+                    (float) segment.getPosition().getX() + radiusSegment,
+                    (float) segment.getPosition().getY() + radiusSegment,
                     (float) radiusSegment, paintSegment
                 );
 
@@ -390,8 +412,8 @@ public class Game {
 
             while( segment != null ) {
                 if( segment.getIsBelow() ) canvasLayer.drawCircle(
-                    (float) segment.getPositionX() + radiusSegment,
-                    (float) segment.getPositionY() + radiusSegment,
+                    (float) segment.getPosition().getX() + radiusSegment,
+                    (float) segment.getPosition().getY() + radiusSegment,
                     (float) radiusSegment, paintSegment
                 );
 
@@ -418,8 +440,8 @@ public class Game {
                 paintTurn.setColor( colorTwoWay );
 
             canvasLayer.drawCircle(
-                (float) turn.getPositionX() + radiusHole,
-                (float) turn.getPositionY() + radiusHole,
+                (float) turn.getPosition().getX() + radiusHole,
+                (float) turn.getPosition().getY() + radiusHole,
                 (float) radiusTurn, paintTurn
             );
         }
@@ -503,12 +525,12 @@ public class Game {
 
                 while( segment != null ) {
                     boolean touchOnSegmentX =
-                        touchEvent.getX() <= segment.getPositionX() + cellSize &&
-                        touchEvent.getX() >= segment.getPositionX();
+                        touchEvent.getX() <= segment.getPosition().getX() + cellSize &&
+                        touchEvent.getX() >= segment.getPosition().getX();
 
                     boolean touchOnSegmentY =
-                        touchEvent.getY() <= segment.getPositionY() + cellSize &&
-                        touchEvent.getY() >= segment.getPositionY();
+                        touchEvent.getY() <= segment.getPosition().getY() + cellSize &&
+                        touchEvent.getY() >= segment.getPosition().getY();
 
                     // Touched segment falls on both axes of touch as is above ground.
                     boolean touchOnSegment =
@@ -591,11 +613,13 @@ public class Game {
                 Position only ever changes exclusively along the X or Y axis, as direction
                 for one of the axes is always zero.
                 */
-                int segmentNextX = segment.getPositionX() + change * segment.getDirectionX();
-                int segmentNextY = segment.getPositionY() + change * segment.getDirectionY();
+                Position nextPosition = new Position(
+                    segment.getPosition().getX() + change * segment.getDirection().getX(),
+                    segment.getPosition().getY() + change * segment.getDirection().getY()
+                );
 
-                animateThroughHoles( segment, segmentNextX, segmentNextY );
-                animateThroughTurns( segment, segmentNextX, segmentNextY );
+                animateThroughHoles( segment, nextPosition );
+                animateThroughTurns( segment, nextPosition );
 
                 segment = segment.getTail();
             }
@@ -606,11 +630,11 @@ public class Game {
     Animate the segment through any turn it has reached.  Accounting for changes in direction, change
     the segment's position on the X and Y axes.
     */
-    private void animateThroughTurns( Segment segment, int segmentNextX, int segmentNextY ) {
+    private void animateThroughTurns( Segment segment, Position nextPosition ) {
         // Check the segment against all turns.
         for( Turn turn : turns ) {
             // Guard against animating the segment around a turn is has not reached.
-            if( !turn.intersectsPathOf( segment, segmentNextX, segmentNextY ) ) continue;
+            if( !turn.intersectsPathOf( segment, nextPosition ) ) continue;
 
             /*
             Guard against the segment being in the same turn it was last time.  There are no
@@ -631,13 +655,11 @@ public class Game {
                 segment.setExitTaken( segment.getHead().getExitTaken() );
 
             // Set the segment's new direction based on the exit taken.
-            segment.setDirectionX( segment.getExitTaken().getDirectionX() );
-            segment.setDirectionY( segment.getExitTaken().getDirectionY() );
+            segment.setDirection( segment.getExitTaken().getDirection() );
 
             // In rare cases, the segment is perfectly in the turn, requiring no math to carry on.
-            if( turn.coincidesPerfectly( segment, segmentNextX, segmentNextY ) ) {
-                segment.setPositionX( segmentNextX );
-                segment.setPositionY( segmentNextY );
+            if( turn.coincidesWith( nextPosition ) ) {
+                segment.setPosition( nextPosition );
 
                 return;
             }
@@ -647,17 +669,17 @@ public class Game {
             correct it.  As before, heads lead; tails follow.
             */
             if( segment.getIsHead() ) {
-                int segmentTravelAfterTurn = 0;
+                int travelAfterTurn = 0;
 
                 // Depending on the segment's heading, calculate its total travel past the turn.
-                if( turn.passesTopToBottom( segment, segmentNextX, segmentNextY ) ) {
-                    segmentTravelAfterTurn = segmentNextY - turn.getPositionY();
-                } else if( turn.passesBottomToTop( segment, segmentNextX, segmentNextY ) ) {
-                    segmentTravelAfterTurn = turn.getPositionY() - segmentNextY;
-                } else if( turn.passesLeftToRight( segment, segmentNextX, segmentNextY ) ) {
-                    segmentTravelAfterTurn = segmentNextX - turn.getPositionX();
-                } else if( turn.passesRightToLeft( segment, segmentNextX, segmentNextY ) ) {
-                    segmentTravelAfterTurn = turn.getPositionX() - segmentNextX;
+                if( turn.wasPassedTopToBottom( segment, nextPosition ) ) {
+                    travelAfterTurn = nextPosition.getY() - turn.getPosition().getY();
+                } else if( turn.wasPassedBottomToTop( segment, nextPosition ) ) {
+                    travelAfterTurn = turn.getPosition().getY() - nextPosition.getY();
+                } else if( turn.wasPassedLeftToRight( segment, nextPosition ) ) {
+                    travelAfterTurn = nextPosition.getX() - turn.getPosition().getX();
+                } else if( turn.wasPassedRightToLeft( segment, nextPosition ) ) {
+                    travelAfterTurn = turn.getPosition().getX() - nextPosition.getX();
                 }
 
                 /*
@@ -665,17 +687,21 @@ public class Game {
                 turn itself, and fix its position on the other axes by the amount past the turn.
                 */
                 if( segment.getExitTaken().equals( Exit.exitTop ) ) {
-                    segmentNextX = turn.getPositionX();
-                    segmentNextY = segmentNextY - segmentTravelAfterTurn;
+                    nextPosition = new Position(
+                        turn.getPosition().getX(), nextPosition.getY() - travelAfterTurn
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitBottom ) ) {
-                    segmentNextX = turn.getPositionX();
-                    segmentNextY = segmentNextY + segmentTravelAfterTurn;
+                    nextPosition = new Position(
+                        turn.getPosition().getX(), nextPosition.getY() + travelAfterTurn
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitLeft ) ) {
-                    segmentNextX = segmentNextX - segmentTravelAfterTurn;
-                    segmentNextY = turn.getPositionY();
+                    nextPosition = new Position(
+                        nextPosition.getX() - travelAfterTurn, turn.getPosition().getY()
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitRight ) ) {
-                    segmentNextX = segmentNextX + segmentTravelAfterTurn;
-                    segmentNextY = turn.getPositionY();
+                    nextPosition = new Position(
+                        nextPosition.getX() + travelAfterTurn, turn.getPosition().getY()
+                    );
                 }
             } else {
                 /*
@@ -689,41 +715,43 @@ public class Game {
                 dogs start playing together, and the game descends into utter madness.
                 */
                 if( segment.getExitTaken().equals( Exit.exitTop ) ) {
-                    segmentNextX = turn.getPositionX();
-                    segmentNextY = segment.getHead().getPositionY() + cellSize;
+                    nextPosition = new Position(
+                        turn.getPosition().getX(), segment.getHead().getPosition().getY() + cellSize
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitBottom ) ) {
-                    segmentNextX = turn.getPositionX();
-                    segmentNextY = segment.getHead().getPositionY() - cellSize;
+                    nextPosition = new Position(
+                        turn.getPosition().getX(), segment.getHead().getPosition().getY() - cellSize
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitLeft ) ) {
-                    segmentNextX = segment.getHead().getPositionX() + cellSize;
-                    segmentNextY = turn.getPositionY();
+                    nextPosition = new Position(
+                        segment.getHead().getPosition().getX() + cellSize, turn.getPosition().getY()
+                    );
                 } else if( segment.getExitTaken().equals( Exit.exitRight ) ) {
-                    segmentNextX = segment.getHead().getPositionX() - cellSize;
-                    segmentNextY = turn.getPositionY();
+                    nextPosition = new Position(
+                        segment.getHead().getPosition().getX() - cellSize, turn.getPosition().getY()
+                    );
                 }
             }
 
             // Set the segment's recalculated position along the X and Y axes.
-            segment.setPositionX( segmentNextX );
-            segment.setPositionY( segmentNextY );
+            segment.setPosition( nextPosition );
 
             return;
         }
 
         // Segment hit no turns.  Set the segment's original position along the X and Y axes.
-        segment.setPositionX( segmentNextX );
-        segment.setPositionY( segmentNextY );
+        segment.setPosition( nextPosition );
     }
 
     /*
     Animate the segment through any hole it has reached.  Segments always navigate any hole they
     encounter, either going down or coming back up.
     */
-    private void animateThroughHoles( Segment segment, int segmentNextX, int segmentNextY ) {
+    private void animateThroughHoles( Segment segment, Position nextPosition ) {
         for( Hole hole : holes ) {
 
             // Go up or down the hole.
-            if( hole.intersectsPathOf( segment, segmentNextX, segmentNextY ) ) segment.toggleAboveBelow();
+            if( hole.intersectsPathOf( segment, nextPosition ) ) segment.toggleAboveBelow();
         }
     }
 }

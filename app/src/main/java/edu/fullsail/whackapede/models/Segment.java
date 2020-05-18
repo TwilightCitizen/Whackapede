@@ -7,7 +7,9 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
+import edu.fullsail.whackapede.gameElements.Direction;
 import edu.fullsail.whackapede.gameElements.MovingGameElement;
+import edu.fullsail.whackapede.gameElements.Position;
 
 /*
 Segment various data necessary for the proper placement of centipede segments on the game arena,
@@ -27,8 +29,8 @@ class Segment extends MovingGameElement {
     private Turn turnReached;
     private Exit exitTaken;
 
-    Segment( int positionX, int positionY, int speed, int directionX, int directionY ) {
-        super( positionX, positionY, speed, directionX, directionY );
+    Segment( Position position, int speed, Direction direction ) {
+        super( position, speed, direction );
     }
 
     // Status as head or tail is determined by whether or not the Segment has a head or tail Segment.
@@ -57,8 +59,12 @@ class Segment extends MovingGameElement {
     // Add a tail Segment, placed adjacent to the Segment.
     private Segment addTailLeft( int cellSize, int sideX, int sideY ) {
         Segment tail = new Segment(
-            super.getPositionX() + cellSize * sideX, super.getPositionY() + cellSize * sideY,
-            super.getSpeed(), super.getDirectionX(), super.getDirectionY()
+            new Position(
+                super.getPosition().getX() + cellSize * sideX,
+                super.getPosition().getY() + cellSize * sideY
+            ),
+
+            super.getSpeed(), super.getDirection()
         );
 
         this.tail = tail;

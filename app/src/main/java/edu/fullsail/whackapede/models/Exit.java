@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+import edu.fullsail.whackapede.gameElements.Direction;
+
 /*
 Exit maintains directions of motion on the X and Y axes.  When applied to the position and speed of
 other elements on these axes, those elements' velocity can be determined.  Nominally, the directions
@@ -22,14 +24,13 @@ their direction of motion.
 */
 class Exit {
     // Directions along the X and Y axes.
-    private final int directionX;
-    private final int directionY;
+    private final Direction direction;
 
     // Static Exit instances for exiting a turn from the Top, Bottom, Left, or Right.
-    static final Exit exitTop    = new Exit(  0, -1 );
-    static final Exit exitBottom = new Exit(  0,  1 );
-    static final Exit exitLeft   = new Exit( -1,  0 );
-    static final Exit exitRight  = new Exit(  1,  0 );
+    static final Exit exitTop    = new Exit( Direction.up );
+    static final Exit exitBottom = new Exit( Direction.down );
+    static final Exit exitLeft   = new Exit( Direction.left );
+    static final Exit exitRight  = new Exit( Direction.right );
 
     // Four way exits for Turns situated not along the edges of the game arena.
     static final ArrayList< Exit > fourWayExit = new ArrayList< Exit >() { {
@@ -79,10 +80,7 @@ class Exit {
     } };
 
     // Exits cannot be instantiated externally.
-    private Exit( int directionX, int directionY ) {
-        this.directionX = directionX;
-        this.directionY = directionY;
-    }
+    private Exit( Direction direction ) { this.direction = direction; }
 
     // Determine if two Exits are equal, having equal X and Y directions.
     @Override public boolean equals( @Nullable Object obj ) {
@@ -92,15 +90,14 @@ class Exit {
 
         Exit exit = (Exit)  obj;
 
-        return exit.getDirectionX() == directionX && exit.getDirectionY() == directionY;
+        return exit.getDirection().getX() == direction.getX() &&
+               exit.getDirection().getY() == direction.getY();
     }
 
     // Directions are read-only.  Top, Bottom, Left, and Right always point the same way from origin.
-    int getDirectionX() { return directionX; }
-    int getDirectionY() { return directionY; }
-
+    Direction getDirection() { return direction; }
     // Obtain an Exit that is the exact opposite of the provided directions.
-    static Exit getExitReverseOf( int directionX, int directionY ) {
-        return new Exit( 0 - directionX, 0 - directionY);
+    static Exit getExitReverseOf( Direction direction ) {
+        return new Exit( new Direction( 0 - direction.getX(), 0 - direction.getY() ) );
     }
 }

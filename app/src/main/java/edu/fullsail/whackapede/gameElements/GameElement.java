@@ -9,55 +9,49 @@ package edu.fullsail.whackapede.gameElements;
 
 public class GameElement {
     // Positions along the X and Y axes.
-    private int positionX;
-    private int positionY;
+    private Position position;
 
-    GameElement( int positionX, int positionY ) {
-        this.positionX = positionX;
-        this.positionY = positionY;
-    }
+    GameElement( Position position ) { this.position = position; }
 
     // Position along the X and Y axes is read/write.
-    int getPositionX() { return positionX; }
-    int getPositionY() { return positionY; }
-    void setPositionX( int positionX ) { this.positionX = positionX; }
-    void setPositionY( int positionY ) { this.positionY = positionY; }
+    public Position getPosition() { return position; }
+    void setPosition( Position position ) { this.position = position; }
 
     // Determine this Game Element coincides with another one based on a new position.
-    public boolean coincidesPerfectly( GameElement gameElement, int nextX, int nextY ) {
-        return this.positionX == nextX && this.positionY == nextY;
+    public boolean coincidesWith( Position nextPosition ) {
+        return this.position.getX() == nextPosition.getX() && this.position.getY() == nextPosition.getY();
     }
 
     // Determine this Game Element intersects the path of another one passing from top to bottom.
-    public boolean passesTopToBottom( GameElement gameElement, int nextX, int nextY ) {
-        return gameElement.getPositionX() == this.positionX && this.positionX == nextX &&
-               gameElement.getPositionY() <  this.positionY && this.positionY <  nextY;
+    public boolean wasPassedTopToBottom( GameElement gameElement, Position nextPosition ) {
+        return gameElement.getPosition().getX() == this.position.getX() && this.position.getX() == nextPosition.getX() &&
+               gameElement.getPosition().getY() <  this.position.getY() && this.position.getY() <  nextPosition.getY();
     }
 
     // Determine this Game Element intersects the path of another one passing from bottom to top.
-    public boolean passesBottomToTop( GameElement gameElement, int nextX, int nextY ) {
-        return gameElement.getPositionX() == this.positionX && this.positionX == nextX &&
-               gameElement.getPositionY() >  this.positionY && this.positionY >  nextY;
+    public boolean wasPassedBottomToTop( GameElement gameElement, Position nextPosition ) {
+        return gameElement.getPosition().getX() == this.position.getX() && this.position.getX() == nextPosition.getX() &&
+               gameElement.getPosition().getY() >  this.position.getY() && this.position.getY() >  nextPosition.getY();
     }
 
     // Determine this Game Element intersects the path of another one passing from left to right.
-    public boolean passesLeftToRight( GameElement gameElement, int nextX, int nextY ) {
-        return gameElement.getPositionY() == this.positionY && this.positionY == nextY &&
-               gameElement.getPositionX() <  this.positionX && this.positionX <  nextX;
+    public boolean wasPassedLeftToRight( GameElement gameElement, Position nextPosition ) {
+        return gameElement.getPosition().getY() == this.position.getY() && this.position.getY() == nextPosition.getY() &&
+               gameElement.getPosition().getX() <  this.position.getX() && this.position.getX() <  nextPosition.getX();
     }
 
     // Determine this Game Element intersects the path of another one passing from right to left.
-    public boolean passesRightToLeft( GameElement gameElement, int nextX, int nextY ) {
-        return gameElement.getPositionY() == this.positionY && this.positionY == nextY &&
-               gameElement.getPositionX() >  this.positionX && this.positionX >  nextX;
+    public boolean wasPassedRightToLeft( GameElement gameElement, Position nextPosition ) {
+        return gameElement.getPosition().getY() == this.position.getY() && this.position.getY() == nextPosition.getY() &&
+               gameElement.getPosition().getX() >  this.position.getX() && this.position.getX() >  nextPosition.getX();
     }
 
     // Determine this Game Element intersects the path of another one based on a new position.
-    public boolean intersectsPathOf( GameElement gameElement, int nextX, int nextY ) {
-        return coincidesPerfectly( gameElement, nextX, nextY ) ||
-                passesTopToBottom( gameElement, nextX, nextY ) ||
-                passesBottomToTop( gameElement, nextX, nextY ) ||
-                passesLeftToRight( gameElement, nextX, nextY ) ||
-                passesRightToLeft( gameElement, nextX, nextY );
+    public boolean intersectsPathOf( GameElement gameElement, Position nextPosition ) {
+        return coincidesWith( nextPosition ) ||
+                wasPassedTopToBottom( gameElement, nextPosition ) ||
+                wasPassedBottomToTop( gameElement, nextPosition ) ||
+                wasPassedLeftToRight( gameElement, nextPosition ) ||
+                wasPassedRightToLeft( gameElement, nextPosition );
     }
 }

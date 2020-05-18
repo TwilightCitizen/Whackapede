@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import edu.fullsail.whackapede.gameElements.FixedGameElement;
+import edu.fullsail.whackapede.gameElements.Position;
 
 /*
 Turn maintains the position along the X and Y axis of the game arena where Segments can turn.  It
@@ -22,8 +23,8 @@ class Turn extends FixedGameElement {
     // Exits available at the Turn.
     private final ArrayList< Exit > exits;
 
-    Turn( int positionX, int positionY, ArrayList< Exit > exits ) {
-        super( positionX, positionY );
+    Turn( Position position, ArrayList< Exit > exits ) {
+        super( position );
 
         this.exits = exits;
     }
@@ -31,7 +32,7 @@ class Turn extends FixedGameElement {
     // Provide a random Exit from the Turn excluding any that would have the given Segment go in reverse.
     Exit getRandomExit( Segment segment ) {
         Random rand = new Random();
-        Exit excludedExit = Exit.getExitReverseOf( segment.getDirectionX(), segment.getDirectionY() );
+        Exit excludedExit = Exit.getExitReverseOf( segment.getDirection() );
         ArrayList< Exit > includedExits = new ArrayList<>( exits );
 
         includedExits.remove( excludedExit );

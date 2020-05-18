@@ -12,30 +12,24 @@ public class MovingGameElement extends GameElement {
     private int speed;
 
     // Direction along the X and Y axes.
-    private int directionX;
-    private int directionY;
+    private Direction direction;
 
-    public MovingGameElement( int positionX, int positionY, int speed, int directionX, int directionY ) {
-        super( positionX, positionY );
+    protected MovingGameElement( Position position, int speed, Direction direction ) {
+        super( position );
 
         this.speed = speed;
-        this.directionX = directionX;
-        this.directionY = directionY;
+        this.direction = direction;
     }
 
     // Position along the X and Y axes is read/write.
-    public int getPositionX() { return super.getPositionX(); }
-    public int getPositionY() { return super.getPositionY(); }
-    public void setPositionX( int positionX ) { super.setPositionX( positionX ); }
-    public void setPositionY( int positionY ) { super.setPositionY( positionY ); }
+    public Position getPosition() { return super.getPosition(); }
+    public void setPosition( Position position ) { super.setPosition( position ); }
 
     // Speed of traversal is read/write.
     public int getSpeed() { return speed; }
     public void setSpeed( int speed ) { this.speed = speed; }
 
     // Direction along the X and Y axes is read/write.
-    public int getDirectionX() { return directionX; }
-    public int getDirectionY() { return directionY; }
-    public void setDirectionX( int directionX ) { this.directionX = directionX; }
-    public void setDirectionY( int directionY ) { this.directionY = directionY; }
+    public Direction getDirection() { return direction; }
+    public void setDirection( Direction direction ) { this.direction = direction; }
 }
