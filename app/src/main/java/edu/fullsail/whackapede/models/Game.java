@@ -609,31 +609,8 @@ public class Game {
     private void animateThroughTurns( Segment segment, int segmentNextX, int segmentNextY ) {
         // Check the segment against all turns.
         for( Turn turn : turns ) {
-            boolean segmentPerfectlyInTurn =
-                turn.getPositionX() == segmentNextX && turn.getPositionY() == segmentNextY ;
-
-            boolean segmentPassedTurnTopToBottom =
-                segment.getPositionX() == turn.getPositionX() && turn.getPositionX() == segmentNextX &&
-                segment.getPositionY() <  turn.getPositionY() && turn.getPositionY() <  segmentNextY;
-
-            boolean segmentPassedTurnBottomToTop =
-                segment.getPositionX() == turn.getPositionX() && turn.getPositionX() == segmentNextX &&
-                segment.getPositionY() >  turn.getPositionY() && turn.getPositionY() >  segmentNextY;
-
-            boolean segmentPassedLeftToRight =
-                segment.getPositionY() == turn.getPositionY() && turn.getPositionY() == segmentNextY &&
-                segment.getPositionX() <  turn.getPositionX() && turn.getPositionX() <  segmentNextX;
-
-            boolean segmentPassedRightToLeft =
-                segment.getPositionY() == turn.getPositionY() && turn.getPositionY() == segmentNextY &&
-                segment.getPositionX() >  turn.getPositionX() && turn.getPositionX() >  segmentNextX;
-
-            boolean segmentReachedTurn = segmentPerfectlyInTurn ||
-                segmentPassedTurnTopToBottom || segmentPassedTurnBottomToTop ||
-                segmentPassedLeftToRight || segmentPassedRightToLeft;
-
             // Guard against animating the segment around a turn is has not reached.
-            if( !segmentReachedTurn ) continue;
+            if( !turn.intersectsPathOf( segment, segmentNextX, segmentNextY ) ) continue;
 
             /*
             Guard against the segment being in the same turn it was last time.  There are no
@@ -658,7 +635,7 @@ public class Game {
             segment.setDirectionY( segment.getExitTaken().getDirectionY() );
 
             // In rare cases, the segment is perfectly in the turn, requiring no math to carry on.
-            if( segmentPerfectlyInTurn ) {
+            if( turn.coincidesPerfectly( segment, segmentNextX, segmentNextY ) ) {
                 segment.setPositionX( segmentNextX );
                 segment.setPositionY( segmentNextY );
 
@@ -673,13 +650,13 @@ public class Game {
                 int segmentTravelAfterTurn = 0;
 
                 // Depending on the segment's heading, calculate its total travel past the turn.
-                if( segmentPassedTurnTopToBottom ) {
+                if( turn.passesTopToBottom( segment, segmentNextX, segmentNextY ) ) {
                     segmentTravelAfterTurn = segmentNextY - turn.getPositionY();
-                } else if( segmentPassedTurnBottomToTop ) {
+                } else if( turn.passesBottomToTop( segment, segmentNextX, segmentNextY ) ) {
                     segmentTravelAfterTurn = turn.getPositionY() - segmentNextY;
-                } else if( segmentPassedLeftToRight ) {
+                } else if( turn.passesLeftToRight( segment, segmentNextX, segmentNextY ) ) {
                     segmentTravelAfterTurn = segmentNextX - turn.getPositionX();
-                } else if( segmentPassedRightToLeft ) {
+                } else if( turn.passesRightToLeft( segment, segmentNextX, segmentNextY ) ) {
                     segmentTravelAfterTurn = turn.getPositionX() - segmentNextX;
                 }
 
@@ -742,33 +719,11 @@ public class Game {
     Animate the segment through any hole it has reached.  Segments always navigate any hole they
     encounter, either going down or coming back up.
     */
-    private void animateThroughHoles( Segment segment, double segmentNextX, double segmentNextY ) {
+    private void animateThroughHoles( Segment segment, int segmentNextX, int segmentNextY ) {
         for( Hole hole : holes ) {
-            boolean segmentPerfectlyInHole =
-                hole.getPositionX() == segmentNextX && hole.getPositionY() == segmentNextY ;
-
-            boolean segmentPassedHoleTopToBottom =
-                segment.getPositionX() == hole.getPositionX() && hole.getPositionX() == segmentNextX &&
-                segment.getPositionY() <  hole.getPositionY() && hole.getPositionY() <  segmentNextY;
-
-            boolean segmentPassedHoleBottomToTop =
-                segment.getPositionX() == hole.getPositionX() && hole.getPositionX() == segmentNextX &&
-                segment.getPositionY() >  hole.getPositionY() && hole.getPositionY() >  segmentNextY;
-
-            boolean segmentPassedLeftToRight =
-                segment.getPositionY() == hole.getPositionY() && hole.getPositionY() == segmentNextY &&
-                segment.getPositionX() <  hole.getPositionX() && hole.getPositionX() <  segmentNextX;
-
-            boolean segmentPassedRightToLeft =
-                segment.getPositionY() == hole.getPositionY() && hole.getPositionY() == segmentNextY &&
-                segment.getPositionX() >  hole.getPositionX() && hole.getPositionX() >  segmentNextX;
-
-            boolean segmentReachedHole = segmentPerfectlyInHole ||
-                segmentPassedHoleTopToBottom || segmentPassedHoleBottomToTop ||
-                segmentPassedLeftToRight || segmentPassedRightToLeft;
 
             // Go up or down the hole.
-            if( segmentReachedHole ) segment.toggleAboveBelow();
+            if( hole.intersectsPathOf( segment, segmentNextX, segmentNextY ) ) segment.toggleAboveBelow();
         }
     }
 }

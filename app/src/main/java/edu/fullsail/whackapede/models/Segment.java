@@ -13,21 +13,10 @@ including position and direction along the X and Y axis, speed of traversal alon
 in the above- or below-ground layers, Turns reached on their heading and Exits taken from them,
 and their head and tail Segments, if any.
 */
-class Segment {
+class Segment extends MovingGameElement {
     // Head and tail Segments.
     private Segment head = null;
     private Segment tail = null;
-
-    // Positions along the X and Y axes.
-    private int positionX;
-    private int positionY;
-
-    // Speed of traversal.
-    private int speed;
-
-    // Direction along the X and Y axes.
-    private int directionX;
-    private int directionY;
 
     // Position on above- or below-ground layers.
     private boolean isAbove = true;
@@ -37,11 +26,7 @@ class Segment {
     private Exit exitTaken;
 
     Segment( int positionX, int positionY, int speed, int directionX, int directionY ) {
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.speed = speed;
-        this.directionX = directionX;
-        this.directionY = directionY;
+        super( positionX, positionY, speed, directionX, directionY );
     }
 
     // Status as head or tail is determined by whether or not the Segment has a head or tail Segment.
@@ -53,22 +38,6 @@ class Segment {
     Segment getTail() { return tail; }
     void removeHead() { head = null; }
     void removeTail() { tail = null; }
-
-    // Position along the X and Y axes is read/write.
-    int getPositionX() { return positionX; }
-    int getPositionY() { return positionY; }
-    void setPositionX( int positionX ) { this.positionX = positionX; }
-    void setPositionY( int positionY ) { this.positionY = positionY; }
-
-    // Speed of traversal is read/write.
-    int getSpeed() { return speed; }
-    void setSpeed( int speed ) { this.speed = speed; }
-
-    // Direction along the X and Y axes is read/write.
-    int getDirectionX() { return directionX; }
-    int getDirectionY() { return directionY; }
-    void setDirectionX( int directionX ) { this.directionX = directionX; }
-    void setDirectionY( int directionY ) { this.directionY = directionY; }
 
     // Position on above- or below-ground layers is nearly read-only, toggled but not directly settable.
     boolean getIsAbove() { return isAbove; }
@@ -86,9 +55,8 @@ class Segment {
     // Add a tail Segment, placed adjacent to the Segment.
     private Segment addTailLeft( int cellSize, int sideX, int sideY ) {
         Segment tail = new Segment(
-            positionX + cellSize * sideX,
-            positionY + cellSize * sideY,
-            speed, directionX, directionY
+            super.getPositionX() + cellSize * sideX, super.getPositionY() + cellSize * sideY,
+            super.getSpeed(), super.getDirectionX(), super.getDirectionY()
         );
 
         this.tail = tail;

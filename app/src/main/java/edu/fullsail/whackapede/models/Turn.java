@@ -16,23 +16,15 @@ also maintains an array of Exits from the turn available to a Segment traversing
 a random Exit from its available Exits, excluding any Exit that would cause the traversing Segment
 to go in reverse.  Turns are not ordinarily drawn to screen, but can be for troubleshooting.
 */
-class Turn {
-    // Positions along the X and Y axes.
-    private final int positionX;
-    private final int positionY;
-
+class Turn extends FixedGameElement {
     // Exits available at the Turn.
     private final ArrayList< Exit > exits;
 
-    Turn( int positionXPercent, int currentYPercent, ArrayList< Exit > exits ) {
-        this.positionX = positionXPercent;
-        this.positionY = currentYPercent;
+    Turn( int positionX, int positionY, ArrayList< Exit > exits ) {
+        super( positionX, positionY );
+
         this.exits = exits;
     }
-
-    // Positions are read-only.  Holes remain stationary.
-    int getPositionX() { return positionX; }
-    int getPositionY() { return positionY; }
 
     // Provide a random Exit from the Turn excluding any that would have the given Segment go in reverse.
     Exit getRandomExit( Segment segment ) {
