@@ -7,6 +7,8 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.models;
 
+import edu.fullsail.whackapede.gameElements.MovingGameElement;
+
 /*
 Segment various data necessary for the proper placement of centipede segments on the game arena,
 including position and direction along the X and Y axis, speed of traversal along them, position

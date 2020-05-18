@@ -10,6 +10,8 @@ package edu.fullsail.whackapede.models;
 import java.util.ArrayList;
 import java.util.Random;
 
+import edu.fullsail.whackapede.gameElements.FixedGameElement;
+
 /*
 Turn maintains the position along the X and Y axis of the game arena where Segments can turn.  It
 also maintains an array of Exits from the turn available to a Segment traversing it, and provides
