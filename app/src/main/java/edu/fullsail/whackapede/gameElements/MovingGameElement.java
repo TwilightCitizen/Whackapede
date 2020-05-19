@@ -21,10 +21,6 @@ public class MovingGameElement extends GameElement {
         this.direction = direction;
     }
 
-    // Position along the X and Y axes is read/write.
-    public Position getPosition() { return super.getPosition(); }
-    public void setPosition( Position position ) { super.setPosition( position ); }
-
     // Speed of traversal is read/write.
     public int getSpeed() { return speed; }
     public void setSpeed( int speed ) { this.speed = speed; }

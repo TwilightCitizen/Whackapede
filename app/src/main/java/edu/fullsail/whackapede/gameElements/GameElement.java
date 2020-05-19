@@ -15,7 +15,7 @@ public class GameElement {
 
     // Position along the X and Y axes is read/write.
     public Position getPosition() { return position; }
-    void setPosition( Position position ) { this.position = position; }
+    public void setPosition( Position position ) { this.position = position; }
 
     // Determine this Game Element coincides with another one based on a new position.
     public boolean coincidesWith( Position nextPosition ) {
