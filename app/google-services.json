@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "519209572219",
+    "firebase_url": "https://whack-a-pede.firebaseio.com",
+    "project_id": "whack-a-pede",
+    "storage_bucket": "whack-a-pede.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519209572219:android:ed08135d09c5dfd010cfde",
+        "android_client_info": {
+          "package_name": "edu.fullsail.whackapede"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519209572219-b7nepf0nvbrs2068nncnu21mvnc20kvf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.fullsail.whackapede",
+            "certificate_hash": "c5883d8748722c8b420b946b084e6eedeeaeb707"
+          }
+        },
+        {
+          "client_id": "519209572219-93bmad2hqo8rhl0scceqcjl05u47n46a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCShR6EJd_VvIzJD0xNH1szDe6TXaT0bbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519209572219-93bmad2hqo8rhl0scceqcjl05u47n46a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

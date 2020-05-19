@@ -56,7 +56,13 @@ MDV469-O, C202005-01
         android:id="@+id/GameFragment"
         android:name="edu.fullsail.whackapede.fragments.GameFragment"
         android:label="@string/game"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_game">
+
+        <argument
+            android:name="googleAccount"
+            app:argType="com.google.android.gms.auth.api.signin.GoogleSignInAccount"
+            android:defaultValue="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/LeaderboardFragment"

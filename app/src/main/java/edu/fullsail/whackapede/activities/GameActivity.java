@@ -7,8 +7,10 @@ MDV469-O, C202005-01
 
 package edu.fullsail.whackapede.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -76,6 +78,13 @@ public class GameActivity extends AppCompatActivity {
 
     // Back navigation mirrors up navigation.
     @Override public void onBackPressed() { onSupportNavigateUp(); }
+
+    // Let default handler forward activity results as needed.
+    @Override protected void onActivityResult(
+        int requestCode, int resultCode, @Nullable Intent data
+    ) {
+        super.onActivityResult( requestCode, resultCode, data );
+    }
 
     // Show the action bar.  Called from subordinate fragments that need it.
     public void showActionBar() {
