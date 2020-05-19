@@ -66,6 +66,7 @@ public class Game {
     private int radiusSegment ;
     private int radiusTurn ;
     private int segmentSpeed;
+    private double segmentAcceleration;
 
     // Collections of game elements.
     private final ArrayList< Segment > centipedes = new ArrayList<>();
@@ -109,7 +110,8 @@ public class Game {
         this.radiusHole = (int) ( canvasWidth * cellWidthPercent / 2 );
         this.radiusSegment = radiusHole;
         this.radiusTurn = radiusHole / 2;
-        this.segmentSpeed = cellSize;
+        this.segmentSpeed = cellSize * 5;
+        this.segmentAcceleration = 1.03125;
 
         // Zero score and time remaining.
         this.score = 0;
@@ -474,7 +476,7 @@ public class Game {
         if( !centipedes.isEmpty() ) return;
 
         remainingTimeMillis = roundTimeMillis;
-        segmentSpeed *= 1.25;
+        segmentSpeed *= segmentAcceleration;
 
         setupCentipede();
     }
@@ -553,7 +555,10 @@ public class Game {
             Segment segment = centipede;
 
             while( segment != null ) {
-                segment.setSpeed( segment.getSpeed() + segmentSpeed * segmentsKilled.size() );
+                segment.setSpeed( segmentSpeed +  (int) (
+                    ( segmentSpeed * segmentAcceleration - segmentSpeed ) *
+                    segmentsKilled.size()
+                ) );
 
                 segment = segment.getTail();
             }
