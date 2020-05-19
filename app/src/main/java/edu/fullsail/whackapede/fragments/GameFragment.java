@@ -27,6 +27,7 @@ import java.util.Locale;
 import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.activities.GameActivity;
 import edu.fullsail.whackapede.models.Game;
+import edu.fullsail.whackapede.utilities.TimeUtility;
 import edu.fullsail.whackapede.views.GameSurfaceView;
 
 /*
@@ -172,6 +173,6 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     // Publish new score and time remaining to the scoreboard.  Called from the Game Thread.
     public void onGameStatsChanged() {
         textScore.setText( String.format( Locale.getDefault(), "%d", game.getScore() ) );
-        textClock.setText( String.format( Locale.getDefault(), "%d", (int) game.getRemainingTimeMillis() ) );
+        textClock.setText( TimeUtility.getInstance().millisToMinutesAndSeconds( game.getRemainingTimeMillis() ) );
     }
 }

@@ -23,6 +23,7 @@ import java.util.Random;
 
 import edu.fullsail.whackapede.gameElements.Direction;
 import edu.fullsail.whackapede.gameElements.Position;
+import edu.fullsail.whackapede.utilities.TimeUtility;
 
 import static edu.fullsail.whackapede.R.color.*;
 
@@ -76,8 +77,8 @@ public class Game {
 
     // Player score and time remaining.
     private int score;
-    private double roundTimeMillis;
-    private double remainingTimeMillis;
+    private long roundTimeMillis;
+    private long remainingTimeMillis;
 
     // New games start paused without game board or drawing tools initialized.
     public Game() {
@@ -88,7 +89,7 @@ public class Game {
 
     // Player score and time remaining are read-only.
     public int getScore() { return score; }
-    public double getRemainingTimeMillis() { return remainingTimeMillis; }
+    public long getRemainingTimeMillis() { return remainingTimeMillis; }
 
     // Game can be paused by player or by app when interrupted.
     public void pause() { gameIsPaused = true; }
@@ -453,7 +454,7 @@ public class Game {
     Loop the game logic over the provided elapsed time.  Process attacks on centipedes,
     animate them over the interval, and then draw everything to canvas.
     */
-    public void loop( Context context, Canvas canvas, double elapsedTimeMillis  ) {
+    public void loop( Context context, Canvas canvas, long elapsedTimeMillis  ) {
         checkForGameOver( elapsedTimeMillis );
         checkForNextRound();
         attackCentipedes();
@@ -482,7 +483,7 @@ public class Game {
     Check for time remaining.  If there is none, pause the game, zero the clock, and more will
     happen in the next sprint.
     */
-    private void checkForGameOver( double elapsedTimeMillis ) {
+    private void checkForGameOver( long elapsedTimeMillis ) {
         // Guard against ticking clock and ending game when paused.
         if( gameIsPaused ) return;
 
@@ -593,12 +594,12 @@ public class Game {
     }
 
     // Animate the centipedes over the elapsed time interval.
-    private void animateCentipedes( double elapsedTimeMillis ) {
+    private void animateCentipedes( long elapsedTimeMillis ) {
         // Guard against animating centipedes when the game is paused.
         if( gameIsPaused ) return;
 
         // Normalize the elapsed time as a fraction of 1 seconds.
-        double interval = elapsedTimeMillis / 1000d;
+        double interval = TimeUtility.getInstance().millisToIntervalOfSeconds( elapsedTimeMillis );
 
         // Animate each segment of each centipede for the interval through holes and around turns.
         for( Segment centipede : centipedes ) {

@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import edu.fullsail.whackapede.activities.GameActivity;
 import edu.fullsail.whackapede.fragments.GameFragment;
 import edu.fullsail.whackapede.models.Game;
+import edu.fullsail.whackapede.utilities.TimeUtility;
 
 /*
 Game Thread runs in the background from the UI thread, synchronizing the repetition of manipulating
@@ -46,8 +47,9 @@ public class GameThread extends Thread  {
     of game stat changes each time.
      */
     public void run() {
-        // Get the current time from which all time intervals derive going forward.
-        long previousTimeMillis = System.currentTimeMillis();
+        // Get the Time Utility for marking elapsed time.
+        TimeUtility timeUtility = TimeUtility.getInstance();
+
         // Get the canvas from the surface initially to get its width.
         Canvas canvas = surfaceHolder.lockCanvas();
 
@@ -67,17 +69,10 @@ public class GameThread extends Thread  {
                     // user navigating away or some other interruption.
                     if( canvas == null ) break;
 
-                    // Get the time elapsed this loop.
-                    long currentTimeMillis = System.currentTimeMillis();
-                    double elapsedTimeMillis = currentTimeMillis - previousTimeMillis;
-
                     // Pass the canvas and elapsed time to the game loop.
-                    game.loop( gameActivity, canvas, elapsedTimeMillis );
+                    game.loop( gameActivity, canvas, timeUtility.getTimeElapsedMillis() );
                     // Notify the Game Fragment to update the scoreboard.
                     gameActivity.runOnUiThread( gameFragment::onGameStatsChanged );
-
-                    // Prepare to calculate the next interval of elapsed time.
-                    previousTimeMillis = currentTimeMillis;
                 }
             } finally {
                 // Ensure canvas is unlocked and posted.
