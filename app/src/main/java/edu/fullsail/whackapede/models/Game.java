@@ -288,16 +288,18 @@ public class Game {
     private void drawToCanvas( Context context, Canvas canvas ) {
         initializeDrawingTools( context, canvas );
 
+        // Draw the above and below layers to their bitmaps.
         drawBelowLayer();
         drawAboveLayer();
 
+        // Draw all bitmaps to canvas.
         canvas.drawBitmap( bitmapEarth, 0, 0, paintLayer );
         canvas.drawBitmap( bitmapLayerBelow, 0, 0, paintLayer );
         canvas.drawBitmap( bitmapGrass, 0, 0, paintLayer );
         canvas.drawBitmap( bitmapLayerAbove, 0, 0, paintLayer );
     }
 
-    // Initialize colors, paints, bitmaps, and canvas used in drawing routines.
+    // Initialize paint, bitmaps, and canvases used in drawing routines.
     private void initializeDrawingTools( Context context, Canvas canvas ) {
         // Guard against unnecessary initialization.
         if( drawingToolsAreInitialized ) return;
@@ -313,104 +315,69 @@ public class Game {
         drawingToolsAreInitialized = true;
     }
 
+    // Initialize bitmap used in drawing the earth layer.
     private void initializeEarthLayer( Context context, Canvas canvas ) {
         Drawable drawableEarth = ContextCompat.getDrawable( context, R.drawable.layer_earth );
         bitmapEarth = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasEarth = new Canvas( bitmapEarth );
 
+        assert drawableEarth != null;
+        
         drawableEarth.setBounds( 0, 0, canvasEarth.getWidth(), canvasEarth.getHeight() );
         drawableEarth.draw( canvasEarth );
     }
 
+    // Initialize bitmap used in drawing the grass layer.
     private void initializeGrassLayer( Context context, Canvas canvas ) {
         Drawable drawableGrass = ContextCompat.getDrawable( context, R.drawable.layer_grass );
         bitmapGrass = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasGrass = new Canvas( bitmapGrass );
 
+        assert drawableGrass != null;
+        
         drawableGrass.setBounds( 0, 0, canvasGrass.getWidth(), canvasGrass.getHeight() );
         drawableGrass.draw( canvasGrass );
     }
 
+    // Initialize bitmap used in drawing a segment.
+    private Bitmap initializeSegment( Context context, int drawableSegmentId ) {
+        Drawable drawableSegment = ContextCompat.getDrawable( context, drawableSegmentId );
+        Bitmap bitmapSegment = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasSegment = new Canvas( bitmapSegment );
+        
+        assert drawableSegment != null;
+        
+        drawableSegment.setBounds( 0, 0, cellSize, cellSize );
+        drawableSegment.draw( canvasSegment );
+
+        return bitmapSegment;
+    }
+
+    // Initialize bitmaps used in drawing the above layer.
     private void initializeAboveLayer( Context context, Canvas canvas ) {
         bitmapLayerAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         canvasLayerAbove = new Canvas( bitmapLayerAbove );
 
-        Drawable drawableAboveTail = ContextCompat.getDrawable( context, R.drawable.tail_above );
-        bitmapAboveTail = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveTail = new Canvas( bitmapAboveTail );
-
-        drawableAboveTail.setBounds( 0, 0, cellSize, cellSize );
-        drawableAboveTail.draw( canvasAboveTail );
-
-        Drawable drawableAboveHeadUp = ContextCompat.getDrawable( context, R.drawable.head_above_up );
-        bitmapAboveHeadUp = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveHeadUp = new Canvas( bitmapAboveHeadUp );
-
-        drawableAboveHeadUp.setBounds( 0, 0, cellSize, cellSize );
-        drawableAboveHeadUp.draw( canvasAboveHeadUp );
-
-        Drawable drawableAboveHeadDown = ContextCompat.getDrawable( context, R.drawable.head_above_down );
-        bitmapAboveHeadDown = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveHeadDown = new Canvas( bitmapAboveHeadDown );
-
-        drawableAboveHeadDown.setBounds( 0, 0, cellSize, cellSize );
-        drawableAboveHeadDown.draw( canvasAboveHeadDown );
-
-        Drawable drawableAboveHeadLeft = ContextCompat.getDrawable( context, R.drawable.head_above_left );
-        bitmapAboveHeadLeft = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveHeadLeft = new Canvas( bitmapAboveHeadLeft );
-
-        drawableAboveHeadLeft.setBounds( 0, 0, cellSize, cellSize );
-        drawableAboveHeadLeft.draw( canvasAboveHeadLeft );
-
-        Drawable drawableAboveHeadRight = ContextCompat.getDrawable( context, R.drawable.head_above_right );
-        bitmapAboveHeadRight = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveHeadRight = new Canvas( bitmapAboveHeadRight );
-
-        drawableAboveHeadRight.setBounds( 0, 0, cellSize, cellSize );
-        drawableAboveHeadRight.draw( canvasAboveHeadRight );
+        bitmapAboveTail = initializeSegment( context, R.drawable.tail_above );
+        bitmapAboveHeadUp = initializeSegment( context, R.drawable.head_above_up );
+        bitmapAboveHeadDown = initializeSegment( context, R.drawable.head_above_down );
+        bitmapAboveHeadLeft = initializeSegment( context, R.drawable.head_above_left );
+        bitmapAboveHeadRight = initializeSegment( context, R.drawable.head_above_right );
     }
 
+    // Initialize bitmaps used in drawing the below layer.
     private void initializeBelowLayer( Context context, Canvas canvas ) {
         bitmapLayerBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         canvasLayerBelow = new Canvas( bitmapLayerBelow );
 
-        Drawable drawableBelowTail = ContextCompat.getDrawable( context, R.drawable.tail_below );
-        bitmapBelowTail = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasAboveTail = new Canvas( bitmapBelowTail );
-
-        drawableBelowTail.setBounds( 0, 0, cellSize, cellSize );
-        drawableBelowTail.draw( canvasAboveTail );
-
-        Drawable drawableBelowHeadUp = ContextCompat.getDrawable( context, R.drawable.head_below_up );
-        bitmapBelowHeadUp = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasBelowHeadUp = new Canvas( bitmapBelowHeadUp );
-
-        drawableBelowHeadUp.setBounds( 0, 0, cellSize, cellSize );
-        drawableBelowHeadUp.draw( canvasBelowHeadUp );
-
-        Drawable drawableBelowHeadDown = ContextCompat.getDrawable( context, R.drawable.head_below_down );
-        bitmapBelowHeadDown = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasBelowHeadDown = new Canvas( bitmapBelowHeadDown );
-
-        drawableBelowHeadDown.setBounds( 0, 0, cellSize, cellSize );
-        drawableBelowHeadDown.draw( canvasBelowHeadDown );
-
-        Drawable drawableBelowHeadLeft = ContextCompat.getDrawable( context, R.drawable.head_below_left );
-        bitmapBelowHeadLeft = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasBelowHeadLeft = new Canvas( bitmapBelowHeadLeft );
-
-        drawableBelowHeadLeft.setBounds( 0, 0, cellSize, cellSize );
-        drawableBelowHeadLeft.draw( canvasBelowHeadLeft );
-
-        Drawable drawableBelowHeadRight = ContextCompat.getDrawable( context, R.drawable.head_below_right );
-        bitmapBelowHeadRight = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
-        Canvas canvasBelowHeadRight = new Canvas( bitmapBelowHeadRight );
-
-        drawableBelowHeadRight.setBounds( 0, 0, cellSize, cellSize );
-        drawableBelowHeadRight.draw( canvasBelowHeadRight );
+        bitmapBelowTail = initializeSegment( context, R.drawable.tail_below );
+        bitmapBelowHeadUp = initializeSegment( context, R.drawable.head_below_up );
+        bitmapBelowHeadDown = initializeSegment( context, R.drawable.head_below_down );
+        bitmapBelowHeadLeft = initializeSegment( context, R.drawable.head_below_left );
+        bitmapBelowHeadRight = initializeSegment( context, R.drawable.head_below_right );
     }
 
+    // Draw the above layer.
     private void drawAboveLayer() {
         bitmapLayerAbove.eraseColor( Color.TRANSPARENT );
 
@@ -460,7 +427,7 @@ public class Game {
     }
 
     /*
-    Draw centipede segments below ground as night blue circles wherever they are placed.
+    Draw the below layer.
     */
     private void drawBelowLayer( ) {
         bitmapLayerBelow.eraseColor( Color.TRANSPARENT );

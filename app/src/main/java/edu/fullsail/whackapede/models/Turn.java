@@ -39,7 +39,4 @@ class Turn extends FixedGameElement {
 
         return includedExits.get( rand.nextInt( includedExits.size() ) );
     }
-
-    // Get the count of Exits at the Turn.  Primarily used when drawing Exits to the screen.
-    int getExitCount() { return exits.size(); }
 }
