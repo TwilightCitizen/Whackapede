@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+-->
+
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="2040dp"
+    android:height="3128dp"
+    android:viewportWidth="2040"
+    android:viewportHeight="3128"
+    tools:ignore="VectorRaster">
+
+  <path
+      android:pathData="M0,0h2040v3128h-2040z"
+      android:fillColor="@color/grass_green"/>
+
+  <path
+      android:pathData="M476,476m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M476,1020m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M476,1564m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M476,2108m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M476,2652m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1020,476m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1020,1020m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1020,1564m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1020,2108m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1020,2652m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1564,476m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1564,1020m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1564,1564m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1564,2108m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+
+  <path
+      android:pathData="M1564,2652m-68,0a68,68 0,1 1,136 0a68,68 0,1 1,-136 0"
+      android:fillColor="@color/earth_brown"/>
+</vector>

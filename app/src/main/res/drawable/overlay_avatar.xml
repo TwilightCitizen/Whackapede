@@ -1,7 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+-->
+
 <vector
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="136dp"
-    android:height="136dp"
+    android:width="10dp"
+    android:height="10dp"
     android:viewportWidth="136"
     android:viewportHeight="136">
 

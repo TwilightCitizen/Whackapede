@@ -12,8 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 
 import androidx.core.content.ContextCompat;
@@ -21,11 +20,10 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import edu.fullsail.whackapede.R;
 import edu.fullsail.whackapede.gameElements.Direction;
 import edu.fullsail.whackapede.gameElements.Position;
 import edu.fullsail.whackapede.utilities.TimeUtility;
-
-import static edu.fullsail.whackapede.R.color.*;
 
 /*
 Game maintains the state and logic of a game of Whack-A-Pede.  This includes the internal
@@ -39,33 +37,33 @@ public class Game {
     private boolean boardIsInitialized;
     private boolean drawingToolsAreInitialized;
 
-    // Colors in which game elements will be drawn to screen.
-    private int colorEarth;
-    private int colorGrass;
-    private int colorTrans;
-    private int colorAbove;
-    private int colorBelow;
-    private int colorFourWay;
-    private int colorThreeWay;
-    private int colorTwoWay;
-
-    // Paints with which game elements will be drawn to screen.
-    private Paint paintEarth;
-    private Paint paintHole;
+    // Paint with which game elements will be drawn to layers or screen.
     private Paint paintLayer;
-    private Paint paintSegment;
-    private Paint paintTurn;
 
-    // Bitmap and canvas for drawing game elements to layers to be overlaid to screen.
-    private Bitmap bitmapLayer;
-    private Canvas canvasLayer;
+    // Bitmaps for game layers to draw to screen.
+    private Bitmap bitmapGrass;
+    private Bitmap bitmapEarth;
+    private Bitmap bitmapLayerAbove;
+    private Bitmap bitmapLayerBelow;
+    private Bitmap bitmapAboveTail;
+    private Bitmap bitmapAboveHeadUp;
+    private Bitmap bitmapAboveHeadDown;
+    private Bitmap bitmapAboveHeadLeft;
+    private Bitmap bitmapAboveHeadRight;
+    private Bitmap bitmapBelowHeadUp;
+    private Bitmap bitmapBelowHeadDown;
+    private Bitmap bitmapBelowHeadLeft;
+    private Bitmap bitmapBelowHeadRight;
+    private Bitmap bitmapBelowTail;
+
+    // Canvases for drawing complex layers to bitmaps.
+    private Canvas canvasLayerAbove;
+    private Canvas canvasLayerBelow;
 
     // Key dimensions for size and placement of game elements on screen.
     private int cellSize;
-    private int radiusHole;
-    private int radiusSegment ;
-    private int radiusTurn ;
     private int segmentSpeed;
+    private int segmentMaxSpeed;
     private double segmentAcceleration;
 
     // Collections of game elements.
@@ -107,11 +105,10 @@ public class Game {
 
         // Establish key dimensions based on cell width.
         this.cellSize = (int) ( canvasWidth * cellWidthPercent );
-        this.radiusHole = (int) ( canvasWidth * cellWidthPercent / 2 );
-        this.radiusSegment = radiusHole;
-        this.radiusTurn = radiusHole / 2;
         this.segmentSpeed = cellSize * 5;
+        this.segmentMaxSpeed = cellSize * 30;
         this.segmentAcceleration = 1.03125;
+
 
         // Zero score and time remaining.
         this.score = 0;
@@ -290,13 +287,14 @@ public class Game {
     // Initialize drawing tools and draw all game layers to canvas, overlaying them on screen.
     private void drawToCanvas( Context context, Canvas canvas ) {
         initializeDrawingTools( context, canvas );
-        drawEarthLayerToCanvas( canvas );
-        drawBelowLayerToCanvas( canvas );
-        drawGrassLayerToCanvas( canvas );
-        drawAboveLayerToCanvas( canvas );
 
-        // Temporarily draw turns for visualization during development.
-        // drawTurnLayerToCanvas( canvas );
+        drawBelowLayer();
+        drawAboveLayer();
+
+        canvas.drawBitmap( bitmapEarth, 0, 0, paintLayer );
+        canvas.drawBitmap( bitmapLayerBelow, 0, 0, paintLayer );
+        canvas.drawBitmap( bitmapGrass, 0, 0, paintLayer );
+        canvas.drawBitmap( bitmapLayerAbove, 0, 0, paintLayer );
     }
 
     // Initialize colors, paints, bitmaps, and canvas used in drawing routines.
@@ -304,152 +302,212 @@ public class Game {
         // Guard against unnecessary initialization.
         if( drawingToolsAreInitialized ) return;
 
-        initializeColors( context );
-        initializePaints();
+        paintLayer = new Paint();
 
-        bitmapLayer = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
-        canvasLayer = new Canvas( bitmapLayer );
+        initializeEarthLayer( context, canvas );
+        initializeGrassLayer( context, canvas );
+        initializeAboveLayer( context, canvas );
+        initializeBelowLayer( context, canvas );
 
         // Flag drawing tools as initialized.
         drawingToolsAreInitialized = true;
     }
 
-    // Initialize all the paints used to draw on screen elements.
-    private void initializePaints() {
-        paintLayer = new Paint();
-        paintEarth = new Paint();
-        paintHole = new Paint();
-        paintSegment = new Paint();
-        paintTurn = new Paint();
+    private void initializeEarthLayer( Context context, Canvas canvas ) {
+        Drawable drawableEarth = ContextCompat.getDrawable( context, R.drawable.layer_earth );
+        bitmapEarth = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
+        Canvas canvasEarth = new Canvas( bitmapEarth );
 
-        paintEarth.setColor( colorEarth );
-        paintHole.setAntiAlias( true );
-        paintHole.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.CLEAR ) );
-        paintSegment.setAntiAlias( true );
-        paintTurn.setAntiAlias( true );
+        drawableEarth.setBounds( 0, 0, canvasEarth.getWidth(), canvasEarth.getHeight() );
+        drawableEarth.draw( canvasEarth );
     }
 
-    // Obtain all colors used in on screen elements from resources.
-    private void initializeColors( Context context ) {
-        colorEarth = ContextCompat.getColor( context, earth_brown );
-        colorGrass = ContextCompat.getColor( context, grass_green );
-        colorTrans = ContextCompat.getColor( context, grass_trans );
-        colorAbove = ContextCompat.getColor( context, day_blue );
-        colorBelow = ContextCompat.getColor( context, night_blue );
-        colorFourWay  = ContextCompat.getColor( context, four_way );
-        colorThreeWay = ContextCompat.getColor( context, three_way );
-        colorTwoWay   = ContextCompat.getColor( context, two_way );
+    private void initializeGrassLayer( Context context, Canvas canvas ) {
+        Drawable drawableGrass = ContextCompat.getDrawable( context, R.drawable.layer_grass );
+        bitmapGrass = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
+        Canvas canvasGrass = new Canvas( bitmapGrass );
+
+        drawableGrass.setBounds( 0, 0, canvasGrass.getWidth(), canvasGrass.getHeight() );
+        drawableGrass.draw( canvasGrass );
     }
 
-    /*
-    Draw the earth layer to canvas.  The earth layer paints the canvas green with brown circles
-    where holes will appear through the grass layer above it.  Brown is not drawn for the whole
-    layer because the grass layer uses a semi-transparent green to reveal centipedes below it and
-    this would darken the appearance of the grass layer.
-    */
-    private void drawEarthLayerToCanvas( Canvas canvas ) {
-        bitmapLayer.eraseColor( Color.TRANSPARENT );
-        canvasLayer.drawColor( colorGrass );
-        
-        for( Hole hole : holes ) canvasLayer.drawCircle(
-            (float) hole.getPosition().getX() + radiusHole,
-            (float) hole.getPosition().getY() + radiusHole,
-            (float) radiusHole, paintEarth
-        );
+    private void initializeAboveLayer( Context context, Canvas canvas ) {
+        bitmapLayerAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
+        canvasLayerAbove = new Canvas( bitmapLayerAbove );
 
-        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
+        Drawable drawableAboveTail = ContextCompat.getDrawable( context, R.drawable.tail_above );
+        bitmapAboveTail = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveTail = new Canvas( bitmapAboveTail );
+
+        drawableAboveTail.setBounds( 0, 0, cellSize, cellSize );
+        drawableAboveTail.draw( canvasAboveTail );
+
+        Drawable drawableAboveHeadUp = ContextCompat.getDrawable( context, R.drawable.head_above_up );
+        bitmapAboveHeadUp = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveHeadUp = new Canvas( bitmapAboveHeadUp );
+
+        drawableAboveHeadUp.setBounds( 0, 0, cellSize, cellSize );
+        drawableAboveHeadUp.draw( canvasAboveHeadUp );
+
+        Drawable drawableAboveHeadDown = ContextCompat.getDrawable( context, R.drawable.head_above_down );
+        bitmapAboveHeadDown = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveHeadDown = new Canvas( bitmapAboveHeadDown );
+
+        drawableAboveHeadDown.setBounds( 0, 0, cellSize, cellSize );
+        drawableAboveHeadDown.draw( canvasAboveHeadDown );
+
+        Drawable drawableAboveHeadLeft = ContextCompat.getDrawable( context, R.drawable.head_above_left );
+        bitmapAboveHeadLeft = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveHeadLeft = new Canvas( bitmapAboveHeadLeft );
+
+        drawableAboveHeadLeft.setBounds( 0, 0, cellSize, cellSize );
+        drawableAboveHeadLeft.draw( canvasAboveHeadLeft );
+
+        Drawable drawableAboveHeadRight = ContextCompat.getDrawable( context, R.drawable.head_above_right );
+        bitmapAboveHeadRight = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveHeadRight = new Canvas( bitmapAboveHeadRight );
+
+        drawableAboveHeadRight.setBounds( 0, 0, cellSize, cellSize );
+        drawableAboveHeadRight.draw( canvasAboveHeadRight );
     }
 
-    /*
-    Draw the grass layer to canvas.  The grass layer paints the canvas a semi-transparent green
-    with completely transparent circles where holes are placed.  This allows the brown holes of the
-    earth layer and any underground centipede segments to show completely through the holes, while
-    offering only a slight glimpse of where underground centipedes are elsewhere.
-    */
-    private void drawGrassLayerToCanvas( Canvas canvas ) {
-        bitmapLayer.eraseColor( Color.TRANSPARENT );
-        canvasLayer.drawColor( colorTrans );
+    private void initializeBelowLayer( Context context, Canvas canvas ) {
+        bitmapLayerBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
+        canvasLayerBelow = new Canvas( bitmapLayerBelow );
 
-        for( Hole hole : holes ) canvasLayer.drawCircle(
-            (float) hole.getPosition().getX() + radiusHole,
-            (float) hole.getPosition().getY() + radiusHole,
-            (float) radiusHole, paintHole
-        );
+        Drawable drawableBelowTail = ContextCompat.getDrawable( context, R.drawable.tail_below );
+        bitmapBelowTail = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasAboveTail = new Canvas( bitmapBelowTail );
 
-        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
+        drawableBelowTail.setBounds( 0, 0, cellSize, cellSize );
+        drawableBelowTail.draw( canvasAboveTail );
+
+        Drawable drawableBelowHeadUp = ContextCompat.getDrawable( context, R.drawable.head_below_up );
+        bitmapBelowHeadUp = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasBelowHeadUp = new Canvas( bitmapBelowHeadUp );
+
+        drawableBelowHeadUp.setBounds( 0, 0, cellSize, cellSize );
+        drawableBelowHeadUp.draw( canvasBelowHeadUp );
+
+        Drawable drawableBelowHeadDown = ContextCompat.getDrawable( context, R.drawable.head_below_down );
+        bitmapBelowHeadDown = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasBelowHeadDown = new Canvas( bitmapBelowHeadDown );
+
+        drawableBelowHeadDown.setBounds( 0, 0, cellSize, cellSize );
+        drawableBelowHeadDown.draw( canvasBelowHeadDown );
+
+        Drawable drawableBelowHeadLeft = ContextCompat.getDrawable( context, R.drawable.head_below_left );
+        bitmapBelowHeadLeft = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasBelowHeadLeft = new Canvas( bitmapBelowHeadLeft );
+
+        drawableBelowHeadLeft.setBounds( 0, 0, cellSize, cellSize );
+        drawableBelowHeadLeft.draw( canvasBelowHeadLeft );
+
+        Drawable drawableBelowHeadRight = ContextCompat.getDrawable( context, R.drawable.head_below_right );
+        bitmapBelowHeadRight = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
+        Canvas canvasBelowHeadRight = new Canvas( bitmapBelowHeadRight );
+
+        drawableBelowHeadRight.setBounds( 0, 0, cellSize, cellSize );
+        drawableBelowHeadRight.draw( canvasBelowHeadRight );
     }
 
-    /*
-    Draw centipede segments above ground as day blue circles wherever they are placed.
-    */
-    private void drawAboveLayerToCanvas( Canvas canvas ) {
-        bitmapLayer.eraseColor( Color.TRANSPARENT );
-        paintSegment.setColor( colorAbove );
+    private void drawAboveLayer() {
+        bitmapLayerAbove.eraseColor( Color.TRANSPARENT );
 
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
 
             while( segment != null ) {
-                if( segment.getIsAbove() ) canvasLayer.drawCircle(
-                    (float) segment.getPosition().getX() + radiusSegment,
-                    (float) segment.getPosition().getY() + radiusSegment,
-                    (float) radiusSegment, paintSegment
-                );
+                if( segment.getIsAbove() ) {
+                    canvasLayerAbove.drawBitmap(
+                        bitmapAboveTail, segment.getPosition().getX(),
+                        segment.getPosition().getY(), paintLayer
+                    );
+
+                    if( segment.getIsHead() ) {
+                        if( segment.getDirection() == Direction.up ) {
+                            canvasLayerAbove.drawBitmap(
+                                bitmapAboveHeadUp, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.down ) {
+                            canvasLayerAbove.drawBitmap(
+                                bitmapAboveHeadDown, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.left ) {
+                            canvasLayerAbove.drawBitmap(
+                                bitmapAboveHeadLeft, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.right ) {
+                            canvasLayerAbove.drawBitmap(
+                                bitmapAboveHeadRight, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        }
+                    } else {
+                        canvasLayerAbove.drawBitmap(
+                            bitmapAboveTail, segment.getPosition().getX(),
+                            segment.getPosition().getY(), paintLayer
+                        );
+                    }
+                }
 
                 segment = segment.getTail();
             }
         }
-
-        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     /*
     Draw centipede segments below ground as night blue circles wherever they are placed.
     */
-    private void drawBelowLayerToCanvas( Canvas canvas ) {
-        bitmapLayer.eraseColor( Color.TRANSPARENT );
-        paintSegment.setColor( colorBelow );
+    private void drawBelowLayer( ) {
+        bitmapLayerBelow.eraseColor( Color.TRANSPARENT );
 
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
 
             while( segment != null ) {
-                if( segment.getIsBelow() ) canvasLayer.drawCircle(
-                    (float) segment.getPosition().getX() + radiusSegment,
-                    (float) segment.getPosition().getY() + radiusSegment,
-                    (float) radiusSegment, paintSegment
-                );
+                if( segment.getIsBelow() ) {
+                    canvasLayerBelow.drawBitmap(
+                        bitmapBelowTail, segment.getPosition().getX(),
+                        segment.getPosition().getY(), paintLayer
+                    );
+
+                    if( segment.getIsHead() ) {
+                        if( segment.getDirection() == Direction.up ) {
+                            canvasLayerBelow.drawBitmap(
+                                bitmapBelowHeadUp, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.down ) {
+                            canvasLayerBelow.drawBitmap(
+                                bitmapBelowHeadDown, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.left ) {
+                            canvasLayerBelow.drawBitmap(
+                                bitmapBelowHeadLeft, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        } else if( segment.getDirection() == Direction.right ) {
+                            canvasLayerBelow.drawBitmap(
+                                bitmapBelowHeadRight, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
+                            );
+                        }
+                    } else {
+                        canvasLayerBelow.drawBitmap(
+                            bitmapBelowTail, segment.getPosition().getX(),
+                            segment.getPosition().getY(), paintLayer
+                        );
+                    }
+                }
 
                 segment = segment.getTail();
             }
         }
-
-        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
-    }
-
-    /*
-    Draw the turn layer to canvas for debugging/troubleshooting.  Turns are drawn as differently
-    colored circles for the type of turn they are, wherever they are placed.
-    */
-    private void drawTurnLayerToCanvas( Canvas canvas ) {
-        bitmapLayer.eraseColor( Color.TRANSPARENT );
-
-        for( Turn turn : turns ) {
-            if( turn.getExitCount() == 4 )
-                paintTurn.setColor( colorFourWay );
-            else if( turn.getExitCount() == 3 )
-                paintTurn.setColor( colorThreeWay );
-            else if( turn.getExitCount() == 2 )
-                paintTurn.setColor( colorTwoWay );
-
-            canvasLayer.drawCircle(
-                (float) turn.getPosition().getX() + radiusHole,
-                (float) turn.getPosition().getY() + radiusHole,
-                (float) radiusTurn, paintTurn
-            );
-        }
-
-        canvas.drawBitmap( bitmapLayer, 0, 0, paintLayer );
     }
 
     /*
@@ -477,6 +535,7 @@ public class Game {
 
         remainingTimeMillis = roundTimeMillis;
         segmentSpeed *= segmentAcceleration;
+        segmentSpeed = Math.min( segmentSpeed, segmentMaxSpeed );
 
         setupCentipede();
     }
@@ -550,15 +609,16 @@ public class Game {
         // Clear out the touch events so already touched spots don't become centipede auto-killers.
         touchEvents.clear();
 
+        // Figure out the new speed for all segments.
+        int newSpeed = segmentSpeed + (int) (
+            ( segmentSpeed * segmentAcceleration - segmentSpeed ) * segmentsKilled.size() );
+
         // Speed up all the centipede segments.  The more segments killed, the faster.
         for( Segment centipede : centipedes ) {
             Segment segment = centipede;
 
             while( segment != null ) {
-                segment.setSpeed( segmentSpeed +  (int) (
-                    ( segmentSpeed * segmentAcceleration - segmentSpeed ) *
-                    segmentsKilled.size()
-                ) );
+                segment.setSpeed( Math.min( newSpeed, segmentMaxSpeed ) );
 
                 segment = segment.getTail();
             }

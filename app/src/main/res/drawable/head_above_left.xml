@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+-->
+
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="136dp"
+    android:height="136dp"
+    android:viewportWidth="136"
+    android:viewportHeight="136">
+
+  <path
+      android:pathData="M68,68m-0,-68a68,68 0,1 1,-0 136a68,68 0,1 1,-0 -136"
+      android:fillColor="@color/day_blue"/>
+
+  <path
+      android:pathData="M32.5,19a24.5,14.5 90,1 0,-0 49a24.5,14.5 90,1 0,-0 -49z"
+      android:fillColor="@color/plain_white"/>
+
+  <path
+      android:pathData="M32.5,68a24.5,14.5 90,1 0,-0 49a24.5,14.5 90,1 0,-0 -49z"
+      android:fillColor="@color/plain_white"/>
+
+  <path
+      android:pathData="M25,31a12.5,7 90,1 0,-0 25a12.5,7 90,1 0,-0 -25z"
+      android:fillColor="@color/not_quite_black"/>
+
+  <path
+      android:pathData="M25,80a12.5,7 90,1 0,-0 25a12.5,7 90,1 0,-0 -25z"
+      android:fillColor="@color/not_quite_black"/>
+</vector>
