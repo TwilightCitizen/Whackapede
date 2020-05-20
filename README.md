@@ -18,19 +18,25 @@ Whack-A-Pede is a quasi mash-up of the Atari arcade classic, Centipede, and Whac
 
 ## Hardware Requirements
 
-- Android Phones and Tablets running Android 5.0 (API 21) or Later.
+- Android phones and tablets running Android 5.0 (API 21) or later are required.
 
-- Hardware device is recommended for testing the game screen itself, as the emulators can introduce subtle delays that can affect the correct animation of on-screen elements at higher speeds.  Any compatible emulator is fine to test the overall navigation and other app features.
+- Android phones and tablets running Android 7.0 (API 24) are recommended for best graphical performance.
+
+- Android phones and tablets running Android 5.0 or 6.0 (API 21 or 23) introduce artifacts when rendering some of the transparency effects.  It is unknown if this is limited to emulators or applies to hardware devices, too.
+
+- A hardware device is recommended for testing the game screen itself.  Emulators introduce delays that can affect the correct animation of on-screen elements at higher speeds, but any compatible emulator is fine to test the overall navigation and other app features.
 
 ### Hardware and Emulators Tested On
 
-- Nexus 5 Emulator, APIs 21, 23, 28, and 29.
+- Nexus 5 Emulator, Android 5.0 through 10.0 (API 21 through 29).
 
-- Pixel 3 Hardware, API 29.
+- Pixel 3 Hardware, Android 10.0 (API 29).
 
 ## Log in Requirements & Credentials for Testing
 
-- None at this time.
+- No credentials are required for testing most of the app functionality.
+
+- For testing Google Sign-in to play as a logged in user and publish scores to the leaderboard, logging in with a valid Google account is necessary.
 
 ## Known Bugs
 
