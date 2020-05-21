@@ -115,7 +115,7 @@ public class Game {
 
         // Zero score and time remaining.
         this.score = 0;
-        this.roundTimeMillis = 1000 * 5; // 60;
+        this.roundTimeMillis = 1000 * 60;
         this.remainingTimeMillis = roundTimeMillis;
 
         // Position game elements on the board.
