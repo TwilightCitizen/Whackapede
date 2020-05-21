@@ -95,6 +95,7 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
         Intent googleSignInIntent = googleSignInClient.getSignInIntent();
 
         startActivityForResult( googleSignInIntent, REQUEST_GOOGLE_SIGN_IN );
+        googleSignInClient.signOut();
     }
 
     // Obtain Google Sign In task for handling Google Sign In result.
@@ -126,6 +127,7 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
 
             googleSignInBundle.putParcelable( GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount );
             navController.navigate( R.id.action_PlayGameFragment_to_GameFragment, googleSignInBundle );
+
         } catch( ApiException e ) {
             e.printStackTrace();
 
