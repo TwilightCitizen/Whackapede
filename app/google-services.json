@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "519209572219",
-    "firebase_url": "https://whack-a-pede.firebaseio.com",
-    "project_id": "whack-a-pede",
-    "storage_bucket": "whack-a-pede.appspot.com"
+    "project_number": "123512543415",
+    "firebase_url": "https://whackapede.firebaseio.com",
+    "project_id": "whackapede",
+    "storage_bucket": "whackapede.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:519209572219:android:ed08135d09c5dfd010cfde",
+        "mobilesdk_app_id": "1:123512543415:android:f2f3ddb97df5c824269532",
         "android_client_info": {
-          "package_name": "edu.fullsail.whackapede"
+          "package_name": "com.twilightcitizen.whackapede"
         }
       },
       "oauth_client": [
         {
-          "client_id": "519209572219-b7nepf0nvbrs2068nncnu21mvnc20kvf.apps.googleusercontent.com",
+          "client_id": "123512543415-v7njmgg2ibv7f1467emaitlduh35m01d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "edu.fullsail.whackapede",
+            "package_name": "com.twilightcitizen.whackapede",
             "certificate_hash": "c5883d8748722c8b420b946b084e6eedeeaeb707"
           }
         },
         {
-          "client_id": "519209572219-93bmad2hqo8rhl0scceqcjl05u47n46a.apps.googleusercontent.com",
+          "client_id": "123512543415-h9lspubmntvvv48d58tb9dvrdq8qbtno.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCShR6EJd_VvIzJD0xNH1szDe6TXaT0bbc"
+          "current_key": "AIzaSyAeXYbBq5qyc-16XI-7F4mazFhJ1q2H9lk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "519209572219-63hck5s3jqa0ct474kairvqcf6mc30lm.apps.googleusercontent.com",
+              "client_id": "123512543415-h9lspubmntvvv48d58tb9dvrdq8qbtno.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
