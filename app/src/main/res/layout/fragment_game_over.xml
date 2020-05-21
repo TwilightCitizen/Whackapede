@@ -18,25 +18,88 @@ MDV469-O, C202005-01
     <ImageView
         android:id="@+id/image_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_marginTop="64dp"
         android:contentDescription="@string/whack_a_pede_logo"
         android:src="@drawable/logo_whack_a_pede"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1" />
+
+    <ImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/plain_white"
+        android:contentDescription="@string/player_avatar"
+        android:src="@drawable/icon_guest_account"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/image_logo"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/image_avatar_overlay"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="64dp"
+        android:contentDescription="@string/player_avatar"
+        android:src="@drawable/overlay_avatar"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/image_logo"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlSymmetry" />
 
     <TextView
-        android:id="@+id/text_game_over"
+        android:id="@+id/text_game_over_player"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="@string/game_over"
+        android:text="@string/game_over_player"
+        android:textAlignment="center"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_logo" />
+        app:layout_constraintTop_toBottomOf="@id/image_avatar" />
+
+    <TextView
+        android:id="@+id/text_game_over_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/game_over_message"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_game_over_player" />
+
+    <TextView
+        android:id="@+id/text_game_over_publish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/game_over_publishing"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_game_over_message" />
 
     <Button
         android:id="@+id/button_back"
@@ -44,8 +107,9 @@ MDV469-O, C202005-01
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:enabled="false"
         android:text="@string/back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_game_over" />
+        app:layout_constraintTop_toBottomOf="@id/text_game_over_publish" />
 </androidx.constraintlayout.widget.ConstraintLayout>

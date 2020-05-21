@@ -1,3 +1,10 @@
+/*
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+*/
+
 package com.twilightcitizen.whackapede.utilities;
 
 import android.content.Context;
@@ -18,7 +25,7 @@ Leaderboard Utility abstracts the publication and retrieval of player scores to 
 Cloud Firestore.  It methods accept callbacks that conform to event interfaces for reporting the
 success or failure of these transactions so that callers can act accordingly.
 */
-class LeaderboardUtility {
+public class LeaderboardUtility {
     // The singleton instance.
     private static LeaderboardUtility instance = null;
 
@@ -30,7 +37,7 @@ class LeaderboardUtility {
     private LeaderboardUtility() {}
 
     // Return the singleton instance, instantiating as needed.
-    static LeaderboardUtility getInstance() {
+    public static LeaderboardUtility getInstance() {
         if( instance == null ) instance = new LeaderboardUtility();
 
         return instance;
@@ -61,7 +68,7 @@ class LeaderboardUtility {
         return firebaseFirestore;
     }
 
-    void publishScoreToLeaderboard(
+    public void publishScoreToLeaderboard(
         Context context, GoogleSignInAccount googleSignInAccount, int finalScore,
         OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
     ) {
@@ -84,7 +91,7 @@ class LeaderboardUtility {
             .addOnSuccessListener( ( DocumentSnapshot documentSnapshot ) -> {
                 // Create the leaderboard entry if it does not exist.
                 if( !documentSnapshot.exists() ) {
-                    publishNewLeaderboardEntry(
+                    putLeaderboardEntry(
                         firebaseFirestore, googleSignInId, displayName, finalScore,
                             onPutScoreSucceeded, onPutScoreFailed
                     );
@@ -92,7 +99,7 @@ class LeaderboardUtility {
                 } else if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
                     onPutScoreSucceeded.onPutScoreSucceeded();
                     // Otherwise, update the leaderboard.
-                } else updateExistingLeaderboardEntry(
+                } else updateLeaderboardEntry(
                     firebaseFirestore, googleSignInId, finalScore,
                         onPutScoreSucceeded, onPutScoreFailed
                 );
@@ -111,7 +118,7 @@ class LeaderboardUtility {
         return retrievedFinalScore > finalScore;
     }
 
-    private void publishNewLeaderboardEntry(
+    private void putLeaderboardEntry(
         FirebaseFirestore firebaseFirestore, String googleSignInId, String displayName, int finalScore,
         OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
     ) {
@@ -126,7 +133,7 @@ class LeaderboardUtility {
         .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
     }
 
-    private void updateExistingLeaderboardEntry(
+    private void updateLeaderboardEntry(
         FirebaseFirestore firebaseFirestore, String googleSignInId, int finalScore,
         OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
     ) {
@@ -138,7 +145,7 @@ class LeaderboardUtility {
             .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
     }
 
-    @SuppressWarnings( "SameParameterValue" ) void getTopLimitLeaders(
+    @SuppressWarnings( "SameParameterValue" ) public void getTopLimitLeaders(
         Context context, int limit,
         OnGetLeadersSucceeded onGetLeadersSucceeded, OnGetLeadersFailed onGetLeadersFailed
     ) {

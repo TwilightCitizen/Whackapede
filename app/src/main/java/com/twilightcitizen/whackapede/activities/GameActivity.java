@@ -20,7 +20,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.twilightcitizen.whackapede.R;
-import com.twilightcitizen.whackapede.fragments.GameFragment;
 
 /*
 Game Activity is the main activity presented after launch.  It hosts an action bar and a fragment
@@ -29,7 +28,9 @@ fragments in the app.
 */
 public class GameActivity extends AppCompatActivity {
     // Some fragments may choose to handle back/up navigation specially.
-    public interface OnNavigateBackOrUp { boolean onNavigateBackOrUp(); }
+    public interface OnNavigateBackOrUp {
+        @SuppressWarnings( "SameReturnValue" ) boolean onNavigateBackOrUp();
+    }
 
     // Setup content and toolbar on creation.
     @Override protected void onCreate( Bundle savedInstanceState ) {

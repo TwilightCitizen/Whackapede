@@ -1,10 +1,17 @@
+/*
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+*/
+
 package com.twilightcitizen.whackapede.utilities;
 
 /*
 Leaderboard Entry encapsulates the data for an entry on the Firebase Cloud Firestore
 leaderboard more conveniently that Maps or Dictionaries of values.
 */
-public class LeaderboardEntry {
+class LeaderboardEntry {
     private String displayName;
     private int    finalScore;
 

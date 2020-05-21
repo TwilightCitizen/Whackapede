@@ -48,6 +48,12 @@ MDV469-O, C202005-01
     <string name="play">Play</string>
     <string name="pause">Pause</string>
 
+    <string name="game_over_player">Game Over%s!</string>
+    <string name="game_over_message">You scored %d points.</string>
+    <string name="game_over_publishing">Wait a moment while your score syncs to the leaderboard.</string>
+    <string name="game_over_published">All set!  It\'s safe to hit back now.</string>
+    <string name="game_over_unpublished">Your score couln\'t be published to the leaderboard.  The server might be down or your Internet connection might be offline.</string>
+
     <string-array name="music_tracks">
         <item>This Song</item>
         <item>That Song</item>
