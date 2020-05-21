@@ -73,6 +73,13 @@ public class GameThread extends Thread  {
                     game.loop( gameActivity, canvas, timeUtility.getTimeElapsedMillis() );
                     // Notify the Game Fragment to update the scoreboard.
                     gameActivity.runOnUiThread( gameFragment::onGameStatsChanged );
+
+                    // Notify the Game Fragment of Game Over and stop the thread.
+                    if( game.getIsOver() ) {
+                        gameActivity.runOnUiThread( gameFragment::onGameOver );
+
+                        isRunning = false;
+                    }
                 }
             } finally {
                 // Ensure canvas is unlocked and posted.

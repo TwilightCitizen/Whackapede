@@ -34,6 +34,7 @@ public class Game {
     // Flags to indicate if the game is paused, if its board is initialized, and if drawing
     // tools are initialized.  Needed to manage game interactions and drawing to screen.
     private boolean gameIsPaused;
+    private boolean gameIsOver;
     private boolean boardIsInitialized;
     private boolean drawingToolsAreInitialized;
 
@@ -82,6 +83,7 @@ public class Game {
     // New games start paused without game board or drawing tools initialized.
     public Game() {
         gameIsPaused = true;
+        gameIsOver = false;
         boardIsInitialized = false;
         drawingToolsAreInitialized = false;
     }
@@ -93,7 +95,8 @@ public class Game {
     // Game can be paused by player or by app when interrupted.
     public void pause() { gameIsPaused = true; }
     public void toggleState() { gameIsPaused = !gameIsPaused; }
-    public boolean isGameIsPaused() { return gameIsPaused; }
+    public boolean getIsPaused() { return gameIsPaused; }
+    public boolean getIsOver() { return  gameIsOver; }
 
     // Initialize the game board.
     public void initializeBoard( int canvasWidth ) {
@@ -112,7 +115,7 @@ public class Game {
 
         // Zero score and time remaining.
         this.score = 0;
-        this.roundTimeMillis = 1000 * 60;
+        this.roundTimeMillis = 1000 * 5; // 60;
         this.remainingTimeMillis = roundTimeMillis;
 
         // Position game elements on the board.
@@ -512,8 +515,8 @@ public class Game {
     happen in the next sprint.
     */
     private void checkForGameOver( long elapsedTimeMillis ) {
-        // Guard against ticking clock and ending game when paused.
-        if( gameIsPaused ) return;
+        // Guard against ticking clock and ending game when paused or already over.
+        if( gameIsPaused || gameIsOver ) return;
 
         // Tick down the clock.
         remainingTimeMillis -= elapsedTimeMillis;
@@ -522,9 +525,9 @@ public class Game {
         if( remainingTimeMillis <= 0 ) {
             // Prevent negative clock.
             remainingTimeMillis = 0;
-
-            // TODO: Implement end game when user/guest play is determined.
-            pause();
+            // Flag Game Over and pause it.
+            gameIsOver = true;
+            gameIsPaused = true;
         }
     }
 

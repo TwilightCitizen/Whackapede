@@ -28,6 +28,9 @@ container view that serves as the applications navigation host fragment and mana
 fragments in the app.
 */
 public class GameActivity extends AppCompatActivity {
+    // Some fragments may choose to handle back/up navigation specially.
+    public interface OnNavigateBackOrUp { boolean onNavigateBackOrUp(); }
+
     // Setup content and toolbar on creation.
     @Override protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
@@ -55,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController( this, navController );
     }
 
-    // Handle up navigation specially for the Game Fragment.
+    // Handle up navigation specially for fragments that require it.
     @Override public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController( this, R.id.nav_host_fragment );
 
@@ -63,13 +66,13 @@ public class GameActivity extends AppCompatActivity {
         Fragment fragment = getSupportFragmentManager().getFragments().get( 0 )
             .getChildFragmentManager().getFragments().get( 0 );
 
-        GameFragment gameFragment;
+        OnNavigateBackOrUp onNavigateBackOrUp;
 
         // Defer up navigation decision to the Game Fragment first.
-        if( fragment instanceof GameFragment ) {
-            gameFragment = (GameFragment) fragment;
+        if( fragment instanceof OnNavigateBackOrUp ) {
+            onNavigateBackOrUp = (OnNavigateBackOrUp ) fragment;
 
-            return gameFragment.onNavigateBackOrUp() && navController.navigateUp();
+            return onNavigateBackOrUp.onNavigateBackOrUp() && navController.navigateUp();
         }
 
         // Navigate normally for other fragments.

@@ -88,19 +88,11 @@ class LeaderboardUtility {
                         firebaseFirestore, googleSignInId, displayName, finalScore,
                             onPutScoreSucceeded, onPutScoreFailed
                     );
-
-                    return;
-                }
-
                 // If it is greater than the final score the user just got, do nothing.
-                if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
+                } else if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
                     onPutScoreSucceeded.onPutScoreSucceeded();
-
-                    return;
-                }
-
-                // Otherwise, update the leaderboard.
-                updateExistingLeaderboardEntry(
+                    // Otherwise, update the leaderboard.
+                } else updateExistingLeaderboardEntry(
                     firebaseFirestore, googleSignInId, finalScore,
                         onPutScoreSucceeded, onPutScoreFailed
                 );
@@ -128,11 +120,8 @@ class LeaderboardUtility {
 
         // Write the new entry to the leaderboard.
         firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).set( echoLeaderBoardEntry )
-
         // Notify the caller of successful score publication to the leaderboard.
-        .addOnSuccessListener( ( Void aVoid ) ->
-            onPutScoreSucceeded.onPutScoreSucceeded() )
-
+        .addOnSuccessListener( ( Void aVoid ) -> onPutScoreSucceeded.onPutScoreSucceeded() )
         // Notify the caller of unsuccessful score publication to the leaderboard.
         .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
     }
@@ -144,9 +133,7 @@ class LeaderboardUtility {
         // Otherwise, update the leaderboard.
         firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).update( FINAL_SCORE, finalScore )
             // Notify the caller of successful score publication to the leaderboard.
-            .addOnSuccessListener( ( Void aVoid ) ->
-                    onPutScoreSucceeded.onPutScoreSucceeded() )
-
+            .addOnSuccessListener( ( Void aVoid ) -> onPutScoreSucceeded.onPutScoreSucceeded() )
             // Notify the caller of unsuccessful score publication to the leaderboard.
             .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
     }

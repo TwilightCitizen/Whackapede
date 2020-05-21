@@ -131,6 +131,8 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
         } catch( ApiException e ) {
             e.printStackTrace();
 
+            // TODO: Handle authentication failure with some kind of message.
+
             navController.navigate( R.id.action_PlayGameFragment_to_GameFragment );
         }
     }

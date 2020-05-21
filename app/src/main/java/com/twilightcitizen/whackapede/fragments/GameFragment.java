@@ -23,6 +23,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,7 +44,9 @@ player to unintentionally leave an ongoing game.  It provides a single menu acti
 starting/resuming games, a scoreboard to show the guest or authenticated player's avatar, current
 score, and time remaining, and the game arena itself via a SurfaceView loaded into a containing frame.
 */
-@SuppressWarnings( "WeakerAccess" ) public class GameFragment extends Fragment {
+@SuppressWarnings( "WeakerAccess" ) public class GameFragment extends Fragment
+    implements GameActivity.OnNavigateBackOrUp {
+
     // Frame to host the SurfaceView where the game arena will be drawn to screen.
     private FrameLayout frameGame;
     // Game Activity must host Game Fragment.
@@ -56,6 +60,13 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     // Player's current score and time remaining on the scoreboard.
     private TextView textScore;
     private TextView textClock;
+    // Player's authenticated Google account, if any.
+    private GoogleSignInAccount googleSignInAccount;
+
+    // Google Account tag for passing authenticated account to Game Over Fragment.
+    public static final String GOOGLE_SIGN_IN_ACCOUNT = "GOOGLE_SIGN_IN_ACCOUNT";
+    // Final Score tag for passing final score to Game Over Fragment.
+    public static final String FINAL_SCORE = "FINAL_SCORE";
 
     // Setup with menu options on creation.
     @Override public void onCreate( @Nullable Bundle savedInstanceState ) {
@@ -101,10 +112,14 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
         setupGuestOrGoogleAccount( view );
     }
 
+    /*
+    Setup the scoreboard to display details for a guest player or player authenticated through
+    Google Sign In accordingly.
+    */
     private void setupGuestOrGoogleAccount( View view ) {
         if( getArguments() == null ) return;
 
-        GoogleSignInAccount googleSignInAccount = getArguments().getParcelable( PlayGameFragment.GOOGLE_SIGN_IN_ACCOUNT );
+        googleSignInAccount = getArguments().getParcelable( PlayGameFragment.GOOGLE_SIGN_IN_ACCOUNT );
 
         if( googleSignInAccount == null ) return;
 
@@ -117,8 +132,10 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
         Glide.with( gameActivity ).load( uriPlayerAvatar ).placeholder( R.drawable.icon_guest_account ).into( imageAvatar );
     }
 
-    // Create a new Game and SurfaceView where its arena will be drawn, adding the game arena
-    // to the frame where it should be drawn.
+    /*
+    Create a new Game and SurfaceView where its arena will be drawn, adding the game arena
+    to the frame where it should be drawn.
+    */
     private void setupGameArena( View view ) {
         frameGame = view.findViewById( R.id.frame_game );
         game = new Game();
@@ -164,7 +181,13 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
 
     // Navigate back/up if the game is paused, but pause it and wait if it isn't.
     public boolean onNavigateBackOrUp() {
-        if( game.isGameIsPaused() ) return true;
+        if( game.getIsPaused() ) {
+            NavController navController = NavHostFragment.findNavController( GameFragment.this );
+
+            navController.navigate( R.id.action_GameFragment_to_LandingFragment );
+
+            return false;
+        }
 
         game.pause();
         toggleItemPlayPause();
@@ -188,13 +211,25 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     private void toggleItemPlayPause() {
         MenuItem itemPlayPause = menu.getItem( 0 );
 
-        itemPlayPause.setIcon( game.isGameIsPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
-        itemPlayPause.setTitle( game.isGameIsPaused() ? R.string.play : R.string.pause );
+        itemPlayPause.setIcon( game.getIsPaused() ? R.drawable.icon_play : R.drawable.icon_pause );
+        itemPlayPause.setTitle( game.getIsPaused() ? R.string.play : R.string.pause );
     }
 
     // Publish new score and time remaining to the scoreboard.  Called from the Game Thread.
     public void onGameStatsChanged() {
         textScore.setText( String.format( Locale.getDefault(), "%d", game.getScore() ) );
         textClock.setText( TimeUtility.getInstance().millisToMinutesAndSeconds( game.getRemainingTimeMillis() ) );
+    }
+
+    // Handle Game Over, passing Google Account and Final Score to Game Over Fragment.
+    public void onGameOver() {
+        NavController navController = NavHostFragment.findNavController( GameFragment.this );
+
+        // Pass the authenticated account to the Game Fragment in a bundle.
+        Bundle gameOverBundle = new Bundle();
+
+        gameOverBundle.putParcelable( GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount );
+        gameOverBundle.putInt( FINAL_SCORE, game.getScore() );
+        navController.navigate( R.id.action_GameFragment_to_GameOverFragment, gameOverBundle );
     }
 }
