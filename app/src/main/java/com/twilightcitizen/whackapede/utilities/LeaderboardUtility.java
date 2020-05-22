@@ -10,8 +10,13 @@ package com.twilightcitizen.whackapede.utilities;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -78,7 +83,7 @@ public class LeaderboardUtility {
         // Guard against publishing the score of a guest user.
         if( googleSignInAccount == null ) return;
 
-        // Get the Google Sign In account ID.
+        // Get the Google Sign In account ID, display name, and avatar.
         String googleSignInId = googleSignInAccount.getId();
         String displayName = googleSignInAccount.getDisplayName();
         Uri photoUrl = googleSignInAccount.getPhotoUrl();
@@ -87,31 +92,39 @@ public class LeaderboardUtility {
         // Guard against no Google Sign In account ID.
         if( googleSignInId == null ) return;
 
-        // Get an initialized, configured Firestore instance.
-        FirebaseFirestore firebaseFirestore = getConfiguredFirestore( context );
+        // Convert Google Sign In to Firebase authentication.
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-        // Get any leaderboard entry for the signed in user.
-        firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).get()
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(
+            googleSignInAccount.getIdToken(), null
+        );
 
-            .addOnSuccessListener( ( DocumentSnapshot documentSnapshot ) -> {
-                // Create the leaderboard entry if it does not exist.
-                if( !documentSnapshot.exists() ) {
-                    putLeaderboardEntry(
-                        firebaseFirestore, googleSignInId, displayName, avatar,
-                        finalScore, totalRounds, totalTime, onPutScoreListener
-                    );
-                // If it is greater than the final score the user just got, do nothing.
-                } else if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
-                    onPutScoreListener.onPutScoreSucceeded();
+        // Attempt to sign into Firebase to publish the leaderboard entry.
+        firebaseAuth.signInWithCredential( authCredential ).addOnSuccessListener( authResult -> {
+            // Get an initialized, configured Firestore instance.
+            FirebaseFirestore firebaseFirestore = getConfiguredFirestore( context );
+
+            // Get any existing leaderboard entry for the signed in user.
+            firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).get()
+                .addOnSuccessListener( ( DocumentSnapshot documentSnapshot ) -> {
+                    // Create the leaderboard entry if it does not exist.
+                    if( !documentSnapshot.exists() ) {
+                        putLeaderboardEntry(
+                            firebaseFirestore, googleSignInId, displayName, avatar,
+                            finalScore, totalRounds, totalTime, onPutScoreListener
+                        );
+                    // If it is greater than the final score the user just got, do nothing.
+                    } else if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
+                        onPutScoreListener.onPutScoreSucceeded();
                     // Otherwise, update the leaderboard.
-                } else updateLeaderboardEntry(
-                    firebaseFirestore, googleSignInId, finalScore,
-                        onPutScoreListener
-                );
-            } )
+                    } else updateLeaderboardEntry(
+                        firebaseFirestore, googleSignInId, finalScore, onPutScoreListener
+                    );
+                } )
 
-            // Notify the caller of unsuccessful score publication to the leaderboard.
-            .addOnFailureListener( onPutScoreListener::onPutScoreFailed );
+                // Notify the caller of unsuccessful score publication to the leaderboard.
+                .addOnFailureListener( onPutScoreListener::onPutScoreFailed );
+        } ).addOnFailureListener( onPutScoreListener::onPutScoreFailed );
     }
 
     private boolean existingScoreBeatsNewScore(

@@ -94,7 +94,7 @@ public class Game {
     public int getScore() { return score; }
     public int getRounds() { return rounds; }
     public long getRemainingTimeMillis() { return remainingTimeMillis; }
-    public long getTotalTimeMillis() { return  totalTimeMillis; }
+    public long getTotalTimeMillis() { return totalTimeMillis; }
 
     // Game can be paused by player or by app when interrupted.
     public void pause() { gameIsPaused = true; }
