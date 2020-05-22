@@ -28,6 +28,7 @@ import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
 import com.twilightcitizen.whackapede.utilities.LeaderboardEntry;
 import com.twilightcitizen.whackapede.utilities.LeaderboardUtility;
+import com.twilightcitizen.whackapede.utilities.TimeUtility;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -93,10 +94,10 @@ highest to lowest, using the action bar for back/up navigation.
                 R.plurals.rounds, leaderBoardEntry.getTotalRounds(), leaderBoardEntry.getTotalRounds()
             );
 
-            roundsInTime += String.format(
-                Locale.getDefault(), getString( R.string.in_time ),
-                Long.toString( leaderBoardEntry.getTotalTime() )
-            );
+            roundsInTime += String.format( Locale.getDefault(), getString( R.string.in_time ),
+                TimeUtility.getInstance().millisToMinutesAndSeconds(
+                    leaderBoardEntry.getTotalTime()
+            ) );
 
             holder.textRoundsInTime.setText( roundsInTime );
 

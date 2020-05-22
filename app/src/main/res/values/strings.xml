@@ -52,17 +52,17 @@ MDV469-O, C202005-01
 
     <plurals name="game_over_message">
         <item quantity="one">You scored %d point.</item>
-        <item quantity="other">You scored %d points.</item>
+        <item quantity="other">You scored %,d points.</item>
     </plurals>
 
     <plurals name="points">
         <item quantity="one">%d Point</item>
-        <item quantity="other">%d Points</item>
+        <item quantity="other">%,d Points</item>
     </plurals>
 
     <plurals name="rounds">
         <item quantity="one">%d Round</item>
-        <item quantity="other">%d Rounds</item>
+        <item quantity="other">%,d Rounds</item>
     </plurals>
 
     <string name="in_time">\ in %s</string>
