@@ -36,6 +36,12 @@ public class TimeUtility {
     // Convert milliseconds into a fractional interval of seconds.
     public Double millisToIntervalOfSeconds( long millis ) { return millis / 1000d; }
 
+    // Convert seconds to milliseconds.
+    public long secondsToMillis( int seconds ) { return seconds * 1000; }
+
+    // Convert milliseconds to whole seconds.
+    public int millisToSeconds( long millis ) { return (int) millis / 60; }
+
     // Mark current system time and return the elapsed time in milliseconds since last mark.
     public long getTimeElapsedMillis() {
         // No elapsed time can be tracked without a first mark.

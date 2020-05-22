@@ -81,6 +81,9 @@ public class Game {
     private long roundTimeMillis;
     private long remainingTimeMillis;
     private long totalTimeMillis;
+    private int pointsPerSegment;
+    private long timeMillisPerSegment;
+    private long pointsPerSecond;
 
     // New games start paused without game board or drawing tools initialized.
     public Game() {
@@ -120,9 +123,12 @@ public class Game {
         // Zero score and time remaining.
         this.score = 0;
         this.rounds = 1;
-        this.roundTimeMillis = 1000 * 60;
+        this.roundTimeMillis = TimeUtility.getInstance().secondsToMillis( 60 );
         this.remainingTimeMillis = roundTimeMillis;
         this.totalTimeMillis = 0;
+        this.pointsPerSegment = 100;
+        this.timeMillisPerSegment = TimeUtility.getInstance().secondsToMillis( 10 );
+        this.pointsPerSecond = 10;
 
         // Position game elements on the board.
         setupHoles();
@@ -491,10 +497,16 @@ public class Game {
     animate them over the interval, and then draw everything to canvas.
     */
     public void loop( Context context, Canvas canvas, long elapsedTimeMillis  ) {
-        checkForGameOver( elapsedTimeMillis );
-        checkForNextRound();
-        attackCentipedes();
-        animateCentipedes( elapsedTimeMillis );
+        if( !( gameIsPaused || gameIsOver ) ) {
+            totalTimeMillis += elapsedTimeMillis;
+            remainingTimeMillis -= elapsedTimeMillis;
+
+            checkForGameOver( elapsedTimeMillis );
+            checkForNextRound();
+            attackCentipedes();
+            animateCentipedes( elapsedTimeMillis );
+        }
+
         drawToCanvas( context, canvas );
     }
 
@@ -503,16 +515,13 @@ public class Game {
     board and reset the clock.
     */
     private void checkForNextRound() {
-        // Guard against starting next round when paused.
-        if( gameIsPaused ) return;
-
         // Guard against starting new round when centipedes exist.
         if( !centipedes.isEmpty() ) return;
 
+        // Add points for time remaining.
+        score += TimeUtility.getInstance().millisToSeconds( remainingTimeMillis ) * pointsPerSecond;
         // Increment rounds.
         rounds++;
-        // Add time used in the round to total time.
-        totalTimeMillis += roundTimeMillis - remainingTimeMillis;
         // Reset the clock.
         remainingTimeMillis = roundTimeMillis;
         // Set the next round's centipede starting speed.
@@ -527,16 +536,8 @@ public class Game {
     happen in the next sprint.
     */
     private void checkForGameOver( long elapsedTimeMillis ) {
-        // Guard against ticking clock and ending game when paused or already over.
-        if( gameIsPaused || gameIsOver ) return;
-
-        // Tick down the clock.
-        remainingTimeMillis -= elapsedTimeMillis;
-
         // Game is over if timer reaches zero.
         if( remainingTimeMillis <= 0 ) {
-            // Add time used in the round to total time.
-            totalTimeMillis += roundTimeMillis;
             // Prevent negative clock.
             remainingTimeMillis = 0;
             // Flag Game Over and pause it.
@@ -556,9 +557,6 @@ public class Game {
     points for the player for all successfully attacked segments.
     */
     private void attackCentipedes() {
-        // Keep players honest.  No pause cheats here.
-        if( gameIsPaused ) return;
-
         // Collect any segments killed, any heads to remove, and any new heads to add.
         ArrayList< Segment > segmentsKilled = new ArrayList<>();
         ArrayList< Segment > headsToRemove = new ArrayList<>();
@@ -639,14 +637,12 @@ public class Game {
         centipedes.addAll( headsToAdd );
 
         // Add points for each segment killed to the player's score.
-        score += segmentsKilled.size();
+        score += segmentsKilled.size() * pointsPerSegment;
+        remainingTimeMillis += segmentsKilled.size() * timeMillisPerSegment;
     }
 
     // Animate the centipedes over the elapsed time interval.
     private void animateCentipedes( long elapsedTimeMillis ) {
-        // Guard against animating centipedes when the game is paused.
-        if( gameIsPaused ) return;
-
         // Normalize the elapsed time as a fraction of 1 seconds.
         double interval = TimeUtility.getInstance().millisToIntervalOfSeconds( elapsedTimeMillis );
 

@@ -219,7 +219,7 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
 
     // Publish new score and time remaining to the scoreboard.  Called from the Game Thread.
     public void onGameStatsChanged() {
-        textScore.setText( String.format( Locale.getDefault(), "%d", game.getScore() ) );
+        textScore.setText( String.format( Locale.getDefault(), "%,d", game.getScore() ) );
         textClock.setText( TimeUtility.getInstance().millisToMinutesAndSeconds( game.getRemainingTimeMillis() ) );
     }
 

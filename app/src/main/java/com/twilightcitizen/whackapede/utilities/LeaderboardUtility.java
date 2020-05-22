@@ -10,8 +10,6 @@ package com.twilightcitizen.whackapede.utilities;
 import android.content.Context;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
@@ -37,6 +35,8 @@ public class LeaderboardUtility {
 
     // Leaderboard constants.
     private static final String FINAL_SCORE  = "finalScore";
+    private static final String TOTAL_ROUNDS = "totalRounds";
+    private static final String TOTAL_TIME   = "totalTime";
     private static final String LEADERBOARD  = "leaderboard";
 
     // Private constructor prevents instantiation.
@@ -118,7 +118,8 @@ public class LeaderboardUtility {
                         onPutScoreListener.onPutScoreSucceeded();
                     // Otherwise, update the leaderboard.
                     } else updateLeaderboardEntry(
-                        firebaseFirestore, googleSignInId, finalScore, onPutScoreListener
+                        firebaseFirestore, googleSignInId, finalScore, totalRounds,
+                        totalTime, onPutScoreListener
                     );
                 } )
 
@@ -155,11 +156,12 @@ public class LeaderboardUtility {
     }
 
     private void updateLeaderboardEntry(
-        FirebaseFirestore firebaseFirestore, String googleSignInId,
-        int finalScore, OnPutScoreListener onPutScoreListener
+        FirebaseFirestore firebaseFirestore, String googleSignInId, int finalScore,
+        int totalRounds, long totalTime, OnPutScoreListener onPutScoreListener
     ) {
         // Otherwise, update the leaderboard.
-        firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).update( FINAL_SCORE, finalScore )
+        firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId )
+            .update( FINAL_SCORE, finalScore, TOTAL_ROUNDS, totalRounds, TOTAL_TIME, totalTime )
             // Notify the caller of successful score publication to the leaderboard.
             .addOnSuccessListener( ( Void aVoid ) -> onPutScoreListener.onPutScoreSucceeded() )
             // Notify the caller of unsuccessful score publication to the leaderboard.
