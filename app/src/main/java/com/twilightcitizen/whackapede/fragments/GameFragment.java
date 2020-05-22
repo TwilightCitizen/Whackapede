@@ -65,8 +65,10 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
 
     // Google Account tag for passing authenticated account to Game Over Fragment.
     public static final String GOOGLE_SIGN_IN_ACCOUNT = "GOOGLE_SIGN_IN_ACCOUNT";
-    // Final Score tag for passing final score to Game Over Fragment.
+    // Tags for passing final score, rounds, and total time to Game Over Fragment.
     public static final String FINAL_SCORE = "FINAL_SCORE";
+    public static final String TOTAL_ROUNDS = "TOTAL_ROUNDS";
+    public static final String TOTAL_TIME = "TOTAL_TIME";
 
     // Setup with menu options on creation.
     @Override public void onCreate( @Nullable Bundle savedInstanceState ) {
@@ -230,6 +232,8 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
 
         gameOverBundle.putParcelable( GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount );
         gameOverBundle.putInt( FINAL_SCORE, game.getScore() );
+        gameOverBundle.putInt( TOTAL_ROUNDS, game.getRounds() );
+        gameOverBundle.putLong( TOTAL_TIME, game.getTotalTimeMillis() );
         navController.navigate( R.id.action_GameFragment_to_GameOverFragment, gameOverBundle );
     }
 }

@@ -77,8 +77,10 @@ public class Game {
 
     // Player score and time remaining.
     private int score;
+    private int rounds;
     private long roundTimeMillis;
     private long remainingTimeMillis;
+    private long totalTimeMillis;
 
     // New games start paused without game board or drawing tools initialized.
     public Game() {
@@ -90,7 +92,9 @@ public class Game {
 
     // Player score and time remaining are read-only.
     public int getScore() { return score; }
+    public int getRounds() { return rounds; }
     public long getRemainingTimeMillis() { return remainingTimeMillis; }
+    public long getTotalTimeMillis() { return  totalTimeMillis; }
 
     // Game can be paused by player or by app when interrupted.
     public void pause() { gameIsPaused = true; }
@@ -115,8 +119,10 @@ public class Game {
 
         // Zero score and time remaining.
         this.score = 0;
+        this.rounds = 1;
         this.roundTimeMillis = 1000 * 60;
         this.remainingTimeMillis = roundTimeMillis;
+        this.totalTimeMillis = 0;
 
         // Position game elements on the board.
         setupHoles();
@@ -503,7 +509,13 @@ public class Game {
         // Guard against starting new round when centipedes exist.
         if( !centipedes.isEmpty() ) return;
 
+        // Increment rounds.
+        rounds++;
+        // Add time used in the round to total time.
+        totalTimeMillis += roundTimeMillis - remainingTimeMillis;
+        // Reset the clock.
         remainingTimeMillis = roundTimeMillis;
+        // Set the next round's centipede starting speed.
         segmentSpeed *= segmentAcceleration;
         segmentSpeed = Math.min( segmentSpeed, segmentMaxSpeed );
 
@@ -523,6 +535,8 @@ public class Game {
 
         // Game is over if timer reaches zero.
         if( remainingTimeMillis <= 0 ) {
+            // Add time used in the round to total time.
+            totalTimeMillis += roundTimeMillis;
             // Prevent negative clock.
             remainingTimeMillis = 0;
             // Flag Game Over and pause it.

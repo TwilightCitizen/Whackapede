@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
+import com.twilightcitizen.whackapede.models.Game;
 import com.twilightcitizen.whackapede.utilities.LeaderboardUtility;
 
 import java.util.Locale;
@@ -36,15 +37,16 @@ navigation with a custom button in lieu of the action bar up button for aestheti
 Publication of scores to the leaderboard happens here, too.
 */
 @SuppressWarnings( "WeakerAccess" ) public class GameOverFragment extends Fragment
-    implements GameActivity.OnNavigateBackOrUp,
-        LeaderboardUtility.OnPutScoreSucceeded, LeaderboardUtility.OnPutScoreFailed {
+    implements GameActivity.OnNavigateBackOrUp, LeaderboardUtility.OnPutScoreListener {
 
     // Game Activity must host Game Over Fragment.
     private GameActivity gameActivity;
     // Player's authenticated Google account, if any.
     private GoogleSignInAccount googleSignInAccount;
-    // Player's final score
+    // Player's final score, total rounds, and total time.
     private int finalScore;
+    private int totalRounds;
+    private long totalTime;
     // Back button and text view for status of publishing score to leaderboard.
     private TextView textPublishing;
     private Button buttonBack;
@@ -78,6 +80,7 @@ Publication of scores to the leaderboard happens here, too.
         publishScoreToLeaderboard( view );
     }
 
+    // Publish the player's score to the leaderboard.
     private void publishScoreToLeaderboard( View view ) {
         textPublishing = view.findViewById( R.id.text_game_over_publish );
         buttonBack = view.findViewById( R.id.button_back );
@@ -92,16 +95,18 @@ Publication of scores to the leaderboard happens here, too.
 
         // Otherwise, attempt to publish final score to leaderboard.
         LeaderboardUtility.getInstance().publishScoreToLeaderboard(
-            gameActivity, googleSignInAccount, finalScore, this, this
+            gameActivity, googleSignInAccount, finalScore, totalRounds, totalTime, this
         );
     }
 
+    // Promote back/up navigation on successful score publication.
     @Override public void onPutScoreSucceeded() {
         buttonBack.setEnabled( true );
 
         textPublishing.setText( getString( R.string.game_over_published ) );
     }
 
+    // Promote back/up navigation on unsuccessful score publication.
     @Override public void onPutScoreFailed( Exception e ) {
         buttonBack.setEnabled( true );
 
@@ -117,14 +122,16 @@ Publication of scores to the leaderboard happens here, too.
 
         googleSignInAccount = getArguments().getParcelable( GameFragment.GOOGLE_SIGN_IN_ACCOUNT );
         finalScore = getArguments().getInt( GameFragment.FINAL_SCORE );
+        totalRounds = getArguments().getInt( GameFragment.TOTAL_ROUNDS );
+        totalTime = getArguments().getLong( GameFragment.TOTAL_TIME );
 
         TextView textGameOverPlayer = view.findViewById( R.id.text_game_over_player );
         TextView textGameOverMessage = view.findViewById( R.id.text_game_over_message );
         ImageView imageAvatar = view.findViewById( R.id.image_avatar );
 
-        textGameOverMessage.setText( String.format(
-            Locale.getDefault(), getString( R.string.game_over_message ), finalScore
-        ) );
+        textGameOverMessage.setText(
+            getResources().getQuantityString( R.plurals.game_over_message, finalScore, finalScore )
+        );
 
         if( googleSignInAccount == null ) {
             textGameOverPlayer.setText( String.format(
@@ -138,7 +145,8 @@ Publication of scores to the leaderboard happens here, too.
 
             Uri uriPlayerAvatar = googleSignInAccount.getPhotoUrl();
 
-            Glide.with( gameActivity ).load( uriPlayerAvatar ).placeholder( R.drawable.icon_guest_account ).into( imageAvatar );
+            Glide.with( gameActivity ).load( uriPlayerAvatar )
+                .placeholder( R.drawable.icon_guest_account ).into( imageAvatar );
         }
     }
 

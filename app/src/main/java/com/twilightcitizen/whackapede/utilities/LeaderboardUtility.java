@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.utilities;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApp;
@@ -44,13 +45,15 @@ public class LeaderboardUtility {
     }
 
     // Inter-class communication interfaces for handling Leaderboard events.
-    public interface OnGetLeadersSucceeded {
+    public interface OnGetLeadersListener {
         void onGetLeaderSucceeded( ArrayList< LeaderboardEntry > topLimitLeaders );
+        void onGetLeadersFailed( Exception e );
     }
 
-    public interface OnGetLeadersFailed { void onGetLeadersFailed( Exception e ); }
-    public interface OnPutScoreSucceeded { void onPutScoreSucceeded(); }
-    public interface OnPutScoreFailed { void onPutScoreFailed( Exception e ); }
+    public interface OnPutScoreListener {
+        void onPutScoreSucceeded();
+        void onPutScoreFailed( Exception e );
+    }
 
     private FirebaseFirestore getConfiguredFirestore( Context context ) {
         // Initialize Firebase.
@@ -69,15 +72,17 @@ public class LeaderboardUtility {
     }
 
     public void publishScoreToLeaderboard(
-        Context context, GoogleSignInAccount googleSignInAccount, int finalScore,
-        OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
+        Context context, GoogleSignInAccount googleSignInAccount,
+        int finalScore, int totalRounds, long totalTime, OnPutScoreListener onPutScoreListener
     ) {
         // Guard against publishing the score of a guest user.
         if( googleSignInAccount == null ) return;
 
         // Get the Google Sign In account ID.
         String googleSignInId = googleSignInAccount.getId();
-        String displayName    = googleSignInAccount.getDisplayName();
+        String displayName = googleSignInAccount.getDisplayName();
+        Uri photoUrl = googleSignInAccount.getPhotoUrl();
+        String avatar = photoUrl == null ? "" : photoUrl.toString();
 
         // Guard against no Google Sign In account ID.
         if( googleSignInId == null ) return;
@@ -92,21 +97,21 @@ public class LeaderboardUtility {
                 // Create the leaderboard entry if it does not exist.
                 if( !documentSnapshot.exists() ) {
                     putLeaderboardEntry(
-                        firebaseFirestore, googleSignInId, displayName, finalScore,
-                            onPutScoreSucceeded, onPutScoreFailed
+                        firebaseFirestore, googleSignInId, displayName, avatar,
+                        finalScore, totalRounds, totalTime, onPutScoreListener
                     );
                 // If it is greater than the final score the user just got, do nothing.
                 } else if( existingScoreBeatsNewScore( documentSnapshot, finalScore ) ){
-                    onPutScoreSucceeded.onPutScoreSucceeded();
+                    onPutScoreListener.onPutScoreSucceeded();
                     // Otherwise, update the leaderboard.
                 } else updateLeaderboardEntry(
                     firebaseFirestore, googleSignInId, finalScore,
-                        onPutScoreSucceeded, onPutScoreFailed
+                        onPutScoreListener
                 );
             } )
 
             // Notify the caller of unsuccessful score publication to the leaderboard.
-            .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
+            .addOnFailureListener( onPutScoreListener::onPutScoreFailed );
     }
 
     private boolean existingScoreBeatsNewScore(
@@ -119,35 +124,37 @@ public class LeaderboardUtility {
     }
 
     private void putLeaderboardEntry(
-        FirebaseFirestore firebaseFirestore, String googleSignInId, String displayName, int finalScore,
-        OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
+        FirebaseFirestore firebaseFirestore, String googleSignInId, String displayName,
+        String avatar, int finalScore, int totalRounds, long totalTime,
+        OnPutScoreListener onPutScoreListener
     ) {
         // Create a new entry for the leaderboard.
-        LeaderboardEntry echoLeaderBoardEntry = new LeaderboardEntry( displayName, finalScore );
+        LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
+            displayName, avatar, finalScore, totalRounds, totalTime
+        );
 
         // Write the new entry to the leaderboard.
-        firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).set( echoLeaderBoardEntry )
+        firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).set( leaderboardEntry )
         // Notify the caller of successful score publication to the leaderboard.
-        .addOnSuccessListener( ( Void aVoid ) -> onPutScoreSucceeded.onPutScoreSucceeded() )
+        .addOnSuccessListener( ( Void aVoid ) -> onPutScoreListener.onPutScoreSucceeded() )
         // Notify the caller of unsuccessful score publication to the leaderboard.
-        .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
+        .addOnFailureListener( onPutScoreListener::onPutScoreFailed );
     }
 
     private void updateLeaderboardEntry(
-        FirebaseFirestore firebaseFirestore, String googleSignInId, int finalScore,
-        OnPutScoreSucceeded onPutScoreSucceeded, OnPutScoreFailed onPutScoreFailed
+        FirebaseFirestore firebaseFirestore, String googleSignInId,
+        int finalScore, OnPutScoreListener onPutScoreListener
     ) {
         // Otherwise, update the leaderboard.
         firebaseFirestore.collection( LEADERBOARD ).document( googleSignInId ).update( FINAL_SCORE, finalScore )
             // Notify the caller of successful score publication to the leaderboard.
-            .addOnSuccessListener( ( Void aVoid ) -> onPutScoreSucceeded.onPutScoreSucceeded() )
+            .addOnSuccessListener( ( Void aVoid ) -> onPutScoreListener.onPutScoreSucceeded() )
             // Notify the caller of unsuccessful score publication to the leaderboard.
-            .addOnFailureListener( onPutScoreFailed::onPutScoreFailed );
+            .addOnFailureListener( onPutScoreListener::onPutScoreFailed );
     }
 
     @SuppressWarnings( "SameParameterValue" ) public void getTopLimitLeaders(
-        Context context, int limit,
-        OnGetLeadersSucceeded onGetLeadersSucceeded, OnGetLeadersFailed onGetLeadersFailed
+        Context context, int limit, OnGetLeadersListener onGetLeadersListener
     ) {
         // Top limit leaders on the leaderboard, if any.
         ArrayList< LeaderboardEntry > topLimitLeaders = new ArrayList<>();
@@ -167,12 +174,12 @@ public class LeaderboardUtility {
                 }
 
                 // Notify the caller that the top limit leaders were retrieved.
-                onGetLeadersSucceeded.onGetLeaderSucceeded( topLimitLeaders );
+                onGetLeadersListener.onGetLeaderSucceeded( topLimitLeaders );
             } )
 
             // Notify the caller that the top limit leaders could not be retrieved.
             // This almost certainly will never get called.  Instead, the success listener
             // will provide an empty query.
-            .addOnFailureListener( onGetLeadersFailed::onGetLeadersFailed );
+            .addOnFailureListener( onGetLeadersListener::onGetLeadersFailed );
     }
 }
