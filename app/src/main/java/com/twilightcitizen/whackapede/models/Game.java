@@ -117,7 +117,7 @@ public class Game {
         this.cellSize = (int) ( canvasWidth * cellWidthPercent );
         this.segmentSpeed = cellSize * 5;
         this.segmentMaxSpeed = cellSize * 30;
-        this.segmentAcceleration = 1.03125;
+        this.segmentAcceleration = 0.03125;
 
 
         // Zero score and time remaining.
@@ -525,7 +525,7 @@ public class Game {
         // Reset the clock.
         remainingTimeMillis = roundTimeMillis;
         // Set the next round's centipede starting speed.
-        segmentSpeed *= segmentAcceleration;
+        segmentSpeed += segmentSpeed * segmentAcceleration;
         segmentSpeed = Math.min( segmentSpeed, segmentMaxSpeed );
 
         setupCentipede();
@@ -591,36 +591,28 @@ public class Game {
         // Clear out the touch events so already touched spots don't become centipede auto-killers.
         touchEvents.clear();
 
-        // Figure out the new speed for all segments.
-        int newSpeed = segmentSpeed + (int) (
-            ( segmentSpeed * segmentAcceleration - segmentSpeed ) * segmentsKilled.size() );
-
-        // Speed up all the centipede segments.  The more segments killed, the faster.
-        for( Segment centipede : centipedes ) {
-            Segment segment = centipede;
-
-            while( segment != null ) {
-                segment.setSpeed( Math.min( newSpeed, segmentMaxSpeed ) );
-
-                segment = segment.getTail();
-            }
-        }
-
         /*
-        Remove heads and tails that were touched.  If an inner segment was touched, remove it
-        and split the centipede into two smaller ones.
-
-        TODO - Look into shattering centipedes into all heads if a head or tail is touched.
+        Remove segments that were touched.  If an inner segment was touched, remove it
+        and split the centipede into two smaller ones.  If the head was touched, remove it and
+        shatter the remaining centipede into all heads.
         */
         for( Segment segment : segmentsKilled ) {
             if( segment.getIsHead() ) {
-                if( segment.getTail() != null ) {
-                    headsToAdd.add( segment.getTail() );
-                    segment.getTail().removeHead();
-                    segment.removeTail();
-                }
+                Segment tail = segment.getTail();
 
+                segment.removeTail();
                 headsToRemove.add( segment );
+
+                while( tail != null ) {
+                    headsToAdd.add( tail );
+                    tail.removeHead();
+
+                    Segment newTail = tail.getTail();
+
+                    tail.removeTail();
+
+                    tail = newTail;
+                }
             } else if ( segment.getIsTail() ) {
                 segment.getHead().removeTail();
                 segment.removeHead();
@@ -639,6 +631,22 @@ public class Game {
         // Add points for each segment killed to the player's score.
         score += segmentsKilled.size() * pointsPerSegment;
         remainingTimeMillis += segmentsKilled.size() * timeMillisPerSegment;
+
+        // Figure out the new speed for all segments.
+        int newSpeed = segmentSpeed + (int) (
+            segmentSpeed * segmentAcceleration * segmentsKilled.size()
+        );
+
+        // Speed up all the centipede segments.  The more segments killed, the faster.
+        for( Segment centipede : centipedes ) {
+            Segment segment = centipede;
+
+            while( segment != null ) {
+                segment.setSpeed( Math.min( newSpeed, segmentMaxSpeed ) );
+
+                segment = segment.getTail();
+            }
+        }
     }
 
     // Animate the centipedes over the elapsed time interval.
