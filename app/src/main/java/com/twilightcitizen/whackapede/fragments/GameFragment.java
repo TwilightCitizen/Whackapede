@@ -131,7 +131,9 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
         ImageView imageAvatar = view.findViewById( R.id.image_avatar );
 
         textPlayer.setText( playerDisplayName );
-        Glide.with( gameActivity ).load( uriPlayerAvatar ).placeholder( R.drawable.icon_guest_account ).into( imageAvatar );
+
+        Glide.with( gameActivity ).load( uriPlayerAvatar )
+            .placeholder( R.drawable.icon_guest_account ).into( imageAvatar );
     }
 
     /*
@@ -141,7 +143,7 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     private void setupGameArena( View view ) {
         frameGame = view.findViewById( R.id.frame_game );
         game = new Game();
-        gameSurfaceView = new GameSurfaceView( gameActivity, this, null, game );
+        gameSurfaceView = new GameSurfaceView( this, null, game );
 
         frameGame.addView( gameSurfaceView );
     }
@@ -169,7 +171,7 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     */
     private void restoreGameToArena() {
         frameGame.removeAllViews();
-        gameSurfaceView = new GameSurfaceView( gameActivity, this, null, game );
+        gameSurfaceView = new GameSurfaceView( this, null, game );
 
         frameGame.addView( gameSurfaceView );
     }
@@ -220,7 +222,10 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     // Publish new score and time remaining to the scoreboard.  Called from the Game Thread.
     public void onGameStatsChanged() {
         textScore.setText( String.format( Locale.getDefault(), "%,d", game.getScore() ) );
-        textClock.setText( TimeUtility.getInstance().millisToMinutesAndSeconds( game.getRemainingTimeMillis() ) );
+
+        textClock.setText( TimeUtility.getInstance().millisToMinutesAndSeconds(
+            game.getRemainingTimeMillis()
+        ) );
     }
 
     // Handle Game Over, passing Google Account and Final Score to Game Over Fragment.

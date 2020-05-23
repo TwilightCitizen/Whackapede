@@ -24,36 +24,36 @@ Game Surface View is the custom SurfaceView to which the Game's arena is drawn f
 It maintains an instance of the Game it displays to publish touch events to it, and a Game Thread to
 control the Game and and its drawing in the background so the UI thread remains unencumbered.
 */
-@SuppressLint( "ViewConstructor" ) public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+@SuppressLint( "ViewConstructor" ) public class GameSurfaceView extends SurfaceView
+    implements SurfaceHolder.Callback {
+
     // Game Thread to control and draw game.
     private final GameThread gameThread;
     // Game being controlled and drawn.
     private final Game game;
 
     // Get a holder to the SurfaceView for drawing, passing it and the Game to be drawn to a new Game Thread.
-    public GameSurfaceView( GameActivity gameActivity, GameFragment gameFragment, AttributeSet attrs, Game game ) {
-        super( gameActivity, attrs );
+    public GameSurfaceView(
+        GameFragment gameFragment, AttributeSet attrs, Game game
+    ) {
+        super( gameFragment.getActivity(), attrs );
 
         SurfaceHolder surfaceHolder = getHolder();
 
         surfaceHolder.addCallback( this );
 
         this.game = game;
-        gameThread = new GameThread( surfaceHolder, gameActivity, gameFragment, game );
+        gameThread = new GameThread( surfaceHolder, gameFragment, game );
     }
 
     // Start the Game Thread when the drawing surface is created and ready for drawing.
-    @Override public void surfaceCreated( SurfaceHolder holder ) {
-        gameThread.start();
-    }
+    @Override public void surfaceCreated( SurfaceHolder holder ) { gameThread.start(); }
 
     @Override public void surfaceChanged( SurfaceHolder holder, int format, int width, int height ) {}
 
     // Stop the Game Thread when the drawing surface is no longer available.
-    @Override public void surfaceDestroyed( SurfaceHolder holder ) {
-        gameThread.end();
-        gameThread.interrupt();
-    }
+    @Override public void surfaceDestroyed( SurfaceHolder holder ) { gameThread.end(); }
+    // gameThread.interrupt();
 
     /*
     Obtain touch events, translating their location from window/screen-based to surface-based coordinates,

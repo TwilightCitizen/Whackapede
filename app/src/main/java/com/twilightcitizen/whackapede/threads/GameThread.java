@@ -33,11 +33,11 @@ public class GameThread extends Thread  {
 
     // Maintain all the above instances and flag the Game Thread as running.
     public GameThread(
-        SurfaceHolder surfaceHolder, GameActivity gameActivity, GameFragment gameFragment, Game game
+        SurfaceHolder surfaceHolder, GameFragment gameFragment, Game game
     ) {
         isRunning = true;
         this.surfaceHolder = surfaceHolder;
-        this.gameActivity = gameActivity;
+        this.gameActivity = (GameActivity ) gameFragment.getActivity();
         this.game = game;
         this.gameFragment = gameFragment;
     }

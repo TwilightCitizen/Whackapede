@@ -23,6 +23,7 @@ import java.util.Random;
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.gameElements.Direction;
 import com.twilightcitizen.whackapede.gameElements.Position;
+import com.twilightcitizen.whackapede.utilities.SoundUtility;
 import com.twilightcitizen.whackapede.utilities.TimeUtility;
 
 /*
@@ -528,6 +529,8 @@ public class Game {
         segmentSpeed += segmentSpeed * segmentAcceleration;
         segmentSpeed = Math.min( segmentSpeed, segmentMaxSpeed );
 
+        // Setup a new centipede and play an appropriate sound.
+        SoundUtility.getInstance().playNewRound();
         setupCentipede();
     }
 
@@ -543,6 +546,9 @@ public class Game {
             // Flag Game Over and pause it.
             gameIsOver = true;
             gameIsPaused = true;
+
+            // Play an appropriate sound.
+            SoundUtility.getInstance().playGameOver();
         }
     }
 
@@ -587,9 +593,6 @@ public class Game {
                 }
             }
         }
-
-        // Clear out the touch events so already touched spots don't become centipede auto-killers.
-        touchEvents.clear();
 
         /*
         Remove segments that were touched.  If an inner segment was touched, remove it
@@ -647,6 +650,17 @@ public class Game {
                 segment = segment.getTail();
             }
         }
+
+        // Play an appropriate sound.
+        if( !touchEvents.isEmpty() ) {
+            if( segmentsKilled.isEmpty() )
+                SoundUtility.getInstance().playMiss();
+            else
+                SoundUtility.getInstance().playHit();
+        }
+
+        // Clear out  touch events so touched spots don't become centipede auto-killers.
+        touchEvents.clear();
     }
 
     // Animate the centipedes over the elapsed time interval.

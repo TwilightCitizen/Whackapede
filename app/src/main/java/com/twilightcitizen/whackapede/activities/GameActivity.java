@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.activities;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -32,11 +33,12 @@ public class GameActivity extends AppCompatActivity {
         @SuppressWarnings( "SameReturnValue" ) boolean onNavigateBackOrUp();
     }
 
-    // Setup content and toolbar on creation.
+    // Setup content, toolbar, and volume control on creation.
     @Override protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_game );
         setupToolbar();
+        setVolumeControlStream( AudioManager.STREAM_MUSIC );
     }
 
     // Setup the toolbar as an action bar.
