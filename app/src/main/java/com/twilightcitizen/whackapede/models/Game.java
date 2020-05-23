@@ -101,8 +101,18 @@ public class Game {
     public long getTotalTimeMillis() { return totalTimeMillis; }
 
     // Game can be paused by player or by app when interrupted.
-    public void pause() { gameIsPaused = true; }
-    public void toggleState() { gameIsPaused = !gameIsPaused; }
+    public void pause() {
+        touchEvents.clear();
+
+        gameIsPaused = true;
+    }
+
+    public void toggleState() {
+        touchEvents.clear();
+
+        gameIsPaused = !gameIsPaused;
+    }
+
     public boolean getIsPaused() { return gameIsPaused; }
     public boolean getIsOver() { return  gameIsOver; }
 
@@ -124,7 +134,7 @@ public class Game {
         // Zero score and time remaining.
         this.score = 0;
         this.rounds = 1;
-        this.roundTimeMillis = TimeUtility.getInstance().secondsToMillis( 60 );
+        this.roundTimeMillis = TimeUtility.getInstance().secondsToMillis( 10 );
         this.remainingTimeMillis = roundTimeMillis;
         this.totalTimeMillis = 0;
         this.pointsPerSegment = 100;
