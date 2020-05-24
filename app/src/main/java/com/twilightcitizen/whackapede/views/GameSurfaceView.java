@@ -14,7 +14,6 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
 
-import com.twilightcitizen.whackapede.activities.GameActivity;
 import com.twilightcitizen.whackapede.fragments.GameFragment;
 import com.twilightcitizen.whackapede.models.Game;
 import com.twilightcitizen.whackapede.threads.GameThread;

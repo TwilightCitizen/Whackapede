@@ -518,7 +518,7 @@ public class Game {
             totalTimeMillis += elapsedTimeMillis;
             remainingTimeMillis -= elapsedTimeMillis;
 
-            checkForGameOver( elapsedTimeMillis );
+            checkForGameOver();
             checkForNextRound();
             attackCentipedes();
             animateCentipedes( elapsedTimeMillis );
@@ -554,7 +554,7 @@ public class Game {
     Check for time remaining.  If there is none, pause the game, zero the clock, and more will
     happen in the next sprint.
     */
-    private void checkForGameOver( long elapsedTimeMillis ) {
+    private void checkForGameOver() {
         // Game is over if timer reaches zero.
         if( remainingTimeMillis <= 0 ) {
             // Prevent negative clock.

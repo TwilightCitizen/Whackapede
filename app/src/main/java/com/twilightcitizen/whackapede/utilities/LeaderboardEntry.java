@@ -7,8 +7,6 @@ MDV469-O, C202005-01
 
 package com.twilightcitizen.whackapede.utilities;
 
-import android.net.Uri;
-
 /*
 Leaderboard Entry encapsulates the data for an entry on the Firebase Cloud Firestore
 leaderboard more conveniently that Maps or Dictionaries of values.

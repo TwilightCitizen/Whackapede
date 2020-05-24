@@ -17,15 +17,15 @@ MDV469-O, C202005-01
 
     <ImageView
         android:id="@+id/image_logo"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginTop="64dp"
         android:contentDescription="@string/whack_a_pede_logo"
-        android:src="@drawable/logo_whack_a_pede"
+        android:src="@drawable/logo_no_label"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintDimensionRatio="1:1" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/image_avatar"

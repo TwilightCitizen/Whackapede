@@ -32,6 +32,8 @@ Whack-A-Pede is a quasi mash-up of the Atari arcade classic, Centipede, and Whac
 
 - Nexus 5 Emulator, Android 5.0 through 10.0 (API 21 through 29).
 
+- Nexus 9 and Pixel C Emulator, Android 7.0 (API 27).
+
 - Pixel 3 Hardware, Android 10.0 (API 29).
 
 

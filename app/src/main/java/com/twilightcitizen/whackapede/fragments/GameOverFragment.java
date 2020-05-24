@@ -26,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
-import com.twilightcitizen.whackapede.models.Game;
 import com.twilightcitizen.whackapede.utilities.LeaderboardUtility;
 
 import java.util.Locale;
