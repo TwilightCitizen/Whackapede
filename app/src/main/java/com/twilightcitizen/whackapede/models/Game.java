@@ -102,15 +102,21 @@ public class Game {
 
     // Game can be paused by player or by app when interrupted.
     public void pause() {
-        touchEvents.clear();
-
         gameIsPaused = true;
+
+        touchEvents.clear();
+        SoundUtility.getInstance().pauseMusic();
     }
 
     public void toggleState() {
+        gameIsPaused = !gameIsPaused;
+
         touchEvents.clear();
 
-        gameIsPaused = !gameIsPaused;
+        if( gameIsPaused )
+            SoundUtility.getInstance().pauseMusic();
+        else
+            SoundUtility.getInstance().playResumeMusic();
     }
 
     public boolean getIsPaused() { return gameIsPaused; }
@@ -559,6 +565,7 @@ public class Game {
 
             // Play an appropriate sound.
             SoundUtility.getInstance().playGameOver();
+            SoundUtility.getInstance().stopMusic();
         }
     }
 

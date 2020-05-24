@@ -34,6 +34,7 @@ import java.util.Locale;
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
 import com.twilightcitizen.whackapede.models.Game;
+import com.twilightcitizen.whackapede.utilities.SoundUtility;
 import com.twilightcitizen.whackapede.utilities.TimeUtility;
 import com.twilightcitizen.whackapede.views.GameSurfaceView;
 
@@ -189,6 +190,7 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
             NavController navController = NavHostFragment.findNavController( GameFragment.this );
 
             navController.navigate( R.id.action_GameFragment_to_LandingFragment );
+            SoundUtility.getInstance().stopMusic();
 
             return false;
         }
