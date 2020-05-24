@@ -23,7 +23,7 @@ MDV469-O, C202005-01
 
     <string name="back">Back</string>
 
-    <string name="contributors" tools:ignore="Typos">Credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits credits</string>
+    <string name="contributors">Whack-A-Pede game design and graphics by David Clark.\n\nMusic by Eric Matyas at www.soundimage.org.\n\nSound effects courtesy of ZapSplat at www.zapsplat.com.\n\nFor my niece and nephew, Mara and Alex.\n\nCopyright © 2020 David Clark.</string>
 
     <string name="volume">Volume</string>
 
