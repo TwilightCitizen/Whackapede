@@ -63,12 +63,10 @@ public class Game {
     private Canvas canvasLayerBelow;
 
     // Key dimensions for size and placement of game elements on screen.
-    private float cellSize;
-    private int canvasWidth;
-    private int canvasHeight;
-    private float segmentSpeed;
-    private float segmentMaxSpeed;
-    private float segmentAcceleration;
+    private int cellSize;
+    private int segmentSpeed;
+    private int segmentMaxSpeed;
+    private double segmentAcceleration;
 
     // Collections of game elements.
     private final ArrayList< Segment > centipedes = new ArrayList<>();
@@ -92,9 +90,8 @@ public class Game {
     public Game() {
         gameIsPaused = true;
         gameIsOver = false;
-        canvasWidth = 0;
-        canvasHeight = 0;
         boardIsInitialized = false;
+        drawingToolsAreInitialized = false;
     }
 
     // Player score and time remaining are read-only.
@@ -126,26 +123,21 @@ public class Game {
     public boolean getIsOver() { return  gameIsOver; }
 
     // Initialize the game board.
-    public void initializeBoard( Canvas canvas ) {
+    public void initializeBoard( int canvasWidth ) {
         // Guard against unnecessary initialization.
-        if( boardIsInitialized &&
-            canvas.getWidth() == canvasWidth &&
-            canvas.getHeight() == canvasHeight ) return;
-
-        // Hold the canvas width and height.
-        this.canvasWidth = canvas.getWidth();
-        this.canvasHeight = canvas.getHeight();
+        if( boardIsInitialized ) return;
 
         // Cell width percentage is 1/15th of the screen width.  Screen ratio is assumed to be 15:23.
-        this.cellSize = 1 / 15f;
+        double cellWidthPercent = 1 / 15d;
 
         // Establish key dimensions based on cell width.
-        //this.cellSize = (int) ( canvasWidth * cellWidthPercent );
+        this.cellSize = (int) ( canvasWidth * cellWidthPercent );
         this.segmentSpeed = cellSize * 5;
-        this.segmentMaxSpeed = cellSize * 10;
-        this.segmentAcceleration = 0.03125f;
+        this.segmentMaxSpeed = cellSize * 30;
+        this.segmentAcceleration = 0.03125;
 
-        // Zero scoring and time remaining.
+
+        // Zero score and time remaining.
         this.score = 0;
         this.rounds = 1;
         this.roundTimeMillis = TimeUtility.getInstance().secondsToMillis( 10 );
@@ -342,26 +334,23 @@ public class Game {
     // Initialize paint, bitmaps, and canvases used in drawing routines.
     private void initializeDrawingTools( Context context, Canvas canvas ) {
         // Guard against unnecessary initialization.
-        if( drawingToolsAreInitialized &&
-            canvas.getWidth() == canvasWidth &&
-            canvas.getHeight() == canvasHeight ) return;
+        if( drawingToolsAreInitialized ) return;
 
         paintLayer = new Paint();
 
-        initializeEarthLayer( context );
-        initializeGrassLayer( context );
-        initializeAboveLayer( context );
-        initializeBelowLayer( context );
+        initializeEarthLayer( context, canvas );
+        initializeGrassLayer( context, canvas );
+        initializeAboveLayer( context, canvas );
+        initializeBelowLayer( context, canvas );
 
         // Flag drawing tools as initialized.
-        canvasWidth = canvas.getWidth();
-        canvasHeight = canvas.getHeight();
+        drawingToolsAreInitialized = true;
     }
 
     // Initialize bitmap used in drawing the earth layer.
-    private void initializeEarthLayer( Context context) {
+    private void initializeEarthLayer( Context context, Canvas canvas ) {
         Drawable drawableEarth = ContextCompat.getDrawable( context, R.drawable.layer_earth );
-        bitmapEarth = Bitmap.createBitmap( canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888 );
+        bitmapEarth = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasEarth = new Canvas( bitmapEarth );
 
         assert drawableEarth != null;
@@ -371,9 +360,9 @@ public class Game {
     }
 
     // Initialize bitmap used in drawing the grass layer.
-    private void initializeGrassLayer( Context context ) {
+    private void initializeGrassLayer( Context context, Canvas canvas ) {
         Drawable drawableGrass = ContextCompat.getDrawable( context, R.drawable.layer_grass );
-        bitmapGrass = Bitmap.createBitmap( canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888 );
+        bitmapGrass = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         Canvas canvasGrass = new Canvas( bitmapGrass );
 
         assert drawableGrass != null;
@@ -385,24 +374,20 @@ public class Game {
     // Initialize bitmap used in drawing a segment.
     private Bitmap initializeSegment( Context context, int drawableSegmentId ) {
         Drawable drawableSegment = ContextCompat.getDrawable( context, drawableSegmentId );
-
-        Bitmap bitmapSegment = Bitmap.createBitmap(
-            (int) ( cellSize * canvasWidth ), (int) ( cellSize * canvasWidth ), Bitmap.Config.ARGB_8888
-        );
-
+        Bitmap bitmapSegment = Bitmap.createBitmap( cellSize, cellSize, Bitmap.Config.ARGB_8888 );
         Canvas canvasSegment = new Canvas( bitmapSegment );
-
+        
         assert drawableSegment != null;
         
-        drawableSegment.setBounds( 0, 0, (int) ( cellSize * canvasWidth ), (int) ( cellSize * canvasWidth ) );
+        drawableSegment.setBounds( 0, 0, cellSize, cellSize );
         drawableSegment.draw( canvasSegment );
 
         return bitmapSegment;
     }
 
     // Initialize bitmaps used in drawing the above layer.
-    private void initializeAboveLayer( Context context ) {
-        bitmapLayerAbove = Bitmap.createBitmap( canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888 );
+    private void initializeAboveLayer( Context context, Canvas canvas ) {
+        bitmapLayerAbove = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         canvasLayerAbove = new Canvas( bitmapLayerAbove );
 
         bitmapAboveTail = initializeSegment( context, R.drawable.tail_above );
@@ -413,8 +398,8 @@ public class Game {
     }
 
     // Initialize bitmaps used in drawing the below layer.
-    private void initializeBelowLayer( Context context ) {
-        bitmapLayerBelow = Bitmap.createBitmap( canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888 );
+    private void initializeBelowLayer( Context context, Canvas canvas ) {
+        bitmapLayerBelow = Bitmap.createBitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888 );
         canvasLayerBelow = new Canvas( bitmapLayerBelow );
 
         bitmapBelowTail = initializeSegment( context, R.drawable.tail_below );
@@ -432,33 +417,38 @@ public class Game {
             Segment segment = centipede;
 
             while( segment != null ) {
-                float segmentX = canvasWidth * segment.getPosition().getX();
-                float segmentY = canvasWidth * segment.getPosition().getY();
-
                 if( segment.getIsAbove() ) {
-                    canvasLayerAbove.drawBitmap( bitmapAboveTail, segmentX, segmentY, paintLayer );
+                    canvasLayerAbove.drawBitmap(
+                        bitmapAboveTail, segment.getPosition().getX(),
+                        segment.getPosition().getY(), paintLayer
+                    );
 
                     if( segment.getIsHead() ) {
                         if( segment.getDirection() == Direction.up ) {
                             canvasLayerAbove.drawBitmap(
-                                bitmapAboveHeadUp, segmentX, segmentY, paintLayer
+                                bitmapAboveHeadUp, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.down ) {
                             canvasLayerAbove.drawBitmap(
-                                bitmapAboveHeadDown, segmentX, segmentY, paintLayer
+                                bitmapAboveHeadDown, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.left ) {
                             canvasLayerAbove.drawBitmap(
-                                bitmapAboveHeadLeft, segmentX, segmentY, paintLayer
+                                bitmapAboveHeadLeft, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.right ) {
                             canvasLayerAbove.drawBitmap(
-                                bitmapAboveHeadRight, segmentX, segmentY, paintLayer
+                                bitmapAboveHeadRight, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         }
                     } else {
                         canvasLayerAbove.drawBitmap(
-                            bitmapAboveTail, segmentX, segmentY, paintLayer
+                            bitmapAboveTail, segment.getPosition().getX(),
+                            segment.getPosition().getY(), paintLayer
                         );
                     }
                 }
@@ -478,35 +468,38 @@ public class Game {
             Segment segment = centipede;
 
             while( segment != null ) {
-                float segmentX = canvasWidth * segment.getPosition().getX();
-                float segmentY = canvasWidth * segment.getPosition().getY();
-
                 if( segment.getIsBelow() ) {
                     canvasLayerBelow.drawBitmap(
-                        bitmapBelowTail, segmentX, segmentY, paintLayer
+                        bitmapBelowTail, segment.getPosition().getX(),
+                        segment.getPosition().getY(), paintLayer
                     );
 
                     if( segment.getIsHead() ) {
                         if( segment.getDirection() == Direction.up ) {
                             canvasLayerBelow.drawBitmap(
-                                bitmapBelowHeadUp, segmentX, segmentY, paintLayer
+                                bitmapBelowHeadUp, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.down ) {
                             canvasLayerBelow.drawBitmap(
-                                bitmapBelowHeadDown, segmentX, segmentY, paintLayer
+                                bitmapBelowHeadDown, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.left ) {
                             canvasLayerBelow.drawBitmap(
-                                bitmapBelowHeadLeft, segmentX, segmentY, paintLayer
+                                bitmapBelowHeadLeft, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         } else if( segment.getDirection() == Direction.right ) {
                             canvasLayerBelow.drawBitmap(
-                                bitmapBelowHeadRight, segmentX, segmentY, paintLayer
+                                bitmapBelowHeadRight, segment.getPosition().getX(),
+                                segment.getPosition().getY(), paintLayer
                             );
                         }
                     } else {
                         canvasLayerBelow.drawBitmap(
-                            bitmapBelowTail, segmentX, segmentY, paintLayer
+                            bitmapBelowTail, segment.getPosition().getX(),
+                            segment.getPosition().getY(), paintLayer
                         );
                     }
                 }
@@ -599,12 +592,12 @@ public class Game {
 
                 while( segment != null ) {
                     boolean touchOnSegmentX =
-                        touchEvent.getX() <= canvasWidth * segment.getPosition().getX() + canvasWidth * cellSize &&
-                        touchEvent.getX() >= canvasWidth * segment.getPosition().getX();
+                        touchEvent.getX() <= segment.getPosition().getX() + cellSize &&
+                        touchEvent.getX() >= segment.getPosition().getX();
 
                     boolean touchOnSegmentY =
-                        touchEvent.getY() <= canvasWidth * segment.getPosition().getY() + canvasWidth * cellSize &&
-                        touchEvent.getY() >= canvasWidth * segment.getPosition().getY();
+                        touchEvent.getY() <= segment.getPosition().getY() + cellSize &&
+                        touchEvent.getY() >= segment.getPosition().getY();
 
                     // Touched segment falls on both axes of touch as is above ground.
                     boolean touchOnSegment =
@@ -660,7 +653,7 @@ public class Game {
         remainingTimeMillis += segmentsKilled.size() * timeMillisPerSegment;
 
         // Figure out the new speed for all segments.
-        float newSpeed = segmentSpeed + (
+        int newSpeed = segmentSpeed + (int) (
             segmentSpeed * segmentAcceleration * segmentsKilled.size()
         );
 
@@ -695,7 +688,7 @@ public class Game {
         // Animate each segment of each centipede for the interval through holes and around turns.
         for( Segment centipede : centipedes ) {
             // Change in position is centipede speed of traversal by time traversed.
-            float change = (float) ( centipede.getSpeed() * interval );
+            int change = (int) ( centipede.getSpeed() * interval );
 
             Segment segment = centipede;
             
@@ -761,7 +754,7 @@ public class Game {
             correct it.  As before, heads lead; tails follow.
             */
             if( segment.getIsHead() ) {
-                float travelAfterTurn = 0;
+                int travelAfterTurn = 0;
 
                 // Depending on the segment's heading, calculate its total travel past the turn.
                 if( turn.wasPassedTopToBottom( segment, nextPosition ) ) {
