@@ -29,7 +29,7 @@ class Segment extends MovingGameElement {
     private Turn turnReached;
     private Exit exitTaken;
 
-    Segment( Position position, int speed, Direction direction ) {
+    Segment( Position position, float speed, Direction direction ) {
         super( position, speed, direction );
     }
 
@@ -57,7 +57,7 @@ class Segment extends MovingGameElement {
     Exit getExitTaken() { return exitTaken; }
 
     // Add a tail Segment, placed adjacent to the Segment.
-    private Segment addTailLeft( int cellSize, int sideX, int sideY ) {
+    private Segment addTailLeft( float cellSize, int sideX, int sideY ) {
         Segment tail = new Segment(
             new Position(
                 super.getPosition().getX() + cellSize * sideX,
@@ -75,7 +75,7 @@ class Segment extends MovingGameElement {
     }
 
     // Add X number of tail Segments adjacent to the Segment, each one the next tail of the last.
-    void addTails( int tails, int cellSize, int sideX, int sideY ) {
+    void addTails( int tails, float cellSize, int sideX, int sideY ) {
         Segment tail = this;
 
         while( tails > 0 ) {

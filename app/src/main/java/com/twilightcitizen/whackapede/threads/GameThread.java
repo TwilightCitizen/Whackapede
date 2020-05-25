@@ -54,7 +54,7 @@ public class GameThread extends Thread  {
         Canvas canvas = surfaceHolder.lockCanvas();
 
         // Initialize the Game's visual elements for drawing to this specific canvas size.
-        game.initializeBoard( canvas.getWidth() );
+        game.initializeBoard( canvas );
         surfaceHolder.unlockCanvasAndPost( canvas );
 
         // Go until the thread is stopped.
