@@ -59,6 +59,10 @@ MDV469-O, C202005-01
         tools:layout="@layout/fragment_game">
 
         <action
+            android:id="@+id/action_GameFragment_to_SettingsFragment"
+            app:destination="@id/SettingsFragment" />
+
+        <action
             android:id="@+id/action_GameFragment_to_GameOverFragment"
             app:destination="@id/GameOverFragment" />
 

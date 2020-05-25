@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 -->
 
 <menu
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -15,5 +16,13 @@ MDV469-O, C202005-01
         android:id="@+id/action_play_pause"
         android:title="@string/play"
         android:icon="@drawable/icon_play"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        android:icon="@drawable/icon_settings"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 </menu>

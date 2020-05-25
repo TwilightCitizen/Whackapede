@@ -15,13 +15,14 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
+import com.twilightcitizen.whackapede.utilities.SoundUtility;
 
 /*
 Settings Fragment provides a standardized Android settings screen for user configuration of app
 settings.
 */
 @SuppressWarnings( "WeakerAccess" ) public class SettingsFragment extends PreferenceFragmentCompat {
-    // Game Activity must host Settings Fragment.
+    // Game Activity can host Settings Fragment.
     private GameActivity gameActivity;
 
     // Check the host context on attachment.
@@ -30,12 +31,9 @@ settings.
         checkGameActivityHost( context );
     }
 
-    // Ensure that the host context is a Game Activity.
+    // Store the host context if it is a Game Activity.
     private void checkGameActivityHost( Context context ) {
-        if( ! ( context instanceof GameActivity ) )
-            throw new ClassCastException( "GameActivity must host SettingsFragment" );
-
-        gameActivity = (GameActivity) context;
+        if( context instanceof GameActivity ) gameActivity = (GameActivity) context;
     }
 
     // Load preferences from XML resources.
@@ -43,9 +41,19 @@ settings.
         addPreferencesFromResource( R.xml.game_settings );
     }
 
-    // Show the action bar on resume.
+    // Show the action bar on resume if hosted by a Game Activity.
     @Override public void onResume() {
         super.onResume();
-        gameActivity.showActionBar();
+        if( gameActivity != null ) gameActivity.showActionBar();
+    }
+
+    // Apply any changes to the Sound Utility on exit.
+    @Override public void onStop() {
+        super.onStop();
+
+        SoundUtility soundUtility = SoundUtility.getInstance();
+
+        soundUtility.setupVolumes();
+        soundUtility.setupBackgroundMusic();
     }
 }

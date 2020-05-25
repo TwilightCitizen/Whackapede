@@ -13,30 +13,30 @@ MDV469-O, C202005-01
 
     <PreferenceCategory android:title="@string/volume">
         <SeekBarPreference
-            android:key="music_volume_key"
+            android:key="@string/music_volume_key"
             android:title="@string/music_volume"
             android:summary="@string/music_volume_summary"
             app:min="@integer/volume_min"
             android:max="@integer/volume_max"
-            android:defaultValue="@integer/volume_default"
+            android:defaultValue="@integer/volume_music"
             app:showSeekBarValue="true" />
 
         <SeekBarPreference
-            android:key="effects_volume_key"
+            android:key="@string/effects_volume_key"
             android:title="@string/effects_volume"
             android:summary="@string/effects_volume_summary"
             app:min="@integer/volume_min"
             android:max="@integer/volume_max"
-            android:defaultValue="@integer/volume_default"
+            android:defaultValue="@integer/volume_effects"
             app:showSeekBarValue="true" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/music">
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="Mind Bender"
             android:entries="@array/music_tracks"
             android:entryValues="@array/music_tracks"
-            android:key="music_track_key"
+            android:key="@string/music_track_key"
             android:title="@string/music_track"
             android:summary="@string/music_track_summary" />
     </PreferenceCategory>

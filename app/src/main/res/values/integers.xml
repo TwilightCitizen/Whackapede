@@ -10,5 +10,6 @@ MDV469-O, C202005-01
 <resources>
     <integer name="volume_min">0</integer>
     <integer name="volume_max">100</integer>
-    <integer name="volume_default">60</integer>
+    <integer name="volume_effects">100</integer>
+    <integer name="volume_music">60</integer>
 </resources>

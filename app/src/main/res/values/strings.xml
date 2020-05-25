@@ -66,7 +66,7 @@ MDV469-O, C202005-01
     </plurals>
 
     <string name="in_time">\ in %s</string>
-    
+
     <string name="game_over_publishing">Wait a moment while your score syncs to the leaderboard.</string>
     <string name="game_over_published">All set!  It\'s safe to hit back now.</string>
     <string name="game_over_unpublished">Your score couln\'t be published to the leaderboard.  The server might be down, or your Internet connection might be offline.</string>
@@ -75,8 +75,12 @@ MDV469-O, C202005-01
     <string name="no_leaders">Couldn\'t retrieve any leaders.  The server might be down or your Internet connection might be offline.  Or, maybe, there are no leaders yet.  Why not play a game and get on the leaderboard?</string>
 
     <string-array name="music_tracks">
-        <item>This Song</item>
-        <item>That Song</item>
-        <item>The Other Song</item>
+        <item>Mind Bender</item>
+        <item>Electric Raindrops</item>
+        <item>Pong-A-Long</item>
     </string-array>
+
+    <string name="music_volume_key">music_volume_key</string>
+    <string name="effects_volume_key">effects_volume_key</string>
+    <string name="music_track_key">music_track_key</string>
 </resources>

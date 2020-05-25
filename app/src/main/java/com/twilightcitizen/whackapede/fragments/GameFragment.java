@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.Locale;
 
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
+import com.twilightcitizen.whackapede.activities.SettingsActivity;
 import com.twilightcitizen.whackapede.models.Game;
 import com.twilightcitizen.whackapede.utilities.SoundUtility;
 import com.twilightcitizen.whackapede.utilities.TimeUtility;
@@ -206,6 +208,12 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
         if( item.getItemId() == R.id.action_play_pause ) {
             game.toggleState();
             toggleItemPlayPause();
+
+            return true;
+        }
+
+        if( item.getItemId() == R.id.action_settings ) {
+            startActivity( new Intent( getActivity(), SettingsActivity.class ) );
 
             return true;
         }
