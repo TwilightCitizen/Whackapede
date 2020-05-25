@@ -7,7 +7,7 @@ Development Portfolio 6
 MDV469-O, C202005-01
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Whack-A-Pede</string>
 
     <string name="whack_a_pede_logo">Whack-A-Pede Logo</string>

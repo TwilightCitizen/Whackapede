@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -29,6 +30,8 @@ import com.google.android.gms.tasks.Task;
 
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
+import com.twilightcitizen.whackapede.models.Game;
+import com.twilightcitizen.whackapede.viewModels.GameViewModel;
 
 /*
 Play Game Fragment precedes Game Fragment, providing an intermediate launch pad with buttons
@@ -36,14 +39,14 @@ to proceed to the game as a guest or with a signed in Google account.  It also d
 logo and uses a custom back button in lieu of the action bar for aesthetic purposes.
 */
 @SuppressWarnings( "WeakerAccess" ) public class PlayGameFragment extends Fragment {
+    // View model used by the game.
+    private GameViewModel gameViewModel;
+
     // Game Activity must host Play Game Fragment.
     private GameActivity gameActivity;
 
     // Google Sign In request code.
     private static final int REQUEST_GOOGLE_SIGN_IN = 100;
-
-    // Google Account tag for passing authenticated account to Game Fragment.
-    public static final String GOOGLE_SIGN_IN_ACCOUNT = "GOOGLE_SIGN_IN_ACCOUNT";
 
     // Check the host context on attachment.
     @Override public void onAttach( @NonNull Context context ) {
@@ -69,15 +72,25 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
     // Setup the launchpad buttons after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        setupGameViewModel();
         setupLaunchpadButtons( view );
+    }
+
+    // Capture the view model for the game.  Always start a new game from this fragment.
+    private void setupGameViewModel() {
+        gameViewModel = new ViewModelProvider( gameActivity ).get( GameViewModel.class );
+
+        gameViewModel.setGame( new Game() );
     }
 
     // Setup the launchpad buttons with navigation host fragment actions on click.
     private void setupLaunchpadButtons( View view ) {
         NavController navController = NavHostFragment.findNavController( PlayGameFragment.this );
 
-        view.findViewById( R.id.button_guest ).setOnClickListener(
-            button -> navController.navigate( R.id.action_PlayGameFragment_to_GameFragment ) );
+        view.findViewById( R.id.button_guest ).setOnClickListener( button -> {
+            gameViewModel.setGoogleSignInAccount( null );
+            navController.navigate( R.id.action_PlayGameFragment_to_GameFragment );
+        } );
 
         view.findViewById( R.id.button_sign_in ).setOnClickListener( this::onSignInClick );
 
@@ -122,17 +135,10 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
             // Attempt to obtain the authenticated account from the completed Google Sign In task.
             GoogleSignInAccount googleSignInAccount = googleSignInAccountTask.getResult( ApiException.class );
 
-            // Pass the authenticated account to the Game Fragment in a bundle.
-            Bundle googleSignInBundle = new Bundle();
-
-            googleSignInBundle.putParcelable( GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount );
-            navController.navigate( R.id.action_PlayGameFragment_to_GameFragment, googleSignInBundle );
+            gameViewModel.setGoogleSignInAccount( googleSignInAccount );
+            navController.navigate( R.id.action_PlayGameFragment_to_GameFragment );
 
         } catch( ApiException e ) {
-            e.printStackTrace();
-
-            // TODO: Handle authentication failure with some kind of message.
-
             navController.navigate( R.id.action_PlayGameFragment_to_GameFragment );
         }
     }

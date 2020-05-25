@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.util.SparseIntArray;
 
 import androidx.preference.PreferenceManager;
 
@@ -25,17 +24,15 @@ public class SoundUtility {
 
     // Sound pool for sound effects.
     private SoundPool effectsPool;
-    // Sound effect IDs mapped to the effects sound Pool.
-    private SparseIntArray effectsMap;
 
     // Media player for background music.
     private MediaPlayer musicPlayer;
 
     // IDs for sound effects.
-    private static final int SOUND_ID_HIT = 0;
-    private static final int SOUND_ID_MISS = 1;
-    private static final int SOUND_ID_NEW_ROUND = 2;
-    private static final int SOUND_ID_GAME_OVER = 3;
+    private int soundIdHit;
+    private int soundIdMiss;
+    private int soundIdNewRound;
+    private int soundIdGameOver;
 
     // Volume settings for sound effects and music;
     private float volumeEffects;
@@ -91,13 +88,11 @@ public class SoundUtility {
         // Get the application context.
         Context context = Whackapede.getInstance().getContext();
 
-        // Create sparse map of sounds and load them.
-        effectsMap = new SparseIntArray( 5 );
-
-        effectsMap.put( SOUND_ID_HIT, effectsPool.load( context, R.raw.hit, 1 ) );
-        effectsMap.put( SOUND_ID_MISS, effectsPool.load( context, R.raw.miss, 1 ) );
-        effectsMap.put( SOUND_ID_NEW_ROUND, effectsPool.load( context, R.raw.new_round, 1 ) );
-        effectsMap.put( SOUND_ID_GAME_OVER, effectsPool.load( context, R.raw.game_over, 1 ) );
+        // Load sounds effects into pool, saving IDs.
+        soundIdHit = effectsPool.load( context, R.raw.hit, 1 );
+        soundIdMiss = effectsPool.load( context, R.raw.miss, 1 );
+        soundIdNewRound = effectsPool.load( context, R.raw.new_round, 1 );
+        soundIdGameOver = effectsPool.load( context, R.raw.game_over, 1 );
     }
 
     // Setup all the sound effects in a sound pool.
@@ -122,14 +117,14 @@ public class SoundUtility {
     }
 
     // Play various sound effects.
-    private void playEffect( int soundID ) {
-        effectsPool.play( effectsMap.get( soundID ), volumeEffects, volumeEffects, 1, 0, 1f );
+    private void playEffect( int soundId ) {
+        effectsPool.play( soundId, volumeEffects, volumeEffects, 1, 0, 1f );
     }
 
-    public void playHit() { playEffect( SOUND_ID_HIT  ); }
-    public void playMiss() { playEffect( SOUND_ID_MISS ); }
-    public void playNewRound() { playEffect( SOUND_ID_NEW_ROUND ); }
-    public void playGameOver() { playEffect( SOUND_ID_GAME_OVER ); }
+    public void playHit() { playEffect( soundIdHit ); }
+    public void playMiss() { playEffect( soundIdMiss ); }
+    public void playNewRound() { playEffect( soundIdNewRound ); }
+    public void playGameOver() { playEffect( soundIdGameOver ); }
 
     // Control background music playback.
     public void playResumeMusic() { musicPlayer.start(); }

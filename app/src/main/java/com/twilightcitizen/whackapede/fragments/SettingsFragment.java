@@ -44,6 +44,7 @@ settings.
     // Show the action bar on resume if hosted by a Game Activity.
     @Override public void onResume() {
         super.onResume();
+
         if( gameActivity != null ) gameActivity.showActionBar();
     }
 

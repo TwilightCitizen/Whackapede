@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
 import com.twilightcitizen.whackapede.utilities.LeaderboardUtility;
+import com.twilightcitizen.whackapede.viewModels.GameViewModel;
 
 import java.util.Locale;
 
@@ -38,14 +40,20 @@ Publication of scores to the leaderboard happens here, too.
 @SuppressWarnings( "WeakerAccess" ) public class GameOverFragment extends Fragment
     implements GameActivity.OnNavigateBackOrUp, LeaderboardUtility.OnPutScoreListener {
 
+    // View model used by the game.
+    private GameViewModel gameViewModel;
+
     // Game Activity must host Game Over Fragment.
     private GameActivity gameActivity;
+
     // Player's authenticated Google account, if any.
     private GoogleSignInAccount googleSignInAccount;
+
     // Player's final score, total rounds, and total time.
     private int finalScore;
     private int totalRounds;
     private long totalTime;
+
     // Back button and text view for status of publishing score to leaderboard.
     private TextView textPublishing;
     private Button buttonBack;
@@ -74,9 +82,15 @@ Publication of scores to the leaderboard happens here, too.
     // Setup the back button after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        setupGameViewModel();
         setupBackButton( view );
-        setupGuestOrGoogleAccount( view );
+        setupGameOverMessage( view );
         publishScoreToLeaderboard( view );
+    }
+
+    // Capture the view model for the game.
+    private void setupGameViewModel() {
+        gameViewModel = new ViewModelProvider( gameActivity ).get( GameViewModel.class );
     }
 
     // Publish the player's score to the leaderboard.
@@ -116,13 +130,11 @@ Publication of scores to the leaderboard happens here, too.
     Setup the scoreboard to display details for a guest player or player authenticated through
     Google Sign In accordingly.
     */
-    private void setupGuestOrGoogleAccount( View view ) {
-        if( getArguments() == null ) return;
-
-        googleSignInAccount = getArguments().getParcelable( GameFragment.GOOGLE_SIGN_IN_ACCOUNT );
-        finalScore = getArguments().getInt( GameFragment.FINAL_SCORE );
-        totalRounds = getArguments().getInt( GameFragment.TOTAL_ROUNDS );
-        totalTime = getArguments().getLong( GameFragment.TOTAL_TIME );
+    private void setupGameOverMessage( View view ) {
+        googleSignInAccount = gameViewModel.getGoogleSignInAccount();
+        finalScore = gameViewModel.getGame().getScore();
+        totalRounds = gameViewModel.getGame().getRounds();
+        totalTime = gameViewModel.getGame().getTotalTimeMillis();
 
         TextView textGameOverPlayer = view.findViewById( R.id.text_game_over_player );
         TextView textGameOverMessage = view.findViewById( R.id.text_game_over_message );

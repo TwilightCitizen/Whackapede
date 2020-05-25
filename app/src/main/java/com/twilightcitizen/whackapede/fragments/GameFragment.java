@@ -8,7 +8,6 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -34,10 +34,10 @@ import java.util.Locale;
 
 import com.twilightcitizen.whackapede.R;
 import com.twilightcitizen.whackapede.activities.GameActivity;
-import com.twilightcitizen.whackapede.activities.SettingsActivity;
 import com.twilightcitizen.whackapede.models.Game;
 import com.twilightcitizen.whackapede.utilities.SoundUtility;
 import com.twilightcitizen.whackapede.utilities.TimeUtility;
+import com.twilightcitizen.whackapede.viewModels.GameViewModel;
 import com.twilightcitizen.whackapede.views.GameSurfaceView;
 
 /*
@@ -50,28 +50,21 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
 @SuppressWarnings( "WeakerAccess" ) public class GameFragment extends Fragment
     implements GameActivity.OnNavigateBackOrUp {
 
-    // Frame to host the SurfaceView where the game arena will be drawn to screen.
-    private FrameLayout frameGame;
+    // View model used by the game.
+    private GameViewModel gameViewModel;
+
     // Game Activity must host Game Fragment.
     private GameActivity gameActivity;
+
     // The Game itself.
     private Game game;
-    // SurfaceView where the game arena will be drawn to screen.
-    private GameSurfaceView gameSurfaceView;
+
     // Menu hosting the play/pause action button.
     private Menu menu;
+
     // Player's current score and time remaining on the scoreboard.
     private TextView textScore;
     private TextView textClock;
-    // Player's authenticated Google account, if any.
-    private GoogleSignInAccount googleSignInAccount;
-
-    // Google Account tag for passing authenticated account to Game Over Fragment.
-    public static final String GOOGLE_SIGN_IN_ACCOUNT = "GOOGLE_SIGN_IN_ACCOUNT";
-    // Tags for passing final score, rounds, and total time to Game Over Fragment.
-    public static final String FINAL_SCORE = "FINAL_SCORE";
-    public static final String TOTAL_ROUNDS = "TOTAL_ROUNDS";
-    public static final String TOTAL_TIME = "TOTAL_TIME";
 
     // Setup with menu options on creation.
     @Override public void onCreate( @Nullable Bundle savedInstanceState ) {
@@ -112,19 +105,23 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     // Setup the scoreboard and game arena after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        setupGameViewModel();
         setupScoreboard( view );
-        setupGameArena( view );
-        setupGuestOrGoogleAccount( view );
+        setupGoogleAccount( view );
+    }
+
+    // Capture the view model for the game.
+    private void setupGameViewModel() {
+        gameViewModel = new ViewModelProvider( gameActivity ).get( GameViewModel.class );
     }
 
     /*
     Setup the scoreboard to display details for a guest player or player authenticated through
     Google Sign In accordingly.
     */
-    private void setupGuestOrGoogleAccount( View view ) {
-        if( getArguments() == null ) return;
-
-        googleSignInAccount = getArguments().getParcelable( PlayGameFragment.GOOGLE_SIGN_IN_ACCOUNT );
+    private void setupGoogleAccount( View view ) {
+        // Player's authenticated Google account, if any.
+        GoogleSignInAccount googleSignInAccount = gameViewModel.getGoogleSignInAccount();
 
         if( googleSignInAccount == null ) return;
 
@@ -144,10 +141,13 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     to the frame where it should be drawn.
     */
     private void setupGameArena( View view ) {
-        frameGame = view.findViewById( R.id.frame_game );
-        game = new Game();
-        gameSurfaceView = new GameSurfaceView( this, null, game );
+        // Frame to host the SurfaceView where the game arena will be drawn to screen.
+        FrameLayout frameGame = view.findViewById( R.id.frame_game );
+        game = gameViewModel.getGame();
+        // SurfaceView where the game arena will be drawn to screen.
+        GameSurfaceView gameSurfaceView = new GameSurfaceView( this, null, game );
 
+        frameGame.removeAllViews();
         frameGame.addView( gameSurfaceView );
     }
 
@@ -160,23 +160,8 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     // Show the action bar on resume, restoring any ongoing game for display in the arena.
     @Override public void onResume() {
         super.onResume();
-
-        if( game != null ) restoreGameToArena();
-
+        setupGameArena( requireView() );
         gameActivity.showActionBar();
-    }
-
-    /*
-    Game Fragment retains its Game instance when the user navigates away from the app and restores
-    it if it wasn't completely destroyed, but the SurfaceView where its arena is drawn doesn't.  So,
-    we remove any dead SurfaceViews from their containing frame, create a new one with the retained
-    Game instance, and add it to the containing frame to maintain ongoing games between interruptions.
-    */
-    private void restoreGameToArena() {
-        frameGame.removeAllViews();
-        gameSurfaceView = new GameSurfaceView( this, null, game );
-
-        frameGame.addView( gameSurfaceView );
     }
 
     // Pause any ongoing game and toggle the play/pause button on the action bar on stop.
@@ -203,8 +188,9 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
         return false;
     }
 
-    // Toggle the game's paused/running state and the play/pause button when it is tapped.
+    // Handle options selected in the menu.
     @Override public boolean onOptionsItemSelected( @NonNull MenuItem item ) {
+        // Toggle the game's paused/running state and the play/pause button when it is tapped.
         if( item.getItemId() == R.id.action_play_pause ) {
             game.toggleState();
             toggleItemPlayPause();
@@ -212,8 +198,11 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
             return true;
         }
 
+        // Navigate to settings with the settings button is tapped.
         if( item.getItemId() == R.id.action_settings ) {
-            startActivity( new Intent( getActivity(), SettingsActivity.class ) );
+            NavController navController = NavHostFragment.findNavController( GameFragment.this );
+
+            navController.navigate( R.id.action_GameFragment_to_SettingsFragment );
 
             return true;
         }
@@ -242,13 +231,6 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     public void onGameOver() {
         NavController navController = NavHostFragment.findNavController( GameFragment.this );
 
-        // Pass the authenticated account to the Game Fragment in a bundle.
-        Bundle gameOverBundle = new Bundle();
-
-        gameOverBundle.putParcelable( GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount );
-        gameOverBundle.putInt( FINAL_SCORE, game.getScore() );
-        gameOverBundle.putInt( TOTAL_ROUNDS, game.getRounds() );
-        gameOverBundle.putLong( TOTAL_TIME, game.getTotalTimeMillis() );
-        navController.navigate( R.id.action_GameFragment_to_GameOverFragment, gameOverBundle );
+        navController.navigate( R.id.action_GameFragment_to_GameOverFragment );
     }
 }
