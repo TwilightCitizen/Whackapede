@@ -128,6 +128,12 @@ public class SoundUtility {
 
     // Control background music playback.
     public void playResumeMusic() { musicPlayer.start(); }
-    public void pauseMusic() { musicPlayer.pause(); }
-    public void stopMusic() { musicPlayer.pause(); musicPlayer.seekTo( 0 ); }
+
+    public void pauseMusic() {
+        if( musicPlayer.isPlaying() ) musicPlayer.pause();
+    }
+    public void stopMusic() {
+        if( musicPlayer.isPlaying() ) musicPlayer.pause();
+        musicPlayer.seekTo( 0 );
+    }
 }

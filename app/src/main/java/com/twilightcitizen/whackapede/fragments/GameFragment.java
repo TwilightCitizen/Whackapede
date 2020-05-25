@@ -7,7 +7,9 @@ MDV469-O, C202005-01
 
 package com.twilightcitizen.whackapede.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -103,8 +105,10 @@ score, and time remaining, and the game arena itself via a SurfaceView loaded in
     }
 
     // Setup the scoreboard and game arena after view creation.
+    @SuppressLint( "SourceLockedOrientationActivity" )
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
         setupGameViewModel();
         setupScoreboard( view );
         setupGoogleAccount( view );

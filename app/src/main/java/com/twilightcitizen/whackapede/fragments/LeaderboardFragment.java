@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -143,6 +144,7 @@ highest to lowest, using the action bar for back/up navigation.
         @NonNull View view, @Nullable Bundle savedInstanceState
     ) {
         super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
         LeaderboardUtility.getInstance().getTopLimitLeaders( gameActivity, 100, this );
     }
 

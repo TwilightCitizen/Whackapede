@@ -8,12 +8,14 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.twilightcitizen.whackapede.R;
@@ -46,6 +48,11 @@ bar for back/up navigation.
         LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
     ) {
         return inflater.inflate( R.layout.fragment_instructions, container, false );
+    }
+
+    @Override public void onViewCreated( @NonNull View view, @Nullable Bundle savedInstanceState ) {
+        super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
     }
 
     // Show the action bar on resume.

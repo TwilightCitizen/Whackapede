@@ -9,6 +9,7 @@ package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,7 @@ logo and uses a custom back button in lieu of the action bar for aesthetic purpo
     // Setup the launchpad buttons after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
         setupGameViewModel();
         setupLaunchpadButtons( view );
     }

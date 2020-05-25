@@ -19,15 +19,13 @@ MDV469-O, C202005-01
         android:id="@+id/image_avatar"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
         android:background="@color/plain_white"
         android:contentDescription="@string/player_avatar"
         android:scaleType="fitCenter"
         android:src="@drawable/icon_guest_account"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry" />
@@ -36,14 +34,12 @@ MDV469-O, C202005-01
         android:id="@+id/image_avatar_overlay"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
         android:contentDescription="@string/player_avatar"
         android:scaleType="fitCenter"
         android:src="@drawable/overlay_avatar"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry" />
@@ -53,14 +49,13 @@ MDV469-O, C202005-01
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:text="@string/game_over_player"
-        android:textAlignment="center"
+        android:textAlignment="textEnd"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_avatar" />
+        app:layout_constraintStart_toEndOf="@+id/image_avatar"
+        app:layout_constraintTop_toTopOf="@+id/image_avatar" />
 
     <TextView
         android:id="@+id/text_game_over_message"
@@ -69,10 +64,10 @@ MDV469-O, C202005-01
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:textAlignment="center"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_avatar"
         app:layout_constraintTop_toBottomOf="@id/text_game_over_player" />
 
     <TextView
@@ -83,9 +78,9 @@ MDV469-O, C202005-01
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:text="@string/game_over_publishing"
-        android:textAlignment="center"
+        android:textAlignment="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_avatar"
         app:layout_constraintTop_toBottomOf="@id/text_game_over_message" />
 
     <Button
@@ -96,19 +91,18 @@ MDV469-O, C202005-01
         android:layout_marginTop="32dp"
         android:enabled="false"
         android:text="@string/back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/text_game_over_publish"
         app:layout_constraintTop_toBottomOf="@id/text_game_over_publish" />
 
     <ImageView
         android:id="@+id/image_logo"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_marginBottom="64dp"
         android:contentDescription="@string/whack_a_pede_logo"
         android:src="@drawable/logo_no_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_back" />
+        app:layout_constraintEnd_toEndOf="@+id/image_avatar"
+        app:layout_constraintStart_toStartOf="@+id/image_avatar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

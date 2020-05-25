@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -82,6 +83,7 @@ Publication of scores to the leaderboard happens here, too.
     // Setup the back button after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
         setupGameViewModel();
         setupBackButton( view );
         setupGameOverMessage( view );

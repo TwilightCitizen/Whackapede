@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ the app logo and affords no back/up navigation.
     // Setup the launchpad buttons after view creation.
     public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
         setupLaunchpadButtons( view );
     }
 

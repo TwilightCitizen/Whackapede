@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Whack-A-Pede
+David Clark
+Development Portfolio 6
+MDV469-O, C202005-01
+-->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LandingFragment">
+
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:contentDescription="@string/whack_a_pede_logo"
+        android:src="@drawable/logo_with_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_logo"
+        app:layout_constraintTop_toTopOf="@+id/image_logo">
+
+        <Button
+            android:id="@+id/button_play_game"
+            style="@style/Whackapede.Button.Earth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/play_game" />
+
+        <Button
+            android:id="@+id/button_leaderboard"
+            style="@style/Whackapede.Button.Grass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/leaderboard" />
+
+        <Button
+            android:id="@+id/button_settings"
+            style="@style/Whackapede.Button.Grass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings" />
+
+        <Button
+            android:id="@+id/button_instructions"
+            style="@style/Whackapede.Button.Grass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions" />
+
+        <Button
+            android:id="@+id/button_credits"
+            style="@style/Whackapede.Button.Grass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/credits" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

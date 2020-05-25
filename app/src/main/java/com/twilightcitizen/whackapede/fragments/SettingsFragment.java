@@ -8,6 +8,7 @@ MDV469-O, C202005-01
 package com.twilightcitizen.whackapede.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,7 @@ Settings Fragment provides a standardized Android settings screen for user confi
 settings.
 */
 @SuppressWarnings( "WeakerAccess" ) public class SettingsFragment extends PreferenceFragmentCompat {
-    // Game Activity can host Settings Fragment.
+    // Game Activity must host Settings Fragment.
     private GameActivity gameActivity;
 
     // Check the host context on attachment.
@@ -31,21 +32,24 @@ settings.
         checkGameActivityHost( context );
     }
 
-    // Store the host context if it is a Game Activity.
+    // Ensure that the host context is a Game Activity.
     private void checkGameActivityHost( Context context ) {
-        if( context instanceof GameActivity ) gameActivity = (GameActivity) context;
+        if( ! ( context instanceof GameActivity ) )
+            throw new ClassCastException( "GameActivity must host SettingsFragment" );
+
+        gameActivity = (GameActivity) context;
     }
 
     // Load preferences from XML resources.
     @Override public void onCreatePreferences( Bundle savedInstanceState, String rootKey ) {
         addPreferencesFromResource( R.xml.game_settings );
+        gameActivity.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED );
     }
 
     // Show the action bar on resume if hosted by a Game Activity.
     @Override public void onResume() {
         super.onResume();
-
-        if( gameActivity != null ) gameActivity.showActionBar();
+        gameActivity.showActionBar();
     }
 
     // Apply any changes to the Sound Utility on exit.
