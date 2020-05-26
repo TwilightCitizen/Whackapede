@@ -83,4 +83,15 @@ MDV469-O, C202005-01
     <string name="music_volume_key">music_volume_key</string>
     <string name="effects_volume_key">effects_volume_key</string>
     <string name="music_track_key">music_track_key</string>
+
+    <string name="gameplay_label">Gameplay Basics</string>
+    <string name="gameplay">Tap the play button to start a game.  When the game starts, you get 10 seconds on the clock to start and a centipede will start crawling all over the lawn, turning and burrowing in and out of holes.  Tap on centipede segments that are above ground to clear them from the lawn for points.  If you tap it in the middle, it will split into two centipedes, and if you tap it on the head, all its segments will scatter.  Every time you clear a segment, all the remaining ones speed up.  Clear all the segments from the lawn before the timer runs out, or it\'s game over.  If you clear them all before the timer runs out, a new centipede will crawl onto the lawn, faster than the one before it.</string>
+    <string name="pausing_label">Pausing a Game</string>
+    <string name="pausing">Tap the pause button to pause a running game.  The game will also pause if you leave the app while it\'s playing, if you tap back or up once, or if you go into the settings.</string>
+    <string name="quitting_label">Quitting a Game</string>
+    <string name="quitting">To quit a paused game, tap the back or up button once.  To quit a running game, first pause it, then hit back or up.</string>
+    <string name="changing_label">Changing Settings</string>
+    <string name="changing">To change the games settings, tap the settings button from the main menu or from the game menu.  Slide the thumb on the volume sliders to the desired volume levels for the background music and sound effects.  Tap to select the desired track for the background music.  Then, tap back or up to save the changes.</string>
+    <string name="scoring_label">Scoring and Leaderboard</string>
+    <string name="scoring">You score 100 points for every segment you clear from the lawn.  You also get an extra 10 seconds on the clock for every segment you clear.  Once you clear all segments from the lawn, any time left on the clock turns into points.  You get 10 points for every second left over.  To get on the leaderboard, you have to score among the 100 players.  Your score automatically syncs to the cloud when your game is over, and the leaderboard always keeps your highest score.</string>
 </resources>

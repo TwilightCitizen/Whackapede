@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "123512543415-0j9dl4kv68crbkocvcq1lnalkmjd71de.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twilightcitizen.whackapede",
+            "certificate_hash": "8a99b75fee6a4a37da490be383fe657f1809def3"
+          }
+        },
+        {
           "client_id": "123512543415-v7njmgg2ibv7f1467emaitlduh35m01d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
