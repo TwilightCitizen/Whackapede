@@ -75,7 +75,7 @@ class Segment extends MovingGameElement {
     }
 
     // Add X number of tail Segments adjacent to the Segment, each one the next tail of the last.
-    void addTails( int tails, int cellSize, int sideX, int sideY ) {
+    @SuppressWarnings( "SameParameterValue" ) void addTails( int tails, int cellSize, int sideX, int sideY ) {
         Segment tail = this;
 
         while( tails > 0 ) {
